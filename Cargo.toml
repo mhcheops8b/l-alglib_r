@@ -3,6 +3,10 @@ name = "l-alglib"
 version = "0.1.0"
 edition = "2024"
 
+[[bin]]
+name = "gen_from_ord"
+path = "src/gen_from_ord.rs"
+
 [dependencies]
 bzip2 = "0.6.1"
 itertools = "0.14.0"

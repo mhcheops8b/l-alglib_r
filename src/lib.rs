@@ -218,7 +218,9 @@ pub fn gen_all_lalgs_rec(index:usize, positions:&Vec<(usize,usize)>, limpl: &mut
         //eprintln!("FHFH: {index} / {n}");
         //eprintln!("{limpl:?}");
         if l_alg_is_l_algebra(limpl, unit, false) {
-            eprintln!("{limpl:?}");
+            if res.len() % 1000 == 0 {
+                eprintln!("{limpl:?}");
+            }
             res.insert(limpl.clone());
         }
 
@@ -476,3 +478,82 @@ pub fn l_alg_get_repr(limpl: &Vec<Vec<usize>>, b_minimal: bool) ->Vec<Vec<usize>
 
     limpl_repr
 }
+
+pub fn l_alg_perm_preserve_ord(limpl: &Vec<Vec<usize>>, iso_perm_vec: &Vec<usize>) -> bool {
+        let n = limpl.len();
+        let lagl_unit = limpl[0][0];
+
+        let mut b_preserve = true;
+        for idx1 in 0..n {
+            for idx2 in 0..n {
+                if idx1 != idx2 {
+                    if limpl[iso_perm_vec[idx1]][iso_perm_vec[idx2]] == lalg_unit && iso_perm_vec[idx1] > iso_perm_vec[idx2]{
+                        return false
+                    }
+                }
+            }
+        }
+        true
+}
+
+pub fn l_alg_is_repr(limpl: &Vec<Vec<usize>>, b_minimal: bool) -> bool {
+    let n = limpl.len();
+    let lalg_unit = limpl[0][0];
+
+    let mut base_perm_vec = Vec::<usize>::new();
+    let mut iso_perm_vec= Vec::<usize>::new();
+    let mut limpl_repr = Vec::<Vec<usize>>::new();
+
+    limpl_repr = limpl.clone();
+    for i in 0..n {
+        if i != lalg_unit {
+            base_perm_vec.push(i);
+        }
+        iso_perm_vec.push(i);
+    }
+
+    for perm in base_perm_vec.iter().permutations(n-1) {
+        for j in 0..n-1 {
+            iso_perm_vec[base_perm_vec[j]] = *perm[j];
+        }
+        
+//        let mut b_preserve = true;
+//        for idx1 in 0..n {
+//            for idx2 in 0..n {
+//                if idx1 != idx2 {
+//                    if limpl[iso_perm_vec[idx1]][iso_perm_vec[idx2]] == lalg_unit && iso_perm_vec[idx1] > iso_perm_vec[idx2]{
+//                        b_preserve = false;
+//                        break;
+//                    }
+//                }
+//            }
+//            if !b_preserve {
+//                break;
+//            }
+//        }
+//        if !b_preserve {
+//            continue;
+//        }
+        if !l_alg_perm_preserve_ord(limpl, iso_perm_vec) {
+            continue;
+        }
+        
+        // eprintln!("{perm:?}");
+        // eprintln!("{iso_perm_vec:?}");
+        let limpl_img = l_alg_isomorphic_image(limpl, lalg_unit, &iso_perm_vec).0;
+
+        if b_minimal {
+            if l_alg_cmp_is_strictly_less(&limpl_img, &limpl_repr) {
+                return false;
+            }
+        }
+        else {
+            if l_alg_cmp_is_strictly_greater(&limpl_img, &limpl_repr) {
+                return false;
+            }
+        }
+    }
+
+    true
+}
+
