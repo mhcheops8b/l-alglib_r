@@ -210,7 +210,7 @@ pub fn l_alg_get_all_filters(limpl: &Vec<Vec<usize>>, unit: usize) {
     }
 }
 
-pub fn gen_all_lalgs_rec(index:usize, positions:&Vec<(usize,usize)>, limpl: &mut Vec<Vec<usize>>, unit:usize, res:&mut HashSet<Vec<Vec<usize>>>) {
+pub fn gen_all_lalgs_rec(index:usize, positions:&Vec<(usize,usize)>, limpl: &mut Vec<Vec<usize>>, unit:usize, res:&mut HashSet<Vec<Vec<usize>>>, num_tested: &mut usize) {
     let n = positions.len();
     //eprintln!("FHFH: {index} / {n}");
 
@@ -218,10 +218,24 @@ pub fn gen_all_lalgs_rec(index:usize, positions:&Vec<(usize,usize)>, limpl: &mut
         //eprintln!("FHFH: {index} / {n}");
         //eprintln!("{limpl:?}");
         if l_alg_is_l_algebra(limpl, unit, false) {
-            if res.len() % 1000 == 0 {
-                eprintln!("{limpl:?}");
+            *num_tested+=1;
+            if *num_tested % 1000 == 1{
+                eprintln!("Cur_progress: {limpl:?}");
             }
-            res.insert(limpl.clone());
+
+            if l_alg_is_repr(limpl, true) {
+                println!("{limpl:?}");
+                res.insert(limpl.clone());
+            }
+            // if res.len() % 1000 == 0 {
+            //     eprintln!("{limpl:?}");
+            // }
+            
+            // let ll = l_alg_get_repr(&limpl, true);
+            // if !res.contains(&ll) {
+            //     // eprintln!("{ll:?}");
+            //     res.insert(ll);//limpl.clone());
+            // }
         }
 
     }
@@ -278,8 +292,8 @@ pub fn gen_all_lalgs_rec(index:usize, positions:&Vec<(usize,usize)>, limpl: &mut
                 limpl[x][y] = m+1;
                 continue;
             }
-
-            gen_all_lalgs_rec(index+1, positions, limpl, unit, res);
+            
+            gen_all_lalgs_rec(index+1, positions, limpl, unit, res, num_tested);
         }
         limpl[x][y] = m+1; //unfilled element
     }
@@ -427,9 +441,9 @@ pub fn l_alg_get_repr(limpl: &Vec<Vec<usize>>, b_minimal: bool) ->Vec<Vec<usize>
 
     let mut base_perm_vec = Vec::<usize>::new();
     let mut iso_perm_vec= Vec::<usize>::new();
-    let mut limpl_repr = Vec::<Vec<usize>>::new();
+    //let mut limpl_repr = Vec::<Vec<usize>>::new();
 
-    limpl_repr = limpl.clone();
+    let mut limpl_repr = limpl.clone();
     for i in 0..n {
         if i != lalg_unit {
             base_perm_vec.push(i);
@@ -481,9 +495,8 @@ pub fn l_alg_get_repr(limpl: &Vec<Vec<usize>>, b_minimal: bool) ->Vec<Vec<usize>
 
 pub fn l_alg_perm_preserve_ord(limpl: &Vec<Vec<usize>>, iso_perm_vec: &Vec<usize>) -> bool {
         let n = limpl.len();
-        let lagl_unit = limpl[0][0];
+        let lalg_unit = limpl[0][0];
 
-        let mut b_preserve = true;
         for idx1 in 0..n {
             for idx2 in 0..n {
                 if idx1 != idx2 {
@@ -502,9 +515,9 @@ pub fn l_alg_is_repr(limpl: &Vec<Vec<usize>>, b_minimal: bool) -> bool {
 
     let mut base_perm_vec = Vec::<usize>::new();
     let mut iso_perm_vec= Vec::<usize>::new();
-    let mut limpl_repr = Vec::<Vec<usize>>::new();
+    // let mut limpl_repr = Vec::<Vec<usize>>::new();
 
-    limpl_repr = limpl.clone();
+    // limpl_repr = limpl.clone();
     for i in 0..n {
         if i != lalg_unit {
             base_perm_vec.push(i);
@@ -534,7 +547,7 @@ pub fn l_alg_is_repr(limpl: &Vec<Vec<usize>>, b_minimal: bool) -> bool {
 //        if !b_preserve {
 //            continue;
 //        }
-        if !l_alg_perm_preserve_ord(limpl, iso_perm_vec) {
+        if !l_alg_perm_preserve_ord(limpl, &iso_perm_vec) {
             continue;
         }
         
@@ -543,12 +556,12 @@ pub fn l_alg_is_repr(limpl: &Vec<Vec<usize>>, b_minimal: bool) -> bool {
         let limpl_img = l_alg_isomorphic_image(limpl, lalg_unit, &iso_perm_vec).0;
 
         if b_minimal {
-            if l_alg_cmp_is_strictly_less(&limpl_img, &limpl_repr) {
+            if l_alg_cmp_is_strictly_less(&limpl_img, &limpl) {
                 return false;
             }
         }
         else {
-            if l_alg_cmp_is_strictly_greater(&limpl_img, &limpl_repr) {
+            if l_alg_cmp_is_strictly_greater(&limpl_img, &limpl) {
                 return false;
             }
         }

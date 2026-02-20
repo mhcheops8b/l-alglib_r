@@ -45,7 +45,7 @@ fn main() {
     let args_len = std::env::args().len();
 
     if args_len < 2 {
-        println!("Usage: {} <pord_num>", std::env::args().next().unwrap());
+        println!("Usage: {} <pord_num> [init_vec_string]", std::env::args().next().unwrap());
         return;
     }
 
@@ -55,9 +55,14 @@ fn main() {
         Err(_e) => println!("First argument must be a number.")
     }
 
-
-    // println!("HERE");
-    let n = 7usize;
+    let mut init_vector = Vec::<usize>::new();
+    if args_len == 3 {
+        let init_vector_str = std::env::args().nth(2).unwrap();
+        eprintln!("Init vector (str): {}", init_vector_str);
+        init_vector = init_vector_str.split(",").map(|v| v.trim().parse().unwrap()).collect();
+        eprintln!("Init vector (int): {:?}", init_vector);
+    }
+   let n = 7usize;
     let file = BufReader::new(File::open("ord7_with_top.txt").expect("Cannot open file"));
     // let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
     let mut cur_line_no = 0usize;
@@ -74,12 +79,25 @@ fn main() {
             
             eprintln!("Order: {pord:?}");
 
-            let mut falg = l_alglib::l_alg_alloc_limpl(n);
+            let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(n);
             let mut positions = Vec::<(usize,usize)>::new();
                 
-            l_alglib::l_alg_init_from_ord(&mut falg, &pord, n-1, &mut positions);
+            l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, n-1, &mut positions);
 
-            l_alglib::gen_all_lalgs_rec(0, &positions, &mut falg, n-1, &mut lalgs);
+            // apply init_vector
+            for i in 0usize..std::cmp::min(positions.len(), init_vector.len()) {
+                lalg_limpl[positions[i].0][positions[i].1] = init_vector[i];
+            }
+            
+            for _ in 0usize..std::cmp::min(positions.len(), init_vector.len()) {
+                positions.remove(0);
+            }
+
+            eprintln!("Positions: {positions:?}");
+            eprintln!("Init limpl: {lalg_limpl:?}");
+            // return;
+            let mut num_tested = 0usize;
+            l_alglib::gen_all_lalgs_rec(0, &positions, &mut lalg_limpl, n-1, &mut lalgs, &mut num_tested);
 
             eprintln!("{}", lalgs.len());
             let mut lalgs_repr = HashSet::<Vec<Vec<usize>>>::new();
@@ -273,8 +291,8 @@ fn main() {
 
             // return;
             eprintln!("{positions:?}");
-            
-            l_alglib::gen_all_lalgs_rec(0, &positions, &mut falg, n, &mut lalgs);
+            let mut num_tested = 0usize;
+            l_alglib::gen_all_lalgs_rec(0, &positions, &mut falg, n, &mut lalgs, &mut num_tested);
 
             eprintln!("{}", lalgs.len());
         }
@@ -306,7 +324,8 @@ fn main7() {
     eprintln!("{falg:?}");
     eprintln!("{positions:?}");
     let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
-    l_alglib::gen_all_lalgs_rec(0, &positions, &mut falg, unit, &mut lalgs);
+    let mut num_tested = 0usize;
+    l_alglib::gen_all_lalgs_rec(0, &positions, &mut falg, unit, &mut lalgs, &mut num_tested);
 
     eprintln!("{lalgs:?}");
 }
@@ -336,7 +355,8 @@ fn main6() {
 
     // generate algebras
     let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
-    l_alglib::gen_all_lalgs_rec(0, &positions, &mut lalg_impl, lalg_unit, &mut lalgs);
+    let mut num_tested = 0usize;
+    l_alglib::gen_all_lalgs_rec(0, &positions, &mut lalg_impl, lalg_unit, &mut lalgs, &mut num_tested);
 
     // eliminate isomorphic
     let mut lalgs_processed = HashSet::<Vec<Vec<usize>>>::new();
@@ -408,8 +428,8 @@ fn main33() {
     let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
 
     
-    
-    l_alglib::gen_all_lalgs_rec(0, &positions4, &mut limpl4, unit4, &mut lalgs);
+    let mut num_tested = 0usize;
+    l_alglib::gen_all_lalgs_rec(0, &positions4, &mut limpl4, unit4, &mut lalgs, &mut num_tested);
 
     // println!("{lalgs:?}");
     // return;
@@ -474,8 +494,8 @@ fn main4() {
     let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
 
     
-    
-    l_alglib::gen_all_lalgs_rec(0, &positions, &mut ex3_limpl, ex3_unit, &mut lalgs);
+    let mut num_tested = 0usize;
+    l_alglib::gen_all_lalgs_rec(0, &positions, &mut ex3_limpl, ex3_unit, &mut lalgs, &mut num_tested);
 
     // println!("{lalgs:?}");
     // return;
