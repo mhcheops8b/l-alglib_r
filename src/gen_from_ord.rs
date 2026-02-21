@@ -100,22 +100,22 @@ fn main() {
             l_alglib::gen_all_lalgs_rec(0, &positions, &mut lalg_limpl, n-1, &mut lalgs, &mut num_tested);
 
             eprintln!("{}", lalgs.len());
-            let mut lalgs_repr = HashSet::<Vec<Vec<usize>>>::new();
-            for lalg in &lalgs {
-                let lalg_repr = l_alglib::l_alg_get_repr(&lalg, true);
+            // let mut lalgs_repr = HashSet::<Vec<Vec<usize>>>::new();
+            // for lalg in &lalgs {
+            //     let lalg_repr = l_alglib::l_alg_get_repr(&lalg, true);
 
-                lalgs_repr.insert(lalg_repr);
-            }
+            //     lalgs_repr.insert(lalg_repr);
+            // }
 
-            let mut lalgs_repr_vec = lalgs_repr.iter().collect::<Vec<_>>();
-            lalgs_repr_vec.sort();
+            // let mut lalgs_repr_vec = lalgs_repr.iter().collect::<Vec<_>>();
+            // lalgs_repr_vec.sort();
 
-            for lalg_repr in &lalgs_repr_vec {
-                println!("{lalg_repr:?}");
-            }
+            // for lalg_repr in &lalgs_repr_vec {
+            //     println!("{lalg_repr:?}");
+            // }
     
             
-            eprintln!("{}", lalgs_repr_vec.len());
+            // eprintln!("{}", lalgs_repr_vec.len());
         }
     }
     

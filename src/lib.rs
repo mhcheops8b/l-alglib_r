@@ -219,12 +219,14 @@ pub fn gen_all_lalgs_rec(index:usize, positions:&Vec<(usize,usize)>, limpl: &mut
         //eprintln!("{limpl:?}");
         if l_alg_is_l_algebra(limpl, unit, false) {
             *num_tested+=1;
-            if *num_tested % 1000 == 1{
+            if *num_tested % 1000 == 1 {
                 eprintln!("Cur_progress: {limpl:?}");
+                // eprintln!("{:?}", l_alg_get_repr(limpl, true));
             }
 
             if l_alg_is_repr(limpl, true) {
                 println!("{limpl:?}");
+                // std::io::stdout().flush().unwrap();
                 res.insert(limpl.clone());
             }
             // if res.len() % 1000 == 0 {
@@ -456,24 +458,28 @@ pub fn l_alg_get_repr(limpl: &Vec<Vec<usize>>, b_minimal: bool) ->Vec<Vec<usize>
             iso_perm_vec[base_perm_vec[j]] = *perm[j];
         }
         
-        let mut b_preserve = true;
-        for idx1 in 0..n {
-            for idx2 in 0..n {
-                if idx1 != idx2 {
-                    if limpl[iso_perm_vec[idx1]][iso_perm_vec[idx2]] == lalg_unit && iso_perm_vec[idx1] > iso_perm_vec[idx2]{
-                        b_preserve = false;
-                        break;
-                    }
-                }
-            }
-            if !b_preserve {
-                break;
-            }
-        }
-        if !b_preserve {
+        // let mut b_preserve = true;
+        // for idx1 in 0..n {
+        //     for idx2 in (idx1+1)..n {
+        //         if idx1 < idx2 {
+        //         if limpl[idx1][idx2] == lalg_unit && iso_perm_vec[idx1] > iso_perm_vec[idx2]{
+        //             b_preserve = false;
+        //             break;
+        //         }
+        //         }
+        //     }
+        //     if !b_preserve {
+        //         break;
+        //     }
+        // }
+        // if !b_preserve {
+        //     continue;
+        // }
+
+        if !l_alg_perm_preserve_ord(limpl, &iso_perm_vec) {
             continue;
         }
-        
+
         // eprintln!("{perm:?}");
         // eprintln!("{iso_perm_vec:?}");
         let limpl_img = l_alg_isomorphic_image(limpl, lalg_unit, &iso_perm_vec).0;
@@ -493,16 +499,15 @@ pub fn l_alg_get_repr(limpl: &Vec<Vec<usize>>, b_minimal: bool) ->Vec<Vec<usize>
     limpl_repr
 }
 
+// canonical preserve e_i < e_j iff i < j
 pub fn l_alg_perm_preserve_ord(limpl: &Vec<Vec<usize>>, iso_perm_vec: &Vec<usize>) -> bool {
         let n = limpl.len();
         let lalg_unit = limpl[0][0];
 
         for idx1 in 0..n {
-            for idx2 in 0..n {
-                if idx1 != idx2 {
-                    if limpl[iso_perm_vec[idx1]][iso_perm_vec[idx2]] == lalg_unit && iso_perm_vec[idx1] > iso_perm_vec[idx2]{
-                        return false
-                    }
+            for idx2 in (idx1+1)..n {                
+                if limpl[idx1][idx2] == lalg_unit && iso_perm_vec[idx1] > iso_perm_vec[idx2]{
+                    return false
                 }
             }
         }
@@ -530,23 +535,24 @@ pub fn l_alg_is_repr(limpl: &Vec<Vec<usize>>, b_minimal: bool) -> bool {
             iso_perm_vec[base_perm_vec[j]] = *perm[j];
         }
         
-//        let mut b_preserve = true;
-//        for idx1 in 0..n {
-//            for idx2 in 0..n {
-//                if idx1 != idx2 {
-//                    if limpl[iso_perm_vec[idx1]][iso_perm_vec[idx2]] == lalg_unit && iso_perm_vec[idx1] > iso_perm_vec[idx2]{
-//                        b_preserve = false;
-//                        break;
-//                    }
-//                }
-//            }
-//            if !b_preserve {
-//                break;
-//            }
-//        }
-//        if !b_preserve {
-//            continue;
-//        }
+    //    let mut b_preserve = true;
+    //    for idx1 in 0..n {
+    //        for idx2 in 0..n {
+    //            if idx1 < idx2 {
+    //             //    if limpl[iso_perm_vec[idx1]][iso_perm_vec[idx2]] == lalg_unit && iso_perm_vec[idx1] > iso_perm_vec[idx2]{
+    //                 if limpl[idx1][idx2] == lalg_unit && iso_perm_vec[idx1] > iso_perm_vec[idx2]{
+    //                    b_preserve = false;
+    //                    break;
+    //                }
+    //            }
+    //        }
+    //        if !b_preserve {
+    //            break;
+    //        }
+    //    }
+    //    if !b_preserve {
+    //        continue;
+    //    }
         if !l_alg_perm_preserve_ord(limpl, &iso_perm_vec) {
             continue;
         }
