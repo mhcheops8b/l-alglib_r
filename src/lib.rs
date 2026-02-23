@@ -213,16 +213,24 @@ pub fn l_alg_get_all_filters(limpl: &Vec<Vec<usize>>, unit: usize) {
 pub fn gen_all_lalgs_rec(index:usize, positions:&Vec<(usize,usize)>, limpl: &mut Vec<Vec<usize>>, unit:usize, res:&mut HashSet<Vec<Vec<usize>>>, num_tested: &mut usize) {
     let n = positions.len();
     //eprintln!("FHFH: {index} / {n}");
-
+    *num_tested+=1;
+    if *num_tested % 10_000_000 == 1 {
+        eprintln!("Cur_progress: {limpl:?}");
+    }
     if index >= n {
         //eprintln!("FHFH: {index} / {n}");
         //eprintln!("{limpl:?}");
+        // *num_tested+=1;
+        // if true || *num_tested % 1000 == 1 {
+        //     eprintln!("Cur_progress: {limpl:?}");
+        //     // eprintln!("{:?}", l_alg_get_repr(limpl, true));
+        // }
         if l_alg_is_l_algebra(limpl, unit, false) {
-            *num_tested+=1;
-            if *num_tested % 1000 == 1 {
-                eprintln!("Cur_progress: {limpl:?}");
-                // eprintln!("{:?}", l_alg_get_repr(limpl, true));
-            }
+            // *num_tested+=1;
+            // if *num_tested % 1000 == 1 {
+            //     eprintln!("Cur_progress: {limpl:?}");
+            //     // eprintln!("{:?}", l_alg_get_repr(limpl, true));
+            // }
 
             if l_alg_is_repr(limpl, true) {
                 println!("{limpl:?}");
