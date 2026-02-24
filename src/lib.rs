@@ -276,7 +276,13 @@ pub fn gen_all_lalgs_rec(index:usize, positions:&Vec<(usize,usize)>, limpl: &mut
             // test ax4 partial
             let mut b_problem = false;
             for i in 0..m {
+                if b_problem {
+                    break;
+                }
                 for j in 0..m {
+                    if b_problem {
+                        break;
+                    }
                     if limpl[i][j] == m+1 {
                         continue;
                     }
