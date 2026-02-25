@@ -1,7 +1,8 @@
 use std::collections::{HashSet};
 use itertools::{Itertools};
 
-pub fn l_alg_ax1(limpl: &Vec<Vec<usize>>, unit: usize) -> bool {
+// Vec<Vec<usize>>
+pub fn l_alg_ax1(limpl: &[Vec<usize>], unit: usize) -> bool {
     let n = limpl.len();
 
     for x in 0..n {
@@ -12,7 +13,7 @@ pub fn l_alg_ax1(limpl: &Vec<Vec<usize>>, unit: usize) -> bool {
     true
 }
 
-pub fn l_alg_ax2(limpl: &Vec<Vec<usize>>, unit: usize) -> bool {
+pub fn l_alg_ax2(limpl: &[Vec<usize>], unit: usize) -> bool {
     let n = limpl.len();
 
     for x in 0..n {
@@ -23,7 +24,7 @@ pub fn l_alg_ax2(limpl: &Vec<Vec<usize>>, unit: usize) -> bool {
     true
 }
 
-pub fn l_alg_ax3(limpl: &Vec<Vec<usize>>, unit: usize) -> bool {
+pub fn l_alg_ax3(limpl: &[Vec<usize>], unit: usize) -> bool {
     let n = limpl.len();
 
     for x in 0..n {
@@ -34,7 +35,7 @@ pub fn l_alg_ax3(limpl: &Vec<Vec<usize>>, unit: usize) -> bool {
     true
 }
 
-pub fn l_alg_ax4(limpl: &Vec<Vec<usize>>, bprint: bool) -> bool {
+pub fn l_alg_ax4(limpl: &[Vec<usize>], bprint: bool) -> bool {
     let n = limpl.len();
 
     for x in 0..n {
@@ -53,7 +54,7 @@ pub fn l_alg_ax4(limpl: &Vec<Vec<usize>>, bprint: bool) -> bool {
     true
 }
 
-pub fn l_alg_ax5(limpl: &Vec<Vec<usize>>, unit: usize) -> bool {
+pub fn l_alg_ax5(limpl: &[Vec<usize>], unit: usize) -> bool {
     let n = limpl.len();
 
     for x in 0..n {
@@ -68,7 +69,7 @@ pub fn l_alg_ax5(limpl: &Vec<Vec<usize>>, unit: usize) -> bool {
     true
 }
 
-pub fn l_alg_is_l_algebra(limpl: &Vec<Vec<usize>>, unit: usize, bprint: bool) -> bool {
+pub fn l_alg_is_l_algebra(limpl: &[Vec<usize>], unit: usize, bprint: bool) -> bool {
     l_alg_ax1(limpl, unit) &&
     l_alg_ax2(limpl, unit) &&
     l_alg_ax3(limpl, unit) &&
@@ -76,7 +77,7 @@ pub fn l_alg_is_l_algebra(limpl: &Vec<Vec<usize>>, unit: usize, bprint: bool) ->
     l_alg_ax5(limpl, unit) 
 }
 
-pub fn l_alg_has_kl_property_old(limpl: &Vec<Vec<usize>>, unit: usize) -> bool {
+pub fn l_alg_has_kl_property_old(limpl: &[Vec<usize>], unit: usize) -> bool {
     let n = limpl.len();
 
     for x in 0..n {
@@ -90,7 +91,7 @@ pub fn l_alg_has_kl_property_old(limpl: &Vec<Vec<usize>>, unit: usize) -> bool {
     true
 }
 
-pub fn l_alg_has_kl_property(limpl: &Vec<Vec<usize>>, unit: usize) -> Result<bool,String> {
+pub fn l_alg_has_kl_property(limpl: &[Vec<usize>], unit: usize) -> Result<bool,String> {
     let n = limpl.len();
 
     for x in 0..n {
@@ -105,7 +106,7 @@ pub fn l_alg_has_kl_property(limpl: &Vec<Vec<usize>>, unit: usize) -> Result<boo
 }
 
 
-pub fn l_alg_is_commutative_l_algebra(limpl: &Vec<Vec<usize>>) -> Result<bool,String> {
+pub fn l_alg_is_commutative_l_algebra(limpl: &[Vec<usize>]) -> Result<bool,String> {
     let n = limpl.len();
 
     for x in 0..n {
@@ -120,7 +121,7 @@ pub fn l_alg_is_commutative_l_algebra(limpl: &Vec<Vec<usize>>) -> Result<bool,St
     Ok(true)
 }
 
-pub fn l_alg_is_cl_algebra(limpl: &Vec<Vec<usize>>) -> Result<bool,String> {
+pub fn l_alg_is_cl_algebra(limpl: &[Vec<usize>]) -> Result<bool,String> {
     let n = limpl.len();
 
     for x in 0..n {
@@ -137,7 +138,7 @@ pub fn l_alg_is_cl_algebra(limpl: &Vec<Vec<usize>>) -> Result<bool,String> {
     Ok(true)
 }
 
-pub fn l_alg_is_left_distributive(limpl: &Vec<Vec<usize>>) -> Result<bool,String> {
+pub fn l_alg_is_left_distributive(limpl: &[Vec<usize>]) -> Result<bool,String> {
     let n = limpl.len();
 
     for x in 0..n {
@@ -154,7 +155,7 @@ pub fn l_alg_is_left_distributive(limpl: &Vec<Vec<usize>>) -> Result<bool,String
     Ok(true)
 }
 
-pub fn l_alg_is_right_distributive(limpl: &Vec<Vec<usize>>) -> Result<bool,String> {
+pub fn l_alg_is_right_distributive(limpl: &[Vec<usize>]) -> Result<bool,String> {
     let n = limpl.len();
 
     for x in 0..n {
@@ -171,7 +172,7 @@ pub fn l_alg_is_right_distributive(limpl: &Vec<Vec<usize>>) -> Result<bool,Strin
     Ok(true)
 }
 
-pub fn l_alg_is_filter(limpl: &Vec<Vec<usize>>, unit: usize, subset: &HashSet<usize>, bprint: bool) -> bool {
+pub fn l_alg_is_filter(limpl: &[Vec<usize>], unit: usize, subset: &HashSet<usize>, bprint: bool) -> bool {
     if !subset.contains(&unit) {
         return false;
     }
@@ -190,7 +191,7 @@ pub fn l_alg_is_filter(limpl: &Vec<Vec<usize>>, unit: usize, subset: &HashSet<us
     true
 }
 
-pub fn l_alg_get_all_filters(limpl: &Vec<Vec<usize>>, unit: usize) {
+pub fn l_alg_get_all_filters(limpl: &[Vec<usize>], unit: usize) {
     let n = limpl.len();
 
     for i in 0usize..(1<<n) {
@@ -210,7 +211,7 @@ pub fn l_alg_get_all_filters(limpl: &Vec<Vec<usize>>, unit: usize) {
     }
 }
 
-pub fn l_alg_test_ax4_partial(limpl: &Vec<Vec<usize>>, b_print: bool) -> bool {
+pub fn l_alg_test_ax4_partial(limpl: &[Vec<usize>], b_print: bool) -> bool {
     let m = limpl.len();
 
     // test ax4 partial
@@ -355,7 +356,7 @@ pub fn gen_all_lalgs_rec(index:usize, positions:&Vec<(usize,usize)>, limpl: &mut
     }
 }
 
-pub fn l_alg_isomorphic_image(limpl: &Vec<Vec<usize>>, unit: usize, perm:&Vec<usize>) -> (Vec<Vec<usize>>, usize) {
+pub fn l_alg_isomorphic_image(limpl: &[Vec<usize>], unit: usize, perm:&[usize]) -> (Vec<Vec<usize>>, usize) {
     let n = limpl.len();
     let mut res = Vec::<Vec<usize>>::new();
     
@@ -380,19 +381,20 @@ pub fn l_alg_isomorphic_image(limpl: &Vec<Vec<usize>>, unit: usize, perm:&Vec<us
 
 
 pub fn l_alg_alloc_limpl(n:usize) -> Vec<Vec<usize>> {
-    let mut res = Vec::<Vec<usize>>::new();
+    vec![vec![0;n];n]
+    // let mut res = Vec::<Vec<usize>>::new();
 
-    for i in 0..n {
-        res.push(Vec::<usize>::new());
-        for _ in 0..n {
-            res[i].push(0);
-        }
-    }
+    // for i in 0..n {
+    //     res.push(Vec::<usize>::new());
+    //     for _ in 0..n {
+    //         res[i].push(0);
+    //     }
+    // }
 
-    res
+    // res
 }
 
-pub fn l_alg_init_limpl(limpl: &mut Vec<Vec<usize>>) {
+pub fn l_alg_init_limpl(limpl: &mut [Vec<usize>]) {
     let n = limpl.len();
 
     for i in 0..n {
@@ -402,7 +404,7 @@ pub fn l_alg_init_limpl(limpl: &mut Vec<Vec<usize>>) {
 } 
 
 
-pub fn l_alg_init_from_ord(limpl: &mut Vec<Vec<usize>>, order: &Vec<Vec<usize>>, unit_elem:usize, unfilled_positions: &mut Vec<(usize,usize)>) {
+pub fn l_alg_init_from_ord(limpl: &mut [Vec<usize>], order: &[Vec<usize>], unit_elem:usize, unfilled_positions: &mut Vec<(usize,usize)>) {
     let n = limpl.len();
     for i in 0.. n {
         if i != unit_elem {
@@ -423,7 +425,7 @@ pub fn l_alg_init_from_ord(limpl: &mut Vec<Vec<usize>>, order: &Vec<Vec<usize>>,
         }
     }
 }
-pub fn qord_is_antisymmetric(qord: &Vec<Vec<usize>>) -> bool {
+pub fn qord_is_antisymmetric(qord: &[Vec<usize>]) -> bool {
     let n = qord.len();
 
     for i in 0..n {
@@ -437,7 +439,7 @@ pub fn qord_is_antisymmetric(qord: &Vec<Vec<usize>>) -> bool {
     true
 }
 
-pub fn l_alg_cmp_is_strictly_less(limpl1: &Vec<Vec<usize>>, limpl2: &Vec<Vec<usize>>) -> bool {
+pub fn l_alg_cmp_is_strictly_less(limpl1: &[Vec<usize>], limpl2: &[Vec<usize>]) -> bool {
     let n = limpl1.len();
     let mut i = 0usize;
     let mut j = 0usize;
@@ -463,7 +465,7 @@ pub fn l_alg_cmp_is_strictly_less(limpl1: &Vec<Vec<usize>>, limpl2: &Vec<Vec<usi
     false
 }
 
-pub fn l_alg_cmp_is_strictly_greater(limpl1: &Vec<Vec<usize>>, limpl2: &Vec<Vec<usize>>) -> bool {
+pub fn l_alg_cmp_is_strictly_greater(limpl1: &[Vec<usize>], limpl2: &[Vec<usize>]) -> bool {
     let n = limpl1.len();
     let mut i = 0usize;
     let mut j = 0usize;
@@ -491,7 +493,7 @@ pub fn l_alg_cmp_is_strictly_greater(limpl1: &Vec<Vec<usize>>, limpl2: &Vec<Vec<
 
 
 
-pub fn l_alg_get_repr(limpl: &Vec<Vec<usize>>, b_minimal: bool) ->Vec<Vec<usize>> {
+pub fn l_alg_get_repr(limpl: &[Vec<usize>], b_minimal: bool) ->Vec<Vec<usize>> {
     let n = limpl.len();
     let lalg_unit = limpl[0][0];
 
@@ -499,7 +501,7 @@ pub fn l_alg_get_repr(limpl: &Vec<Vec<usize>>, b_minimal: bool) ->Vec<Vec<usize>
     let mut iso_perm_vec= Vec::<usize>::new();
     //let mut limpl_repr = Vec::<Vec<usize>>::new();
 
-    let mut limpl_repr = limpl.clone();
+    let mut limpl_repr = limpl.to_owned();//clone();
     for i in 0..n {
         if i != lalg_unit {
             base_perm_vec.push(i);
@@ -554,7 +556,7 @@ pub fn l_alg_get_repr(limpl: &Vec<Vec<usize>>, b_minimal: bool) ->Vec<Vec<usize>
 }
 
 // canonical preserve e_i < e_j iff i < j
-pub fn l_alg_perm_preserve_ord(limpl: &Vec<Vec<usize>>, iso_perm_vec: &Vec<usize>) -> bool {
+pub fn l_alg_perm_preserve_ord(limpl: &[Vec<usize>], iso_perm_vec: &[usize]) -> bool {
         let n = limpl.len();
         let lalg_unit = limpl[0][0];
 
