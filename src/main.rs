@@ -113,6 +113,7 @@ fn main() {
     let n = 6;
     let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
     let mut num_tested = 0usize;
+    let mut num_models = 0usize;
     // let mut qords = Vec::<Vec<Vec<usize>>>::new();
 
     // let mut qord = l_alglib::l_alg_alloc_limpl(n+1);
@@ -171,7 +172,7 @@ fn main() {
             // return;
             eprintln!("{positions:?}");
             
-            l_alglib::gen_all_lalgs_rec(0, &positions, &mut falg, n, &mut lalgs, &mut num_tested);
+            l_alglib::gen_all_lalgs_rec(0, &positions, &mut falg, n, &mut lalgs, &mut num_tested, &mut num_models);
 
             eprintln!("{}", lalgs.len());
         }
@@ -204,7 +205,8 @@ fn main7() {
     eprintln!("{positions:?}");
     let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
     let mut num_tested = 0usize;
-    l_alglib::gen_all_lalgs_rec(0, &positions, &mut falg, unit, &mut lalgs, &mut num_tested);
+    let mut num_models = 0usize;
+    l_alglib::gen_all_lalgs_rec(0, &positions, &mut falg, unit, &mut lalgs, &mut num_tested, &mut  num_models);
 
     eprintln!("{lalgs:?}");
 }
@@ -235,7 +237,8 @@ fn main6() {
     // generate algebras
     let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
     let mut num_tested = 0usize;
-    l_alglib::gen_all_lalgs_rec(0, &positions, &mut lalg_impl, lalg_unit, &mut lalgs, &mut num_tested);
+    let mut num_models = 0usize;
+    l_alglib::gen_all_lalgs_rec(0, &positions, &mut lalg_impl, lalg_unit, &mut lalgs, &mut num_tested, &mut num_models);
 
     // eliminate isomorphic
     let mut lalgs_processed = HashSet::<Vec<Vec<usize>>>::new();
@@ -306,9 +309,10 @@ fn main33() {
 
     let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
     let mut num_tested = 0usize;
+    let mut num_models = 0usize;
     
     
-    l_alglib::gen_all_lalgs_rec(0, &positions4, &mut limpl4, unit4, &mut lalgs, &mut num_tested);
+    l_alglib::gen_all_lalgs_rec(0, &positions4, &mut limpl4, unit4, &mut lalgs, &mut num_tested, &mut num_models);
 
     // println!("{lalgs:?}");
     // return;
@@ -372,9 +376,10 @@ fn main4() {
 
     let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
     let mut num_tested = 0usize;
+    let mut num_models = 0usize;
     
     
-    l_alglib::gen_all_lalgs_rec(0, &positions, &mut ex3_limpl, ex3_unit, &mut lalgs, &mut num_tested);
+    l_alglib::gen_all_lalgs_rec(0, &positions, &mut ex3_limpl, ex3_unit, &mut lalgs, &mut num_tested, &mut num_models);
 
     // println!("{lalgs:?}");
     // return;

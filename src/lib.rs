@@ -210,7 +210,39 @@ pub fn l_alg_get_all_filters(limpl: &Vec<Vec<usize>>, unit: usize) {
     }
 }
 
-pub fn gen_all_lalgs_rec(index:usize, positions:&Vec<(usize,usize)>, limpl: &mut Vec<Vec<usize>>, unit:usize, res:&mut HashSet<Vec<Vec<usize>>>, num_tested: &mut usize) {
+pub fn l_alg_test_ax4_partial(limpl: &Vec<Vec<usize>>, b_print: bool) -> bool {
+    let m = limpl.len();
+
+    // test ax4 partial
+    for i in 0..m {
+        for j in 0..m {
+            if limpl[i][j] == m+1 {
+                continue;
+            }
+            if limpl[j][i] == m+1 {
+                continue;
+            }
+            for k in 0..m {
+                if limpl[i][k] == m+1 {
+                    continue;
+                }
+                if limpl[j][k] == m+1 {
+                    continue;
+                }
+                if limpl[limpl[i][j]][limpl[i][k]] != m+1 && limpl[limpl[j][i]][limpl[j][k]] != m+1 &&  
+                   limpl[limpl[i][j]][limpl[i][k]] != limpl[limpl[j][i]][limpl[j][k]] {
+                    if b_print {
+                        eprintln!("Partial ax4 is not satisfied for x = {}, y = {}, z = {}", i, j, k);
+                    }
+                    return false;
+                }
+            }
+        }
+    }
+    true
+}
+
+pub fn gen_all_lalgs_rec(index:usize, positions:&Vec<(usize,usize)>, limpl: &mut Vec<Vec<usize>>, unit:usize, res:&mut HashSet<Vec<Vec<usize>>>, num_tested: &mut usize, num_models: &mut usize) {
     let n = positions.len();
     //eprintln!("FHFH: {index} / {n}");
     *num_tested+=1;
@@ -226,17 +258,24 @@ pub fn gen_all_lalgs_rec(index:usize, positions:&Vec<(usize,usize)>, limpl: &mut
         //     // eprintln!("{:?}", l_alg_get_repr(limpl, true));
         // }
         if l_alg_is_l_algebra(limpl, unit, false) {
+            *num_models +=1;
+            // println!("{:?}", l_alg_get_repr(limpl, true));
+            // eprintln!("== {:?}", limpl);
+            // eprintln!("-> {:?}", l_alg_get_repr(limpl, true));
             // *num_tested+=1;
             // if *num_tested % 1000 == 1 {
             //     eprintln!("Cur_progress: {limpl:?}");
             //     // eprintln!("{:?}", l_alg_get_repr(limpl, true));
             // }
-
-            if l_alg_is_repr(limpl, true) {
-                println!("{limpl:?}");
-                // std::io::stdout().flush().unwrap();
-                res.insert(limpl.clone());
+            let l_alg_repr = l_alg_get_repr(limpl, true);
+            if res.insert(l_alg_repr.clone()) {
+                println!("{:?}", l_alg_repr);
             }
+            // if l_alg_is_repr(limpl, true) {
+            //     println!("{limpl:?}");
+            //     // std::io::stdout().flush().unwrap();
+            //     res.insert(limpl.clone());
+            // }
             // if res.len() % 1000 == 0 {
             //     eprintln!("{limpl:?}");
             // }
@@ -261,6 +300,7 @@ pub fn gen_all_lalgs_rec(index:usize, positions:&Vec<(usize,usize)>, limpl: &mut
             if limpl[y][x] == unit && limpl[y][e] != unit {
                 continue;
             }
+
             let mut b_found = false;
             for t in 0..y {
                 if limpl[t][y] == unit && limpl[limpl[x][t]][e] != unit {
@@ -273,43 +313,43 @@ pub fn gen_all_lalgs_rec(index:usize, positions:&Vec<(usize,usize)>, limpl: &mut
             }
             limpl[x][y] = e;
 
-            // test ax4 partial
-            let mut b_problem = false;
-            for i in 0..m {
-                if b_problem {
-                    break;
-                }
-                for j in 0..m {
-                    if b_problem {
-                        break;
-                    }
-                    if limpl[i][j] == m+1 {
-                        continue;
-                    }
-                    if limpl[j][i] == m+1 {
-                        continue;
-                    }
-                    for k in 0..m {
-                        if limpl[i][k] == m+1 {
-                            continue;
-                        }
-                        if limpl[j][k] == m+1 {
-                            continue;
-                        }
-                        if limpl[limpl[i][j]][limpl[i][k]] != m+1 && limpl[limpl[j][i]][limpl[j][k]] != m+1 &&  limpl[limpl[i][j]][limpl[i][k]] != limpl[limpl[j][i]][limpl[j][k]] {
-                            b_problem = true;
-                            break;
-                        }
-                    }
-                }
-            }
+            // // test ax4 partial
+            // let mut b_problem = false;
+            // for i in 0..m {
+            //     if b_problem {
+            //         break;
+            //     }
+            //     for j in 0..m {
+            //         if b_problem {
+            //             break;
+            //         }
+            //         if limpl[i][j] == m+1 {
+            //             continue;
+            //         }
+            //         if limpl[j][i] == m+1 {
+            //             continue;
+            //         }
+            //         for k in 0..m {
+            //             if limpl[i][k] == m+1 {
+            //                 continue;
+            //             }
+            //             if limpl[j][k] == m+1 {
+            //                 continue;
+            //             }
+            //             if limpl[limpl[i][j]][limpl[i][k]] != m+1 && limpl[limpl[j][i]][limpl[j][k]] != m+1 &&  limpl[limpl[i][j]][limpl[i][k]] != limpl[limpl[j][i]][limpl[j][k]] {
+            //                 b_problem = true;
+            //                 break;
+            //             }
+            //         }
+            //     }
+            // }
 
-            if b_problem {
+            if !l_alg_test_ax4_partial(limpl, false) {
                 limpl[x][y] = m+1;
                 continue;
             }
             
-            gen_all_lalgs_rec(index+1, positions, limpl, unit, res, num_tested);
+            gen_all_lalgs_rec(index+1, positions, limpl, unit, res, num_tested, num_models);
         }
         limpl[x][y] = m+1; //unfilled element
     }
@@ -590,3 +630,37 @@ pub fn l_alg_is_repr(limpl: &Vec<Vec<usize>>, b_minimal: bool) -> bool {
     true
 }
 
+pub fn parse_vector(line: &String) -> Vec<Vec<usize>> {
+        let mut parsed_vector = Vec::<Vec<usize>>::new();
+        for t in line.split("[") {
+            if t=="" {
+                continue;
+            }
+            let mut tt = String::from(t);
+            
+            let gg = tt.find("], ");
+            if gg.is_some() {
+                let pos = gg.unwrap();
+                tt.remove(pos);
+                tt.remove(pos);
+                tt.remove(pos);
+            }
+            let gg = tt.find("]]");
+            if gg.is_some() {
+                let pos = gg.unwrap();
+                tt.remove(pos);
+                tt.remove(pos);
+            }
+            let vv = tt.split(", ").map(|v| {//println!("v = {v:?}"); 
+            v.trim().parse::<usize>().unwrap()}).collect::<Vec<_>>();
+            // println!("{vv:?}");
+            parsed_vector.push(vv);
+
+            //tt.remove_matches("]]");
+            //println!("{tt:?}");
+        }
+        // println!("{parsed_vector:?}");
+
+        parsed_vector
+
+}
