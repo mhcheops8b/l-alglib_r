@@ -32,7 +32,7 @@ fn main() {
     }
 
     for line in file.lines() {
-        let lalg = l_alglib::parse_vector(&line.unwrap());
+        let lalg = serde_json::from_str::<Vec<Vec<usize>>>(&line.unwrap()).unwrap();//l_alglib::parse_vector(&line.unwrap());
         
         println!("{:?}", l_alglib::l_alg_get_repr(&lalg, b_min_repr));
     }

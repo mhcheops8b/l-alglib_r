@@ -74,8 +74,8 @@ fn main() {
         if cur_line_no == pord_num {
             let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
             // println!("{cur_line:?}");
-            let pord = l_alglib::parse_vector(&cur_line);
-
+            // let pord = l_alglib::parse_vector(&cur_line);
+            let pord = serde_json::from_str::<Vec<Vec<usize>>>(&cur_line).unwrap();
             
             eprintln!("Order: {pord:?}");
 

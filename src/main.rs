@@ -6,44 +6,51 @@ use std::fs::File;
 use bzip2::read::{BzDecoder};
 use std::io::{BufReader};
 
-#[allow(dead_code)]
-fn parse_vector(line: &String) -> Vec<Vec<usize>> {
-        let mut parsed_vector = Vec::<Vec<usize>>::new();
-        for t in line.split("[") {
-            if t=="" {
-                continue;
-            }
-            let mut tt = String::from(t);
+// #[allow(dead_code)]
+// fn parse_vector(line: &String) -> Vec<Vec<usize>> {
+//         let mut parsed_vector = Vec::<Vec<usize>>::new();
+//         for t in line.split("[") {
+//             if t=="" {
+//                 continue;
+//             }
+//             let mut tt = String::from(t);
             
-            let gg = tt.find("], ");
-            if gg.is_some() {
-                let pos = gg.unwrap();
-                tt.remove(pos);
-                tt.remove(pos);
-                tt.remove(pos);
-            }
-            let gg = tt.find("]]");
-            if gg.is_some() {
-                let pos = gg.unwrap();
-                tt.remove(pos);
-                tt.remove(pos);
-            }
-            let vv = tt.split(", ").map(|v| {//println!("v = {v:?}"); 
-            v.trim().parse::<usize>().unwrap()}).collect::<Vec<_>>();
-            // println!("{vv:?}");
-            parsed_vector.push(vv);
+//             let gg = tt.find("], ");
+//             if gg.is_some() {
+//                 let pos = gg.unwrap();
+//                 tt.remove(pos);
+//                 tt.remove(pos);
+//                 tt.remove(pos);
+//             }
+//             let gg = tt.find("]]");
+//             if gg.is_some() {
+//                 let pos = gg.unwrap();
+//                 tt.remove(pos);
+//                 tt.remove(pos);
+//             }
+//             let vv = tt.split(", ").map(|v| {//println!("v = {v:?}"); 
+//             v.trim().parse::<usize>().unwrap()}).collect::<Vec<_>>();
+//             // println!("{vv:?}");
+//             parsed_vector.push(vv);
 
-            //tt.remove_matches("]]");
-            //println!("{tt:?}");
-        }
-        // println!("{parsed_vector:?}");
+//             //tt.remove_matches("]]");
+//             //println!("{tt:?}");
+//         }
+//         // println!("{parsed_vector:?}");
 
-        parsed_vector
+//         parsed_vector
 
-}
+// }
+
 
 //#![feature(string_remove_matches)]
 fn main() {
+    // use serde_json::{Result, Value};
+    // let v_str = "[[0,1,2],[2,3,4],[4,5,6]]";
+
+    // let v = serde_json::from_str::<Vec<Vec<usize>>>(v_str).unwrap();
+    // eprintln!("{v:?}");
+    // return;
     // let file = BufReader::new(File::open("./hh6_1.txt").expect("Cannot open file"));
 
     // for line in file.lines() {

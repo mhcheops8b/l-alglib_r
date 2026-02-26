@@ -40,9 +40,11 @@ pub fn l_alg_ax4(limpl: &[Vec<usize>], bprint: bool) -> bool {
 
     for x in 0..n {
         for y in 0..n {
+            let v_xy = limpl[x][y];
+            let v_yx = limpl[y][x];
             for z in 0..n {        
-                if limpl[limpl[x][y]][limpl[x][z]] != 
-                   limpl[limpl[y][x]][limpl[y][z]] {
+                if limpl[v_xy][limpl[x][z]] != 
+                   limpl[v_yx][limpl[y][z]] {
                     if bprint {
                         eprintln!("  Problem: x = {}, y = {}, z = {}", x, y, z);
                     }
@@ -59,10 +61,8 @@ pub fn l_alg_ax5(limpl: &[Vec<usize>], unit: usize) -> bool {
 
     for x in 0..n {
         for y in 0..n {
-            if x != y {
-                if limpl[x][y] == unit && limpl[y][x] == unit {
+            if x != y && limpl[x][y] == unit && limpl[y][x] == unit {
                     return false;
-                }
             }
         }
     }
@@ -570,7 +570,7 @@ pub fn l_alg_perm_preserve_ord(limpl: &[Vec<usize>], iso_perm_vec: &[usize]) -> 
         true
 }
 
-pub fn l_alg_is_repr(limpl: &Vec<Vec<usize>>, b_minimal: bool) -> bool {
+pub fn l_alg_is_repr(limpl: &[Vec<usize>], b_minimal: bool) -> bool {
     let n = limpl.len();
     let lalg_unit = limpl[0][0];
 
@@ -618,12 +618,12 @@ pub fn l_alg_is_repr(limpl: &Vec<Vec<usize>>, b_minimal: bool) -> bool {
         let limpl_img = l_alg_isomorphic_image(limpl, lalg_unit, &iso_perm_vec).0;
 
         if b_minimal {
-            if l_alg_cmp_is_strictly_less(&limpl_img, &limpl) {
+            if l_alg_cmp_is_strictly_less(&limpl_img, limpl) {
                 return false;
             }
         }
         else {
-            if l_alg_cmp_is_strictly_greater(&limpl_img, &limpl) {
+            if l_alg_cmp_is_strictly_greater(&limpl_img, limpl) {
                 return false;
             }
         }
@@ -632,37 +632,37 @@ pub fn l_alg_is_repr(limpl: &Vec<Vec<usize>>, b_minimal: bool) -> bool {
     true
 }
 
-pub fn parse_vector(line: &String) -> Vec<Vec<usize>> {
-        let mut parsed_vector = Vec::<Vec<usize>>::new();
-        for t in line.split("[") {
-            if t=="" {
-                continue;
-            }
-            let mut tt = String::from(t);
+// pub fn parse_vector(line: &String) -> Vec<Vec<usize>> {
+//         let mut parsed_vector = Vec::<Vec<usize>>::new();
+//         for t in line.split("[") {
+//             if t=="" {
+//                 continue;
+//             }
+//             let mut tt = String::from(t);
             
-            let gg = tt.find("], ");
-            if gg.is_some() {
-                let pos = gg.unwrap();
-                tt.remove(pos);
-                tt.remove(pos);
-                tt.remove(pos);
-            }
-            let gg = tt.find("]]");
-            if gg.is_some() {
-                let pos = gg.unwrap();
-                tt.remove(pos);
-                tt.remove(pos);
-            }
-            let vv = tt.split(", ").map(|v| {//println!("v = {v:?}"); 
-            v.trim().parse::<usize>().unwrap()}).collect::<Vec<_>>();
-            // println!("{vv:?}");
-            parsed_vector.push(vv);
+//             let gg = tt.find("], ");
+//             if gg.is_some() {
+//                 let pos = gg.unwrap();
+//                 tt.remove(pos);
+//                 tt.remove(pos);
+//                 tt.remove(pos);
+//             }
+//             let gg = tt.find("]]");
+//             if gg.is_some() {
+//                 let pos = gg.unwrap();
+//                 tt.remove(pos);
+//                 tt.remove(pos);
+//             }
+//             let vv = tt.split(", ").map(|v| {//println!("v = {v:?}"); 
+//             v.trim().parse::<usize>().unwrap()}).collect::<Vec<_>>();
+//             // println!("{vv:?}");
+//             parsed_vector.push(vv);
 
-            //tt.remove_matches("]]");
-            //println!("{tt:?}");
-        }
-        // println!("{parsed_vector:?}");
+//             //tt.remove_matches("]]");
+//             //println!("{tt:?}");
+//         }
+//         // println!("{parsed_vector:?}");
 
-        parsed_vector
+//         parsed_vector
 
-}
+// }
