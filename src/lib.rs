@@ -211,6 +211,51 @@ pub fn l_alg_get_all_filters(limpl: &[Vec<usize>], unit: usize) {
     }
 }
 
+pub fn l_alg_test_ax4_partial_xy(limpl: &[Vec<usize>], x: usize, y: usize, b_print: bool) -> bool {
+    let m = limpl.len();
+
+    if limpl[y][x] != m+1 {
+        for z in 0..m {
+            if limpl[x][z] != m+1 && limpl[y][z] != m+1 
+            && limpl[limpl[x][y]][limpl[x][z]] != m+1
+            && limpl[limpl[y][x]][limpl[y][z]] != m+1
+            && limpl[limpl[x][y]][limpl[x][z]] != limpl[limpl[y][x]][limpl[y][z]] {
+                return false;
+            }
+        }
+    }
+    for z in 0..m {
+        if limpl[x][z] == m+1 || limpl[z][x] == m+1 || limpl[z][y] == m+1 {
+            continue;
+        }
+
+        if limpl[limpl[x][z]][limpl[x][y]] != m+1 
+           && limpl[limpl[z][x]][limpl[z][y]] != m+1
+           && limpl[limpl[x][z]][limpl[x][y]] != limpl[limpl[z][x]][limpl[z][y]] {
+            return false;
+           }
+    }
+    for s in 0..m {
+        for t in 0..m {
+            if limpl[s][t] == x {
+                for u in 0..m {
+                    if limpl[s][u] == y {
+                        if limpl[t][s] != m+1 && limpl[t][u] != m+1 &&
+                           limpl[limpl[t][s]][limpl[t][u]] != m+1 && 
+                           limpl[limpl[t][s]][limpl[t][u]] != limpl[x][y] {
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    true
+}
+
+
 pub fn l_alg_test_ax4_partial(limpl: &[Vec<usize>], b_print: bool) -> bool {
     let m = limpl.len();
 
@@ -345,7 +390,8 @@ pub fn gen_all_lalgs_rec(index:usize, positions:&Vec<(usize,usize)>, limpl: &mut
             //     }
             // }
 
-            if !l_alg_test_ax4_partial(limpl, false) {
+            if !l_alg_test_ax4_partial_xy(limpl, x, y, false) {
+            // if !l_alg_test_ax4_partial(limpl, false) {
                 limpl[x][y] = m+1;
                 continue;
             }
