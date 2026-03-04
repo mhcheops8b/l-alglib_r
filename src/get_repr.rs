@@ -5,7 +5,7 @@ fn main() {
     let args_len = std::env::args().len();
 
     if args_len < 2 {
-        println!("Usage: {} filename [0=min(default),1=max_repr]", std::env::args().next().unwrap());
+        println!("Usage: {} filename [0=min(default),1=max_repr] [1=canonical(default),0=total]", std::env::args().next().unwrap());
         return;
     }
     let filename = std::env::args().nth(1).unwrap();
@@ -15,7 +15,7 @@ fn main() {
     let mut repr_kind = 0usize;
     let mut b_min_repr = true;
     if args_len == 3 {
-        match std::env::args().nth(1).unwrap().parse() {
+        match std::env::args().nth(2).unwrap().parse() {
             Ok(val) => {repr_kind = val},
             Err(_e) => println!("First argument must be a number.")
         }
@@ -30,11 +30,29 @@ fn main() {
             return;
         }
     }
+    let mut b_canonical = true;
+    if args_len == 4 {
+        match std::env::args().nth(3).unwrap().parse() {
+            Ok(val) => {repr_kind = val},
+            Err(_e) => println!("First argument must be a number.")
+        }
+        if repr_kind == 0 {
+            b_canonical = false;
+        }
+        else if repr_kind == 1 {
+            b_canonical = true;
+        }
+        else {
+            eprintln!("Uknown repr type: 0, 1 are expected.");
+            return;
+        }
+    }
+
 
     for line in file.lines() {
         let lalg = serde_json::from_str::<Vec<Vec<usize>>>(&line.unwrap()).unwrap();//l_alglib::parse_vector(&line.unwrap());
         
-        println!("{:?}", l_alglib::l_alg_get_repr(&lalg, b_min_repr));
+        println!("{:?}", l_alglib::l_alg_get_repr(&lalg, b_min_repr, b_canonical));
     }
 
     // return;

@@ -313,7 +313,7 @@ pub fn gen_all_lalgs_rec(index:usize, positions:&Vec<(usize,usize)>, limpl: &mut
             //     eprintln!("Cur_progress: {limpl:?}");
             //     // eprintln!("{:?}", l_alg_get_repr(limpl, true));
             // }
-            let l_alg_repr = l_alg_get_repr(limpl, true);
+            let l_alg_repr = l_alg_get_repr(limpl, true, true);
             if res.insert(l_alg_repr.clone()) {
                 println!("{:?}", l_alg_repr);
             }
@@ -539,7 +539,7 @@ pub fn l_alg_cmp_is_strictly_greater(limpl1: &[Vec<usize>], limpl2: &[Vec<usize>
 
 
 
-pub fn l_alg_get_repr(limpl: &[Vec<usize>], b_minimal: bool) ->Vec<Vec<usize>> {
+pub fn l_alg_get_repr(limpl: &[Vec<usize>], b_minimal: bool, b_canonical: bool) ->Vec<Vec<usize>> {
     let n = limpl.len();
     let lalg_unit = limpl[0][0];
 
@@ -577,9 +577,10 @@ pub fn l_alg_get_repr(limpl: &[Vec<usize>], b_minimal: bool) ->Vec<Vec<usize>> {
         // if !b_preserve {
         //     continue;
         // }
-
-        if !l_alg_perm_preserve_ord(limpl, &iso_perm_vec) {
-            continue;
+        if b_canonical {
+            if !l_alg_perm_preserve_ord(limpl, &iso_perm_vec) {
+                continue;
+            }
         }
 
         // eprintln!("{perm:?}");
