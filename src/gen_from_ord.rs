@@ -62,8 +62,12 @@ fn main() {
         init_vector = init_vector_str.split(",").map(|v| v.trim().parse().unwrap()).collect();
         eprintln!("Init vector (int): {:?}", init_vector);
     }
-   let n = 7usize;
-    let file = BufReader::new(File::open("ord7_with_top.txt").expect("Cannot open file"));
+    // let n = 7usize;
+    // let file = BufReader::new(File::open("ord7_with_top.txt").expect("Cannot open file"));
+    let n = 8usize;
+    let ord_filename =format!("ord{}_with_top.txt", n);
+    let file = BufReader::new(File::open(ord_filename).expect("Cannot open file"));
+
     // let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
     let mut cur_line_no = 0usize;
     for line in file.lines() {
