@@ -45,6 +45,61 @@ use std::io::{BufReader};
 
 //#![feature(string_remove_matches)]
 fn main() {
+    // let n = 7usize;
+    // let lalg_unit = n-1;
+    // let file = BufReader::new(File::open("ord7_with_top.txt").expect("Cannot open file"));
+    // let pord_num = 300;
+    // // let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
+    // let mut cur_line_no = 0usize;
+    // for line in file.lines() {
+    //     let cur_line = line.unwrap();
+    //     cur_line_no+=1;
+        
+
+    //     if cur_line_no == pord_num {
+    //         let pord = serde_json::from_str::<Vec<Vec<usize>>>(&cur_line).unwrap();
+
+    //         let mut base_perm_vec = Vec::<usize>::new();
+    //         let mut iso_perm_vec= Vec::<usize>::new();
+    
+
+
+    //         for i in 0..n {
+    //             if i != lalg_unit {
+    //                 base_perm_vec.push(i);
+    //             }
+    //             iso_perm_vec.push(i);
+
+    //         }   
+    //         let mut cnt = 0usize;
+    //         for perm in base_perm_vec.iter().permutations(n-1) {
+    //             for j in 0..n-1 {
+    //                 iso_perm_vec[base_perm_vec[j]] = *perm[j];
+    //             }
+    //             let mut b_preserve_ord = true;
+    //             for i in 0..n {
+    //                 for j in (i+1)..n {
+    //                     if pord[i][j] == 1 && iso_perm_vec[i] > iso_perm_vec[j] {
+    //                         b_preserve_ord = false;
+    //                         break;
+    //                     }
+    //                 }
+    //                 if !b_preserve_ord {
+    //                     break;
+    //                 }
+    //             }
+    //             if b_preserve_ord {
+    //                 eprintln!("{iso_perm_vec:?}");
+    //                 cnt+=1;
+    //             }
+    //         }
+    //         eprintln!("{cnt}");
+
+    //     }
+        
+    // }
+    // return ;
+    
     // use serde_json::{Result, Value};
     // let v_str = "[[0,1,2],[2,3,4],[4,5,6]]";
 
