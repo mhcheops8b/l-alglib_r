@@ -26,24 +26,25 @@ fn main() {
             b_min_repr = false;
         }
         else {
-            eprintln!("Uknown repr type: 0, 1 are expected.");
+            eprintln!("Unknown repr type: 0, 1 are expected.");
             return;
         }
     }
     let mut b_canonical = true;
+    let mut repr_can = 0usize;
     if args_len == 4 {
         match std::env::args().nth(3).unwrap().parse() {
-            Ok(val) => {repr_kind = val},
+            Ok(val) => {repr_can = val},
             Err(_e) => println!("First argument must be a number.")
         }
-        if repr_kind == 0 {
+        if repr_can == 0 {
             b_canonical = false;
         }
-        else if repr_kind == 1 {
+        else if repr_can == 1 {
             b_canonical = true;
         }
         else {
-            eprintln!("Uknown repr type: 0, 1 are expected.");
+            eprintln!("Unknown can type: 0, 1 are expected.");
             return;
         }
     }
