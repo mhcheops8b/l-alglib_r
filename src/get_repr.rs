@@ -12,10 +12,10 @@ fn main() {
 
     let file = BufReader::new(File::open(filename).expect("Cannot open file"));
 
-    let mut repr_kind = 0usize;
+    let mut repr_kind = 2usize;
     let mut b_min_repr = true;
-    if args_len == 3 {
-        match std::env::args().nth(2).unwrap().parse() {
+    if args_len >= 3 {
+        match std::env::args().nth(2).unwrap().trim().parse() {
             Ok(val) => {repr_kind = val},
             Err(_e) => println!("First argument must be a number.")
         }
@@ -31,9 +31,9 @@ fn main() {
         }
     }
     let mut b_canonical = true;
-    let mut repr_can = 0usize;
-    if args_len == 4 {
-        match std::env::args().nth(3).unwrap().parse() {
+    let mut repr_can = 2usize;
+    if args_len >= 4 {
+        match std::env::args().nth(3).unwrap().trim().parse() {
             Ok(val) => {repr_can = val},
             Err(_e) => println!("First argument must be a number.")
         }
@@ -49,7 +49,7 @@ fn main() {
         }
     }
 
-
+    // eprintln!("{}, {}, {}", std::env::args().len(), b_min_repr, b_canonical);
     for line in file.lines() {
         let lalg = serde_json::from_str::<Vec<Vec<usize>>>(&line.unwrap()).unwrap();//l_alglib::parse_vector(&line.unwrap());
         
