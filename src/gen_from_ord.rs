@@ -93,6 +93,12 @@ fn main() {
                 let x = positions[i].0;
                 let y = positions[i].1;
                 let e = init_vector[i];
+                eprintln!("{},{},{}", x, y, e);
+
+                if e == n+1 {
+                    eprintln!("Skipping initialization of ({}, {})", x, y);
+                    continue;
+                }
                 if e == n-1 {
                     eprintln!("Element at ({}, {}) cannot be equal to unit ({}).",x,y,n-1);
                     return;
@@ -104,7 +110,7 @@ fn main() {
                 }
 
                 for t in 0..y {
-                    if lalg_limpl[t][y] == n-1 && lalg_limpl[lalg_limpl[x][t]][e] != n-1 {
+                    if lalg_limpl[t][y] == n-1 && lalg_limpl[x][t] != n+1 && lalg_limpl[lalg_limpl[x][t]][e] != n-1 {
                         eprintln!("Element e={} at (x={}, y={}) needs to larger than {} since t={} <= y => x->t <= x->y.", e, x, y, lalg_limpl[x][t], t);
                         return;
                     }
@@ -118,9 +124,14 @@ fn main() {
                 // perform tests TODO
             }
             
-            for _ in 0usize..std::cmp::min(positions.len(), init_vector.len()) {
-                positions.remove(0);
+            for i in (0usize..std::cmp::min(positions.len(), init_vector.len())).rev() {
+                if init_vector[i] != n+1 {
+                   positions.remove(i); 
+                }
             }
+            // for _ in 0usize..std::cmp::min(positions.len(), init_vector.len()) {
+            //     positions.remove(0);
+            // }
 
             eprintln!("Positions: {positions:?}");
             eprintln!("Init limpl: {lalg_limpl:?}");

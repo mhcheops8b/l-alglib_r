@@ -1,4 +1,5 @@
 // use core::num;
+use std::collections::HashMap;
 use std::{collections::HashSet, io::BufRead};
 use itertools::{Itertools};
 // use l_alglib::l_alg_init_limpl;
@@ -44,7 +45,343 @@ use std::io::{BufReader};
 
 
 //#![feature(string_remove_matches)]
+
+fn hashmap_perm_image(fun: &HashMap::<(usize,usize), usize>, perm: &Vec<usize>) -> HashMap::<(usize,usize), usize> {
+    let mut res_hm = HashMap::<(usize,usize), usize>::new();
+    
+
+    for k in fun.keys() {
+        let v = fun[k];
+        res_hm.insert((perm[k.0],perm[k.1]), perm[v]);
+    }
+    res_hm
+}
+
+fn get_images(perms_set: &HashSet::<Vec<usize>>, fun: &HashMap::<(usize,usize), usize>) -> Vec<Vec<usize>>{
+    let mut keys_sorted = fun.keys().collect::<Vec<_>>();
+    keys_sorted.sort();
+
+    let mut hs = HashSet::<Vec<usize>>::new();
+    for perm in perms_set {
+        let hh_img = hashmap_perm_image(fun, perm);
+        // get vector
+        let mut vv = Vec::<usize>::new();
+        for k in &keys_sorted {
+            vv.push(hh_img[k]);
+        }
+        hs.insert(vv);
+     }
+
+     let mut hs_v = hs.into_iter().collect::<Vec<_>>();
+     hs_v.sort();
+
+     hs_v
+ }
+
+ fn get_images2(perms_set: impl Iterator<Item=Vec<usize>>, fun: &HashMap::<(usize,usize), usize>) -> Vec<Vec<usize>> {
+
+    let mut keys_sorted = fun.keys().collect::<Vec<_>>();
+    keys_sorted.sort();
+
+    let mut hs = HashSet::<Vec<usize>>::new();
+    for perm in perms_set {
+         let hh_img = hashmap_perm_image(fun, &perm);
+         // get vector
+         let mut vv = Vec::<usize>::new();
+         for k in &keys_sorted {
+             vv.push(hh_img[k]);
+         }
+         hs.insert(vv);
+    }
+
+    let mut hs_v = hs.into_iter().collect::<Vec<_>>();
+    hs_v.sort();
+
+     hs_v
+ }
+
+
 fn main() {
+    // {
+    //     let tt = (0..5).map(|i| 0..=1);
+    //     // for t in tt {
+    //     //      println!("{t:?}");
+    //     // }
+
+    //     let mut multi_prod = tt.multi_cartesian_product();
+
+    //     for f in multi_prod {
+    //         println!("{f:?}");
+    //     }
+    // }
+    // return;
+    
+    // 408
+    // let pord = vec![vec![1usize, 1, 0, 0, 1, 0, 0, 1], vec![0, 1, 0, 0, 1, 0, 0, 1], vec![0, 0, 1, 0, 1, 0, 0, 1], vec![0, 0, 0, 1, 1, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+    // 338
+    let pord = vec![vec![1usize, 1, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+
+    let mut hh = HashMap::<(usize,usize), usize>::new();
+    let tt = (0..11).map(|i| 0..7usize);
+    let mut num_cls = 0usize;
+    for var in tt.multi_cartesian_product() {
+        hh.insert((0,1), 7);
+        hh.insert((0,2), var[0]);
+        hh.insert((0,3), var[1]);
+        hh.insert((0,4), var[2]);
+        hh.insert((0,5), var[3]);
+        hh.insert((0,6), var[4]);
+        hh.insert((1,0), var[5] );
+        hh.insert((1,2), var[6]);
+        hh.insert((1,3), var[7]);
+        hh.insert((1,4), var[8]);
+        hh.insert((1,5), var[9]);
+        hh.insert((1,6), var[10]);
+
+    
+        let pp = (0usize..pord.len()).collect::<Vec<_>>();
+        let jj = get_images2(pp.into_iter().permutations(pord.len())
+            .filter(|pe| pe[0]==0 && pe[1]==1 && l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+        // for perm in pp.into_iter().permutations(pord.len())
+        //     .filter(|pe| pe[0]==0 && pe[1]==1 && pe[4]==4 && l_alglib::pord_perm_preserve_ord(&pord, &pe)) {
+        //     println!("{perm:?}");
+        // }
+        // println!("DBG: {jj:?}");
+        // println!("{:?}, {:?}", jj[0].clone().into_iter().skip(1).collect::<Vec<_>>(), var);
+        if jj[0].clone().into_iter().skip(1).collect::<Vec<_>>() == var {
+            num_cls+=1;
+            let siz =  jj.len();       
+            // println!("{}", siz);
+            let mut b_first = true;
+            let mut b_second = true;
+            for vec_j in jj.iter() {
+                if b_first {
+                    print!("  \\item $\\mathbf{{");
+                    for e in vec_j {
+                        print!("{}", *e);
+                    }
+                    print!("}}$ ({}): ", siz);
+                    b_first = false;
+                }
+                else {
+                    if !b_second {
+                        print!(", ");
+                    }
+                    else {
+                        b_second = false;
+                    }
+                    
+                    print!("${{");
+                    for e in vec_j {
+                        print!("{}", *e);
+                    }
+                    print!("}}$");
+                }
+
+            }
+            //println!("{:?}", jj);
+            println!("\n\n");
+
+        }
+    }
+    eprintln!("{num_cls}");
+    return;
+    let pord = vec![vec![1usize, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 1]];
+    
+    let tt = (0..5).map(|i| 0..=5usize);
+    let mut num_cls = 0usize;
+    for var in tt.multi_cartesian_product() {
+
+        let pp = (0usize..7).collect::<Vec<_>>();
+
+        let mut hh = HashMap::<(usize,usize), usize>::new();
+        hh.insert((0,1), var[0]);
+        hh.insert((0,2), var[1]);
+        hh.insert((0,3), var[2]);
+        hh.insert((0,4), var[3]);
+        hh.insert((0,5), var[4]);
+        
+        
+        let jj = get_images2(pp.into_iter().permutations(7).filter(|pe| pe[0]==0 && l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+        
+        if jj[0] == var {
+            num_cls+=1;
+            let siz =  jj.len();       
+            // println!("{}", siz);
+            let mut b_first = true;
+            let mut b_second = true;
+            for vec_j in jj.iter() {
+                if b_first {
+                    print!("  \\item $\\mathbf{{{}{}{}{}{}}}$ ({}): ", vec_j[0], vec_j[1], vec_j[2], vec_j[3], vec_j[4], jj.len());
+                    b_first = false;
+                }
+                else {
+                    if b_second {
+                        print!("${{{}{}{}{}{}}}$", vec_j[0], vec_j[1], vec_j[2], vec_j[3], vec_j[4]);
+                        b_second = false;
+                    }
+                    else {
+                        print!(", ${{{}{}{}{}{}}}$", vec_j[0], vec_j[1], vec_j[2], vec_j[3], vec_j[4]);
+                    }
+                }
+
+            }
+            //println!("{:?}", jj);
+            println!("\n\n");
+        }
+        // for perm in pp.into_iter().permutations(7) {
+        //     if l_alglib::pord_perm_preserve_ord(&pord, &perm) {
+        //         println!("{:?}", perm);
+        //     }
+        // }
+    }
+    
+    eprintln!("{num_cls}");
+    return;
+    let mut perms_set = HashSet::<Vec<usize>>::new();
+    perms_set.insert(vec![0,1,2,3,4,5,6,7]);
+    perms_set.insert(vec![0,1,2,3,5,4,6,7]);
+    perms_set.insert(vec![0,1,2,4,3,5,6,7]);
+    perms_set.insert(vec![0,1,2,4,5,3,6,7]);
+    perms_set.insert(vec![0,1,2,5,3,4,6,7]);
+    perms_set.insert(vec![0,1,2,5,4,3,6,7]);
+    perms_set.insert(vec![0,2,1,3,4,5,6,7]);
+    perms_set.insert(vec![0,2,1,3,5,4,6,7]);
+    perms_set.insert(vec![0,2,1,4,3,5,6,7]);
+    perms_set.insert(vec![0,2,1,4,5,3,6,7]);
+    perms_set.insert(vec![0,2,1,5,3,4,6,7]);
+    perms_set.insert(vec![0,2,1,5,4,3,6,7]);
+
+    let mut hh = HashMap::<(usize,usize), usize>::new();
+    hh.insert((0,3), 4);
+    hh.insert((0,4), 6);
+    hh.insert((0,5), 6);
+    
+    println!("{:?}", get_images(&perms_set, &hh));
+    return;
+
+
+    
+    let positions = Vec::from([(0usize, 3usize), (0, 4), (0, 5), (1, 0), (1, 2), (1, 3), (1, 4), (1, 5), (2, 0), (2, 1), (2, 3), (2, 4), (2, 5), (3, 0), (3, 1), (3, 2), (3, 4), (3, 5), (4, 0), (4, 1), (4, 2), (4, 3), (4, 5), (5, 0), (5, 1), (5, 2), (5, 3), (5, 4), (6, 0), (6, 1), (6, 2), (6, 3), (6, 4), (6, 5)]);
+
+    for pos in positions {
+        let mut tmp_vec = Vec::<(usize,usize)>::new();
+        for per in &perms_set {
+            tmp_vec.push((per[pos.0], per[pos.1]));
+        }
+        tmp_vec.sort();
+        println!("{tmp_vec:?}");
+    }
+
+    return;
+    let mut hh = HashMap::<(usize,usize), usize>::new();
+    hh.insert((1,2), 0);
+    hh.insert((1,3), 0);
+    hh.insert((1,4), 6);
+    hh.insert((1,5), 1);
+
+    let pp = vec![2,3,4,5];
+
+    
+
+    let mut tt = HashSet::<Vec<usize>>::new();
+    let mut full_perm = [0usize,1,2,3,4,5,6,7];
+    for perm in pp.iter().permutations(4) {
+        
+        for i in 0..4 {
+            full_perm[i+2] = *perm[i];
+        }
+        let mut is_ok = true;
+        for t in hh.keys() {
+            let k = (full_perm[t.0], full_perm[t.1]);
+            if !hh.contains_key(&k) {
+                is_ok = false;
+                break;
+            }
+        }
+        let mut hh2 = HashMap::<(usize,usize), usize>::new();
+        if is_ok {
+            for t in hh.keys() {
+                let k = (full_perm[t.0], full_perm[t.1]);
+                let v = hh[&(t.0,t.1)];
+                hh2.insert(k, full_perm[v]);
+            }
+
+            let mut hh2_keys = hh2.keys().collect::<Vec<_>>();
+            hh2_keys.sort();
+
+            let mut v = Vec::<usize>::new();
+            for k in hh2_keys {
+                v.push(hh2[k]);
+            }
+            // println!("{:?}", v);
+            tt.insert(v);
+            //println!("PP: {:?}", full_perm);
+            // eprintln!("{:?}", hh2);
+            // tt.insert(hh2);
+            // to_vec
+
+        }
+    }
+    
+    println!("{}", tt.len());
+    let mut tt_vec = tt.iter().collect::<Vec<_>>();
+    tt_vec.sort();
+    for v in tt_vec {
+        println!("{:?}", v);
+    }
+    // eprintln!("{:?}", hh);
+    return;
+
+    let mut hs = HashSet::<Vec<usize>>::new();
+    // let mut vv= vec![0usize,0,0,0,2];
+    // let mut vv2= vec![0usize,0,0,0,0];
+    let mut vv= vec![0usize,0,0,5];
+    let mut vv2= vec![0usize,0,0,0];
+
+    // let n = vv.len();
+    // let mut pp = Vec::<usize>::new();
+    // for i in 2..=n {
+    //     pp.push(i);
+    // }
+    let n = 4usize;
+
+    //let pp = [0usize;n];
+    // let pp = vec![2,3,4,5,6];
+    let pp = vec![2,3,4,5];
+
+    for perm in pp.iter().permutations(n) {
+        for i in 0..n {
+            if vv[i] != 0 && vv[i] != 1 {
+                vv2[perm[i]-2] = *perm[vv[i]-2];
+            }
+            else {
+                vv2[perm[i]-2] = vv[i];
+            }
+        }
+        //println!("{vv2:?}");
+        hs.insert(vv2.clone());
+        // for v in &perm {
+        //     if vv[*v -1] == 0 {
+        //         vv2[*v - 1] = 0;
+        //     }
+        //     else {
+        //         vv2[*v-1] = *perm[vv[*v-1]-1];
+        //     }
+        // }
+        
+        //println!("{:?}", perm);
+    }
+
+    let mut h = hs.iter().collect::<Vec<_>>();
+    h.sort();
+    println!("{}", h.len());
+    for hh in h {
+        println!("{hh:?}");
+    }
+    //println!("{h:?}");
+
+    return;
     // let n = 7usize;
     // let lalg_unit = n-1;
     // let file = BufReader::new(File::open("ord7_with_top.txt").expect("Cannot open file"));
@@ -146,6 +483,55 @@ fn main() {
     // }
 
     // return;
+
+    let file = BufReader::new(File::open("c:/users/mhycko/documents/rust/serde_test/all_qords5.pickle.bz2").expect("Cannot open file"));
+    let mut bz_decoder = BzDecoder::new(file);
+    let qords:Vec<Vec<Vec<usize>>> = serde_pickle::from_reader(&mut bz_decoder, Default::default()).unwrap();
+    println!("{}", qords.len());
+    let mut ord_count = 0usize;
+    let n = 5;
+    let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
+    let mut num_tested = 0usize;
+    let mut num_models = 0usize;
+    // let mut qords = Vec::<Vec<Vec<usize>>>::new();
+
+    // let mut qord = l_alglib::l_alg_alloc_limpl(n+1);
+    // for i in 0..=n {
+    //     for j in 0..=n{
+    //         if i<=j {
+    //             qord[i][j] = 1;
+    //         }
+    //     }
+    // }
+    // qords.push(qord);
+
+    for qord in qords {
+        if l_alglib::qord_is_antisymmetric(&qord) {
+            ord_count+=1;
+            // if ord_count != 1 {
+            //     continue;
+            // }
+
+            // eprintln!("HHEHE");
+            // get order n+1 with n as maximal element
+            let mut qord_n1 = l_alglib::l_alg_alloc_limpl(n+1);
+            for i in 0.. n {
+                for j in 0..n {
+                    qord_n1[i][j] = qord[i][j];
+                }
+            }
+            for i in 0..(n+1) {
+                qord_n1[i][n] = 1;
+            }
+
+            println!("{qord_n1:?}");
+        }
+
+    }
+    eprintln!("{ord_count}");
+
+    return;
+
 
 
     // let limp = vec![vec![5usize, 5, 0, 3, 0, 5], vec![0, 5, 2, 3, 4, 5], vec![0, 1, 5, 3, 0, 5], vec![0, 1, 2, 5, 4, 5], vec![0, 1, 0, 3, 5, 5], vec![0, 1, 2, 3, 4, 5]];

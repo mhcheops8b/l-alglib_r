@@ -617,6 +617,35 @@ pub fn l_alg_perm_preserve_ord(limpl: &[Vec<usize>], iso_perm_vec: &[usize]) -> 
         true
 }
 
+// canonical preserve e_i < e_j iff i < j
+pub fn pord_is_canonical(pord: &[Vec<usize>]) -> bool {
+        let n = pord.len();
+        
+        for idx1 in 0..n {
+            for idx2 in 0..n {                
+                if idx1 != idx2 && pord[idx1][idx2] == 1 && idx1 > idx2 {
+                    return false;
+                }
+            }
+        }
+        true
+}
+
+// canonical preserve e_i < e_j iff i < j
+pub fn pord_perm_preserve_ord(pord: &[Vec<usize>], iso_perm_vec: &[usize]) -> bool {
+        let n = pord.len();
+        
+        for idx1 in 0..n {
+            for idx2 in (idx1+1)..n {                
+                if pord[idx1][idx2] == 1 && iso_perm_vec[idx1] > iso_perm_vec[idx2] {
+                    return false;
+                }
+            }
+        }
+        true
+}
+
+
 pub fn l_alg_is_repr(limpl: &[Vec<usize>], b_minimal: bool) -> bool {
     let n = limpl.len();
     let lalg_unit = limpl[0][0];
