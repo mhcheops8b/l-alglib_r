@@ -119,36 +119,54 @@ fn main() {
     // 408
     // let pord = vec![vec![1usize, 1, 0, 0, 1, 0, 0, 1], vec![0, 1, 0, 0, 1, 0, 0, 1], vec![0, 0, 1, 0, 1, 0, 0, 1], vec![0, 0, 0, 1, 1, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
     // 338
-    let pord = vec![vec![1usize, 1, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
-
+    // let pord = vec![vec![1usize, 1, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+    // 1728
+    // let pord = vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+    // 6
+    // let pord = vec![vec![1, 0, 0, 0, 1, 0, 0, 1], vec![0, 1, 0, 0, 1, 0, 0, 1], vec![0, 0, 1, 0, 1, 0, 0, 1], vec![0, 0, 0, 1, 1, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+    // 376: 1st level: (0,2), (0,3), (0,4), (0,6); 2nd level + (1,2), (1,3), (1,4), (1,6); 3rd level + (5,6)
+    // let pord = vec![vec![1, 1, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+    // 5
+    // let pord = vec![vec![1, 0, 0, 0, 0, 1, 1, 1], vec![0, 1, 0, 0, 0, 1, 1, 1], vec![0, 0, 1, 0, 0, 1, 1, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+    // 4
+    // let pord = vec![vec![1, 0, 0, 0, 0, 1, 1, 1], vec![0, 1, 0, 0, 0, 1, 1, 1], vec![0, 0, 1, 0, 0, 1, 1, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+    // 3: 1st: (0,1), (0,2), (0,3), (0,4), (0,6); 2nd: + (5,6)
+    // let pord = vec![vec![1, 0, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+    // 2: (0,1), (0,2), (0,3), (0,4), (0,5)
+    // let pord = vec![vec![1, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+    // 1:
+    let pord = vec![vec![1, 0, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+    
     let mut hh = HashMap::<(usize,usize), usize>::new();
-    let tt = (0..11).map(|i| 0..7usize);
+    let tt = (0..6).map(|i| 0..7usize);
     let mut num_cls = 0usize;
     for var in tt.multi_cartesian_product() {
-        hh.insert((0,1), 7);
-        hh.insert((0,2), var[0]);
-        hh.insert((0,3), var[1]);
-        hh.insert((0,4), var[2]);
-        hh.insert((0,5), var[3]);
-        hh.insert((0,6), var[4]);
-        hh.insert((1,0), var[5] );
-        hh.insert((1,2), var[6]);
-        hh.insert((1,3), var[7]);
-        hh.insert((1,4), var[8]);
-        hh.insert((1,5), var[9]);
-        hh.insert((1,6), var[10]);
+        hh.insert((0,1), var[0]);
+        hh.insert((0,2), var[1]);
+        hh.insert((0,3), var[2]);
+        hh.insert((0,4), var[3]);
+        hh.insert((0,5), var[4]);
+        hh.insert((0,6), var[5]);
+        // hh.insert((1,4), var[6]);
+        // hh.insert((1,6), var[7]);
+        // hh.insert((5,6), var[8]);
+
+        // hh.insert((0,6), var[4]);
+        // hh.insert((4,5), var[5]);
+        // hh.insert((4,6), var[6]);
 
     
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
         let jj = get_images2(pp.into_iter().permutations(pord.len())
-            .filter(|pe| pe[0]==0 && pe[1]==1 && l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+            .filter(|pe| pe[0]==0 && l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
         // for perm in pp.into_iter().permutations(pord.len())
         //     .filter(|pe| pe[0]==0 && pe[1]==1 && pe[4]==4 && l_alglib::pord_perm_preserve_ord(&pord, &pe)) {
         //     println!("{perm:?}");
         // }
         // println!("DBG: {jj:?}");
         // println!("{:?}, {:?}", jj[0].clone().into_iter().skip(1).collect::<Vec<_>>(), var);
-        if jj[0].clone().into_iter().skip(1).collect::<Vec<_>>() == var {
+        //if jj[0].clone().into_iter().skip(1).collect::<Vec<_>>() == var {
+        if jj[0] == var {
             num_cls+=1;
             let siz =  jj.len();       
             // println!("{}", siz);
