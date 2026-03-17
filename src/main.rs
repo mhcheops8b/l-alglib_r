@@ -6,6 +6,7 @@ use itertools::{Itertools};
 use std::fs::File;
 use bzip2::read::{BzDecoder};
 use std::io::{BufReader};
+use std::time::{Instant};
 
 // #[allow(dead_code)]
 // fn parse_vector(line: &String) -> Vec<Vec<usize>> {
@@ -141,7 +142,8 @@ fn main() {
     let mut hh = HashMap::<(usize,usize), usize>::new();
     let tt = (0..5).map(|i| 0..7usize);
     let mut num_cls = 0usize;
-    let fixed = vec![0,0,0,0,1];
+    let ts = Instant::now();
+    let fixed = vec![0,0,0,5,6];
     for var in tt.multi_cartesian_product() {
         // hh.insert((1,2), var[0]);
         // hh.insert((1,3), var[1]);
@@ -165,7 +167,8 @@ fn main() {
 
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
         let jj = get_images2(pp.into_iter().permutations(pord.len())
-            .filter(|pe| pe[1]==1 && pe[2] ==2 && l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+            .filter(|pe| pe[1]==1 && pe[2] ==2 || pe[1]==2 && pe[2] == 1)
+            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
         // for perm in pp.into_iter().permutations(pord.len())
         //     .filter(|pe| pe[0]==0 && pe[1]==1 && pe[4]==4 && l_alglib::pord_perm_preserve_ord(&pord, &pe)) {
         //     println!("{perm:?}");
@@ -177,7 +180,7 @@ fn main() {
         // let t = &jj[0][5..6];
         // eprintln!("{:?}", t);
         // break;
-        if &jj[0][5..10] == var {
+        if &jj[0][0..5] == fixed && &jj[0][5..10] == var {
             num_cls+=1;
             if false {
             let siz =  jj.len();       
@@ -215,7 +218,7 @@ fn main() {
             else {
                 // for 1728
                 // println!("./target/release/gen_from_ord.exe 1728 9,{},{},{},{},{},9,{},{},{},{},{} 1> rc8sym-1728/hh7_pord_1728-{}{}{}{}{}_{}{}{}{}{}.txt 2> rc8sym-1728/hh7_pord_1728-{}{}{}{}{}_{}{}{}{}{}.log", var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9], var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9], var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9]);
-                println!("./target/release/gen_from_ord.exe 1728 9,{},{},{},{},{},9,{},{},{},{},{} 1> rc8sym-1728/hh7_pord_1728-{}{}{}{}{}_{}{}{}{}{}.txt 2> rc8sym-1728/hh7_pord_1728-{}{}{}{}{}_{}{}{}{}{}.log", fixed[0], fixed[1], fixed[2], fixed[3], fixed[4], var[0], var[1], var[2], var[3], var[4], fixed[0], fixed[1], fixed[2], fixed[3], fixed[4], var[0], var[1], var[2], var[3], var[4], fixed[0], fixed[1], fixed[2], fixed[3], fixed[4], var[0], var[1], var[2], var[3], var[4]);
+                println!("./target/release/gen_from_ord.exe 1728 9,{},{},{},{},{},9,{},{},{},{},{} 1> rc8sym-1728/hh8_pord_1728-{}{}{}{}{}_{}{}{}{}{}.txt 2> rc8sym-1728/hh8_pord_1728-{}{}{}{}{}_{}{}{}{}{}.log", fixed[0], fixed[1], fixed[2], fixed[3], fixed[4], var[0], var[1], var[2], var[3], var[4], fixed[0], fixed[1], fixed[2], fixed[3], fixed[4], var[0], var[1], var[2], var[3], var[4], fixed[0], fixed[1], fixed[2], fixed[3], fixed[4], var[0], var[1], var[2], var[3], var[4]);
 
                 // println!("./target/release/gen_from_ord.exe 1728 9,0,0,1,2,3,9,{},{},{},{},{} 1> rc8sym-1728/hh7_pord_1728-00123_{}{}{}{}{}.txt 2> rc8sym-1728/hh7_pord_1728-00123_{}{}{}{}{}.log", var[0], var[1], var[2], var[3], var[4], var[0], var[1], var[2], var[3], var[4], var[0], var[1], var[2], var[3], var[4]);
             }
@@ -223,6 +226,7 @@ fn main() {
     
     }
     eprintln!("{num_cls}");
+    eprintln!("Time elapsed: {:.2} s", ts.elapsed().as_secs_f32());
     return;
     let pord = vec![vec![1usize, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 1]];
     
