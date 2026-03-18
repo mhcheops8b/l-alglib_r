@@ -4,6 +4,7 @@ use itertools::{Itertools};
 use std::fs::File;
 use bzip2::read::{BzDecoder};
 use std::io::{BufReader};
+use std::time::Instant;
 
 // fn parse_vector(line: &String) -> Vec<Vec<usize>> {
 //         let mut parsed_vector = Vec::<Vec<usize>>::new();
@@ -136,10 +137,12 @@ fn main() {
             eprintln!("Positions: {positions:?}");
             eprintln!("Init limpl: {lalg_limpl:?}");
             // return;
+            let time_start = Instant::now();
             let mut num_tested = 0usize;
             let mut num_models = 0usize;
             l_alglib::gen_all_lalgs_rec(0, &positions, &mut lalg_limpl, n-1, &mut lalgs, &mut num_tested, &mut num_models);
 
+            eprintln!("Computation time: {:.2} s", time_start.elapsed().as_secs_f32());
             eprintln!("Number recursive calls: {}", num_tested);
             eprintln!("Number of all models: {}", num_models);
             eprintln!("Number of representative models {}", lalgs.len());
