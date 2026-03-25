@@ -8,6 +8,9 @@ use bzip2::read::{BzDecoder};
 use std::io::{BufReader};
 use std::time::{Instant};
 
+
+
+
 // #[allow(dead_code)]
 // fn parse_vector(line: &String) -> Vec<Vec<usize>> {
 //         let mut parsed_vector = Vec::<Vec<usize>>::new();
@@ -101,7 +104,1223 @@ fn get_images(perms_set: &HashSet::<Vec<usize>>, fun: &HashMap::<(usize,usize), 
      hs_v
  }
 
-fn main() {
+ fn main() {
+    // 376
+    let num_pord = 376;
+    let pord = vec![vec![1, 1, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+    
+    let fixed_vec: Vec<(usize, usize)> = vec![(0,2), (0,3), (0,4), (0,6), (1,0), (1,2), (1,3), (1,4), (1,6)];
+    let mut hh = HashMap::<(usize,usize), usize>::new();
+    let tt = (0..fixed_vec.len()).map(|i| 0..7usize);
+    let mut num_cls = 0usize;
+    let ts = Instant::now();
+    let split_cnt = 4;
+    let mut b_first_split = true;
+    let mut split_vec = Vec::<usize>::new();
+    let dir_base = format!("rc8sym-{:04}_1", num_pord);
+    let mut sub_dir = String::new();
+    for var in tt.multi_cartesian_product() {
+        for (idx,v) in fixed_vec.iter().enumerate() {
+            hh.insert(*v, var[idx]);
+        }
+
+        let pp = (0usize..pord.len()).collect::<Vec<_>>();
+        let jj = get_images2(pp.into_iter().permutations(pord.len())
+            .filter(|pe| pe[0]==0 && pe[1] == 1 && pe[5] == 5 && pe[6]==6)
+            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+
+        if jj[0] == var {
+            if l_alglib::l_alg_test_init_vector(&pord, &var).is_ok() {
+                num_cls+=1;
+                if false {
+                let siz =  jj.len();       
+                // println!("{}", siz);
+                let mut b_first = true;
+                let mut b_second = true;
+                for vec_j in jj.iter() {
+                    if b_first {
+                        print!("  \\item $\\mathbf{{");
+                        for e in vec_j {
+                            print!("{}", *e);
+                        }
+                        print!("}}$ ({}): ", siz);
+                        b_first = false;
+                    }
+                    else {
+                        if !b_second {
+                            print!(", ");
+                        }
+                        else {
+                            b_second = false;
+                        }
+                        
+                        print!("${{");
+                        for e in vec_j {
+                            print!("{}", *e);
+                        }
+                        print!("}}$");
+                    }
+
+                }
+                //println!("{:?}", jj);
+                println!("\n\n");
+                }
+                else {
+                    let mut filename_base = format!("hh8_pord_{:04}-", num_pord);
+                    for i in 0..fixed_vec.len() {
+                        filename_base.push(var[i].to_string().chars().next().unwrap());
+                    }
+                    
+                    if b_first_split || split_vec != var[0..split_cnt] {
+                        b_first_split = false;
+                        sub_dir.clear();
+                        split_vec = var[0..split_cnt].to_vec();
+                        for i in 0..split_cnt {
+                            sub_dir.push(var[i].to_string().chars().next().unwrap());
+                        }
+                        println!("mkdir -p {}/{}",dir_base, sub_dir);
+                    }
+                    // for 408_1
+                    // println!("./target/release/gen_from_ord.exe 1728 9,{},{},{},{},{},9,{},{},{},{},{} 1> rc8sym-1728/hh7_pord_1728-{}{}{}{}{}_{}{}{}{}{}.txt 2> rc8sym-1728/hh7_pord_1728-{}{}{}{}{}_{}{}{}{}{}.log", var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9], var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9], var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9]);
+                    // println!("./target/release/gen_from_ord.exe {} {},{},{},{} 1> rc8sym-{:04}_1/hh8_pord_{:04}-{}{}{}{}.txt 2> rc8sym-{:04}_1/hh8_pord_{:04}-{}{}{}{}.log", num_pord, var[0], var[1], var[2], var[3], num_pord, num_pord, var[0], var[1], var[2], var[3], num_pord, num_pord, var[0], var[1], var[2], var[3]);
+                    // println!("./target/release/gen_from_ord.exe 1728 9,0,0,1,2,3,9,{},{},{},{},{} 1> rc8sym-1728/hh7_pord_1728-00123_{}{}{}{}{}.txt 2> rc8sym-1728/hh7_pord_1728-00123_{}{}{}{}{}.log", var[0], var[1], var[2], var[3], var[4], var[0], var[1], var[2], var[3], var[4], var[0], var[1], var[2], var[3], var[4]);
+
+                    print!("./target/release/gen_from_ord.exe {} ", num_pord);
+                    let mut b_first = true;
+                    for i in 0..fixed_vec.len() {
+                        if !b_first {
+                            print!(",");
+                        }
+                        else {
+                            b_first = false;
+                        }
+                        print!("{}", var[i]);
+                    }
+                    println!(" 1> {}/{}/{}.txt 2> {}/{}/{}.log", dir_base, sub_dir, filename_base, dir_base, sub_dir, filename_base);
+                    // print!(" 1> rc8sym-{:04}_1/hh8_pord_{:04}-", num_pord, num_pord);
+                    // for i in 0..fixed_vec.len() {
+                    //     print!("{}", var[i]);
+                    // }
+                    // print!(".txt 2> rc8sym-{:04}_1/hh8_pord_{:04}-", num_pord, num_pord);
+                    // for i in 0..fixed_vec.len() {
+                    //     print!("{}", var[i]);
+                    // }
+                    // println!(".log");
+
+                }
+            }  
+        }  
+    }
+    eprintln!("{num_cls}");
+    eprintln!("Time elapsed: {:.2} s", ts.elapsed().as_secs_f32());
+
+}
+
+
+
+fn main_376_1() {
+    // 376
+    let num_pord = 376;
+    let pord = vec![vec![1, 1, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+    
+    let fixed_vec: Vec<(usize, usize)> = vec![(0,2), (0,3), (0,4), (0,6)];
+    let mut hh = HashMap::<(usize,usize), usize>::new();
+    let tt = (0..fixed_vec.len()).map(|i| 0..7usize);
+    let mut num_cls = 0usize;
+    let ts = Instant::now();
+
+    for var in tt.multi_cartesian_product() {
+        for (idx,v) in fixed_vec.iter().enumerate() {
+            hh.insert(*v, var[idx]);
+        }
+
+        let pp = (0usize..pord.len()).collect::<Vec<_>>();
+        let jj = get_images2(pp.into_iter().permutations(pord.len())
+            .filter(|pe| pe[0]==0 && pe[1] == 1 && pe[5] == 5 && pe[6]==6)
+            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+
+        if jj[0] == var {
+            num_cls+=1;
+            if false {
+            let siz =  jj.len();       
+            // println!("{}", siz);
+            let mut b_first = true;
+            let mut b_second = true;
+            for vec_j in jj.iter() {
+                if b_first {
+                    print!("  \\item $\\mathbf{{");
+                    for e in vec_j {
+                        print!("{}", *e);
+                    }
+                    print!("}}$ ({}): ", siz);
+                    b_first = false;
+                }
+                else {
+                    if !b_second {
+                        print!(", ");
+                    }
+                    else {
+                        b_second = false;
+                    }
+                    
+                    print!("${{");
+                    for e in vec_j {
+                        print!("{}", *e);
+                    }
+                    print!("}}$");
+                }
+
+            }
+            //println!("{:?}", jj);
+            println!("\n\n");
+            }
+            else {
+                // for 408_1
+                // println!("./target/release/gen_from_ord.exe 1728 9,{},{},{},{},{},9,{},{},{},{},{} 1> rc8sym-1728/hh7_pord_1728-{}{}{}{}{}_{}{}{}{}{}.txt 2> rc8sym-1728/hh7_pord_1728-{}{}{}{}{}_{}{}{}{}{}.log", var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9], var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9], var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9]);
+                // println!("./target/release/gen_from_ord.exe {} {},{},{},{} 1> rc8sym-{:04}_1/hh8_pord_{:04}-{}{}{}{}.txt 2> rc8sym-{:04}_1/hh8_pord_{:04}-{}{}{}{}.log", num_pord, var[0], var[1], var[2], var[3], num_pord, num_pord, var[0], var[1], var[2], var[3], num_pord, num_pord, var[0], var[1], var[2], var[3]);
+                // println!("./target/release/gen_from_ord.exe 1728 9,0,0,1,2,3,9,{},{},{},{},{} 1> rc8sym-1728/hh7_pord_1728-00123_{}{}{}{}{}.txt 2> rc8sym-1728/hh7_pord_1728-00123_{}{}{}{}{}.log", var[0], var[1], var[2], var[3], var[4], var[0], var[1], var[2], var[3], var[4], var[0], var[1], var[2], var[3], var[4]);
+
+                print!("./target/release/gen_from_ord.exe {} ", num_pord);
+                let mut b_first = true;
+                for i in 0..fixed_vec.len() {
+                    if !b_first {
+                        print!(",");
+                    }
+                    else {
+                        b_first = false;
+                    }
+                    print!("{}", var[i]);
+                }
+                print!(" 1> rc8sym-{:04}_1/hh8_pord_{:04}-", num_pord, num_pord);
+                for i in 0..fixed_vec.len() {
+                    print!("{}", var[i]);
+                }
+                print!(".txt 2> rc8sym-{:04}_1/hh8_pord_{:04}-", num_pord, num_pord);
+                for i in 0..fixed_vec.len() {
+                    print!("{}", var[i]);
+                }
+                println!(".log");
+
+            }
+        }    
+    }
+    eprintln!("{num_cls}");
+    eprintln!("Time elapsed: {:.2} s", ts.elapsed().as_secs_f32());
+
+}
+
+fn main_6_1() {
+    // 6
+    let pord = vec![vec![1, 0, 0, 0, 1, 0, 0, 1], vec![0, 1, 0, 0, 1, 0, 0, 1], vec![0, 0, 1, 0, 1, 0, 0, 1], vec![0, 0, 0, 1, 1, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+
+    let mut hh = HashMap::<(usize,usize), usize>::new();
+    let tt = (0..5).map(|i| 0..7usize);
+    let mut num_cls = 0usize;
+    let ts = Instant::now();
+
+    for var in tt.multi_cartesian_product() {
+        hh.insert((0,1), var[0]);
+        hh.insert((0,2), var[1]);
+        hh.insert((0,3), var[2]);
+        hh.insert((0,5), var[4]);
+        hh.insert((0,6), var[3]);
+       
+        // hh.insert((0,6), var[4]);
+        // hh.insert((4,5), var[5]);
+        // hh.insert((4,6), var[6]);
+
+        let pp = (0usize..pord.len()).collect::<Vec<_>>();
+        let jj = get_images2(pp.into_iter().permutations(pord.len())
+            .filter(|pe| pe[0]==0 && pe[4] == 4 && (pe[5]==5 && pe[6]==6 || pe[5]==6 && pe[6]==5))
+            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+
+        if jj[0] == var {
+            num_cls+=1;
+            if false {
+            let siz =  jj.len();       
+            // println!("{}", siz);
+            let mut b_first = true;
+            let mut b_second = true;
+            for vec_j in jj.iter() {
+                if b_first {
+                    print!("  \\item $\\mathbf{{");
+                    for e in vec_j {
+                        print!("{}", *e);
+                    }
+                    print!("}}$ ({}): ", siz);
+                    b_first = false;
+                }
+                else {
+                    if !b_second {
+                        print!(", ");
+                    }
+                    else {
+                        b_second = false;
+                    }
+                    
+                    print!("${{");
+                    for e in vec_j {
+                        print!("{}", *e);
+                    }
+                    print!("}}$");
+                }
+
+            }
+            //println!("{:?}", jj);
+            println!("\n\n");
+            }
+            else {
+                // for 408_1
+                // println!("./target/release/gen_from_ord.exe 1728 9,{},{},{},{},{},9,{},{},{},{},{} 1> rc8sym-1728/hh7_pord_1728-{}{}{}{}{}_{}{}{}{}{}.txt 2> rc8sym-1728/hh7_pord_1728-{}{}{}{}{}_{}{}{}{}{}.log", var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9], var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9], var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9]);
+                println!("./target/release/gen_from_ord.exe 6 {},{},{},{},{} 1> rc8sym-0006_1/hh8_pord_0006-{}{}{}{}{}.txt 2> rc8sym-0006_1/hh8_pord_0006-{}{}{}{}{}.log", var[0], var[1], var[2], var[3], var[4], var[0], var[1], var[2], var[3], var[4], var[0], var[1], var[2], var[3], var[4]);
+                // println!("./target/release/gen_from_ord.exe 1728 9,0,0,1,2,3,9,{},{},{},{},{} 1> rc8sym-1728/hh7_pord_1728-00123_{}{}{}{}{}.txt 2> rc8sym-1728/hh7_pord_1728-00123_{}{}{}{}{}.log", var[0], var[1], var[2], var[3], var[4], var[0], var[1], var[2], var[3], var[4], var[0], var[1], var[2], var[3], var[4]);
+            }
+        }    
+    }
+    eprintln!("{num_cls}");
+    eprintln!("Time elapsed: {:.2} s", ts.elapsed().as_secs_f32());
+}
+
+
+
+
+fn main_10_1() {
+    // 10
+    let pord = vec![vec![1, 0, 0, 0, 1, 1, 0, 1], vec![0, 1, 0, 0, 1, 1, 0, 1], vec![0, 0, 1, 0, 1, 1, 0, 1], vec![0, 0, 0, 1, 1, 1, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+
+    let mut hh = HashMap::<(usize,usize), usize>::new();
+    let tt = (0..4).map(|i| 0..7usize);
+    let mut num_cls = 0usize;
+    let ts = Instant::now();
+
+    for var in tt.multi_cartesian_product() {
+        hh.insert((0,1), var[0]);
+        hh.insert((0,2), var[1]);
+        hh.insert((0,3), var[2]);
+        hh.insert((0,6), var[3]);
+       
+        // hh.insert((0,6), var[4]);
+        // hh.insert((4,5), var[5]);
+        // hh.insert((4,6), var[6]);
+
+        let pp = (0usize..pord.len()).collect::<Vec<_>>();
+        let jj = get_images2(pp.into_iter().permutations(pord.len())
+            .filter(|pe| pe[0]==0 && pe[6]==6 && (pe[4]==4 && pe[5]==5 || pe[4]==5 && pe[5]==4))
+            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+
+        if jj[0] == var {
+            num_cls+=1;
+            if false {
+            let siz =  jj.len();       
+            // println!("{}", siz);
+            let mut b_first = true;
+            let mut b_second = true;
+            for vec_j in jj.iter() {
+                if b_first {
+                    print!("  \\item $\\mathbf{{");
+                    for e in vec_j {
+                        print!("{}", *e);
+                    }
+                    print!("}}$ ({}): ", siz);
+                    b_first = false;
+                }
+                else {
+                    if !b_second {
+                        print!(", ");
+                    }
+                    else {
+                        b_second = false;
+                    }
+                    
+                    print!("${{");
+                    for e in vec_j {
+                        print!("{}", *e);
+                    }
+                    print!("}}$");
+                }
+
+            }
+            //println!("{:?}", jj);
+            println!("\n\n");
+            }
+            else {
+                // for 408_1
+                // println!("./target/release/gen_from_ord.exe 1728 9,{},{},{},{},{},9,{},{},{},{},{} 1> rc8sym-1728/hh7_pord_1728-{}{}{}{}{}_{}{}{}{}{}.txt 2> rc8sym-1728/hh7_pord_1728-{}{}{}{}{}_{}{}{}{}{}.log", var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9], var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9], var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9]);
+                println!("./target/release/gen_from_ord.exe 10 {},{},{},{} 1> rc8sym-0010_1/hh8_pord_0010-{}{}{}{}.txt 2> rc8sym-0010_1/hh8_pord_0010-{}{}{}{}.log", var[0], var[1], var[2], var[3], var[0], var[1], var[2], var[3], var[0], var[1], var[2], var[3]);
+                // println!("./target/release/gen_from_ord.exe 1728 9,0,0,1,2,3,9,{},{},{},{},{} 1> rc8sym-1728/hh7_pord_1728-00123_{}{}{}{}{}.txt 2> rc8sym-1728/hh7_pord_1728-00123_{}{}{}{}{}.log", var[0], var[1], var[2], var[3], var[4], var[0], var[1], var[2], var[3], var[4], var[0], var[1], var[2], var[3], var[4]);
+            }
+        }    
+    }
+    eprintln!("{num_cls}");
+    eprintln!("Time elapsed: {:.2} s", ts.elapsed().as_secs_f32());
+}
+
+
+
+
+ fn main_408_3() {
+    // 408 - 5611
+    let pord = vec![vec![1usize, 1, 0, 0, 1, 0, 0, 1], vec![0, 1, 0, 0, 1, 0, 0, 1], vec![0, 0, 1, 0, 1, 0, 0, 1], vec![0, 0, 0, 1, 1, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+
+    let mut hh = HashMap::<(usize,usize), usize>::new();
+    
+    let mut num_cls = 0usize;
+    let ts = Instant::now();
+    let ff = vec![
+        vec![0usize,0,0,0],
+vec![0,0,0,1],
+vec![0,0,0,2],
+vec![0,0,0,4],
+vec![0,0,0,5],
+vec![0,0,0,6],
+vec![0,0,1,1],
+vec![0,0,1,2],
+vec![0,0,1,4],
+vec![0,0,1,5],
+vec![0,0,1,6],
+vec![0,0,2,2],
+vec![0,0,2,3],
+vec![0,0,2,4],
+vec![0,0,2,5],
+vec![0,0,2,6],
+vec![0,0,4,4],
+vec![0,0,4,5],
+vec![0,0,4,6],
+vec![0,0,5,5],
+vec![0,0,5,6],
+vec![0,0,6,5],
+vec![0,1,0,0],
+vec![0,1,0,1],
+vec![0,1,0,2],
+vec![0,1,0,3],
+vec![0,1,0,4],
+vec![0,1,0,5],
+vec![0,1,0,6],
+vec![0,1,1,1],
+vec![0,1,1,2],
+vec![0,1,1,3],
+vec![0,1,1,4],
+vec![0,1,1,5],
+vec![0,1,1,6],
+vec![0,1,2,2],
+vec![0,1,2,3],
+vec![0,1,2,4],
+vec![0,1,2,5],
+vec![0,1,2,6],
+vec![0,1,3,3],
+vec![0,1,3,4],
+vec![0,1,3,5],
+vec![0,1,3,6],
+vec![0,1,4,4],
+vec![0,1,4,5],
+vec![0,1,4,6],
+vec![0,1,5,5],
+vec![0,1,5,6],
+vec![0,1,6,5],
+vec![0,2,0,0],
+vec![0,2,0,1],
+vec![0,2,0,2],
+vec![0,2,0,3],
+vec![0,2,0,4],
+vec![0,2,0,5],
+vec![0,2,0,6],
+vec![0,2,1,1],
+vec![0,2,1,2],
+vec![0,2,1,3],
+vec![0,2,1,4],
+vec![0,2,1,5],
+vec![0,2,1,6],
+vec![0,2,2,2],
+vec![0,2,2,3],
+vec![0,2,2,4],
+vec![0,2,2,5],
+vec![0,2,2,6],
+vec![0,2,3,3],
+vec![0,2,3,4],
+vec![0,2,3,5],
+vec![0,2,3,6],
+vec![0,2,4,4],
+vec![0,2,4,5],
+vec![0,2,4,6],
+vec![0,2,5,5],
+vec![0,2,5,6],
+vec![0,2,6,5],
+vec![0,3,0,0],
+vec![0,3,0,1],
+vec![0,3,0,2],
+vec![0,3,0,3],
+vec![0,3,0,4],
+vec![0,3,0,5],
+vec![0,3,0,6],
+vec![0,3,1,1],
+vec![0,3,1,2],
+vec![0,3,1,3],
+vec![0,3,1,4],
+vec![0,3,1,5],
+vec![0,3,1,6],
+vec![0,3,2,2],
+vec![0,3,2,3],
+vec![0,3,2,4],
+vec![0,3,2,5],
+vec![0,3,2,6],
+vec![0,3,3,3],
+vec![0,3,3,4],
+vec![0,3,3,5],
+vec![0,3,3,6],
+vec![0,3,4,4],
+vec![0,3,4,5],
+vec![0,3,4,6],
+vec![0,3,5,5],
+vec![0,3,5,6],
+vec![0,3,6,5],
+vec![0,4,0,0],
+vec![0,4,0,1],
+vec![0,4,0,2],
+vec![0,4,0,3],
+vec![0,4,0,4],
+vec![0,4,0,5],
+vec![0,4,0,6],
+vec![0,4,1,1],
+vec![0,4,1,2],
+vec![0,4,1,3],
+vec![0,4,1,4],
+vec![0,4,1,5],
+vec![0,4,1,6],
+vec![0,4,2,2],
+vec![0,4,2,3],
+vec![0,4,2,4],
+vec![0,4,2,5],
+vec![0,4,2,6],
+vec![0,4,3,3],
+vec![0,4,3,4],
+vec![0,4,3,5],
+vec![0,4,3,6],
+vec![0,4,4,4],
+vec![0,4,4,5],
+vec![0,4,4,6],
+vec![0,4,5,5],
+vec![0,4,5,6],
+vec![0,4,6,5],
+vec![0,5,0,0],
+vec![0,5,0,1],
+vec![0,5,0,2],
+vec![0,5,0,3],
+vec![0,5,0,4],
+vec![0,5,0,5],
+vec![0,5,0,6],
+vec![0,5,1,0],
+vec![0,5,1,1],
+vec![0,5,1,2],
+vec![0,5,1,3],
+vec![0,5,1,4],
+vec![0,5,1,5],
+vec![0,5,1,6],
+vec![0,5,2,0],
+vec![0,5,2,1],
+vec![0,5,2,2],
+vec![0,5,2,3],
+vec![0,5,2,4],
+vec![0,5,2,5],
+vec![0,5,2,6],
+vec![0,5,3,0],
+vec![0,5,3,1],
+vec![0,5,3,2],
+vec![0,5,3,3],
+vec![0,5,3,4],
+vec![0,5,3,5],
+vec![0,5,3,6],
+vec![0,5,4,0],
+vec![0,5,4,1],
+vec![0,5,4,2],
+vec![0,5,4,3],
+vec![0,5,4,4],
+vec![0,5,4,5],
+vec![0,5,4,6],
+vec![0,5,5,0],
+vec![0,5,5,1],
+vec![0,5,5,2],
+vec![0,5,5,3],
+vec![0,5,5,4],
+vec![0,5,5,5],
+vec![0,5,5,6],
+vec![0,5,6,0],
+vec![0,5,6,1],
+vec![0,5,6,2],
+vec![0,5,6,3],
+vec![0,5,6,4],
+vec![0,5,6,5],
+vec![0,5,6,6],
+vec![1,1,0,0],
+vec![1,1,0,1],
+vec![1,1,0,2],
+vec![1,1,0,4],
+vec![1,1,0,5],
+vec![1,1,0,6],
+vec![1,1,1,1],
+vec![1,1,1,2],
+vec![1,1,1,4],
+vec![1,1,1,5],
+vec![1,1,1,6],
+vec![1,1,2,2],
+vec![1,1,2,3],
+vec![1,1,2,4],
+vec![1,1,2,5],
+vec![1,1,2,6],
+vec![1,1,4,4],
+vec![1,1,4,5],
+vec![1,1,4,6],
+vec![1,1,5,5],
+vec![1,1,5,6],
+vec![1,1,6,5],
+vec![1,2,0,0],
+vec![1,2,0,1],
+vec![1,2,0,2],
+vec![1,2,0,3],
+vec![1,2,0,4],
+vec![1,2,0,5],
+vec![1,2,0,6],
+vec![1,2,1,1],
+vec![1,2,1,2],
+vec![1,2,1,3],
+vec![1,2,1,4],
+vec![1,2,1,5],
+vec![1,2,1,6],
+vec![1,2,2,2],
+vec![1,2,2,3],
+vec![1,2,2,4],
+vec![1,2,2,5],
+vec![1,2,2,6],
+vec![1,2,3,3],
+vec![1,2,3,4],
+vec![1,2,3,5],
+vec![1,2,3,6],
+vec![1,2,4,4],
+vec![1,2,4,5],
+vec![1,2,4,6],
+vec![1,2,5,5],
+vec![1,2,5,6],
+vec![1,2,6,5],
+vec![1,3,0,0],
+vec![1,3,0,1],
+vec![1,3,0,2],
+vec![1,3,0,3],
+vec![1,3,0,4],
+vec![1,3,0,5],
+vec![1,3,0,6],
+vec![1,3,1,1],
+vec![1,3,1,2],
+vec![1,3,1,3],
+vec![1,3,1,4],
+vec![1,3,1,5],
+vec![1,3,1,6],
+vec![1,3,2,2],
+vec![1,3,2,3],
+vec![1,3,2,4],
+vec![1,3,2,5],
+vec![1,3,2,6],
+vec![1,3,3,3],
+vec![1,3,3,4],
+vec![1,3,3,5],
+vec![1,3,3,6],
+vec![1,3,4,4],
+vec![1,3,4,5],
+vec![1,3,4,6],
+vec![1,3,5,5],
+vec![1,3,5,6],
+vec![1,3,6,5],
+vec![1,4,0,0],
+vec![1,4,0,1],
+vec![1,4,0,2],
+vec![1,4,0,3],
+vec![1,4,0,4],
+vec![1,4,0,5],
+vec![1,4,0,6],
+vec![1,4,1,1],
+vec![1,4,1,2],
+vec![1,4,1,3],
+vec![1,4,1,4],
+vec![1,4,1,5],
+vec![1,4,1,6],
+vec![1,4,2,2],
+vec![1,4,2,3],
+vec![1,4,2,4],
+vec![1,4,2,5],
+vec![1,4,2,6],
+vec![1,4,3,3],
+vec![1,4,3,4],
+vec![1,4,3,5],
+vec![1,4,3,6],
+vec![1,4,4,4],
+vec![1,4,4,5],
+vec![1,4,4,6],
+vec![1,4,5,5],
+vec![1,4,5,6],
+vec![1,4,6,5],
+vec![1,5,0,0],
+vec![1,5,0,1],
+vec![1,5,0,2],
+vec![1,5,0,3],
+vec![1,5,0,4],
+vec![1,5,0,5],
+vec![1,5,0,6],
+vec![1,5,1,0],
+vec![1,5,1,1],
+vec![1,5,1,2],
+vec![1,5,1,3],
+vec![1,5,1,4],
+vec![1,5,1,5],
+vec![1,5,1,6],
+vec![1,5,2,0],
+vec![1,5,2,1],
+vec![1,5,2,2],
+vec![1,5,2,3],
+vec![1,5,2,4],
+vec![1,5,2,5],
+vec![1,5,2,6],
+vec![1,5,3,0],
+vec![1,5,3,1],
+vec![1,5,3,2],
+vec![1,5,3,3],
+vec![1,5,3,4],
+vec![1,5,3,5],
+vec![1,5,3,6],
+vec![1,5,4,0],
+vec![1,5,4,1],
+vec![1,5,4,2],
+vec![1,5,4,3],
+vec![1,5,4,4],
+vec![1,5,4,5],
+vec![1,5,4,6],
+vec![1,5,5,0],
+vec![1,5,5,1],
+vec![1,5,5,2],
+vec![1,5,5,3],
+vec![1,5,5,4],
+vec![1,5,5,5],
+vec![1,5,5,6],
+vec![1,5,6,0],
+vec![1,5,6,1],
+vec![1,5,6,2],
+vec![1,5,6,3],
+vec![1,5,6,4],
+vec![1,5,6,5],
+vec![1,5,6,6],
+vec![2,2,0,0],
+vec![2,2,0,1],
+vec![2,2,0,2],
+vec![2,2,0,3],
+vec![2,2,0,4],
+vec![2,2,0,5],
+vec![2,2,0,6],
+vec![2,2,1,1],
+vec![2,2,1,2],
+vec![2,2,1,3],
+vec![2,2,1,4],
+vec![2,2,1,5],
+vec![2,2,1,6],
+vec![2,2,2,2],
+vec![2,2,2,3],
+vec![2,2,2,4],
+vec![2,2,2,5],
+vec![2,2,2,6],
+vec![2,2,3,3],
+vec![2,2,3,4],
+vec![2,2,3,5],
+vec![2,2,3,6],
+vec![2,2,4,4],
+vec![2,2,4,5],
+vec![2,2,4,6],
+vec![2,2,5,5],
+vec![2,2,5,6],
+vec![2,2,6,5],
+vec![2,3,0,0],
+vec![2,3,0,1],
+vec![2,3,0,2],
+vec![2,3,0,4],
+vec![2,3,0,5],
+vec![2,3,0,6],
+vec![2,3,1,1],
+vec![2,3,1,2],
+vec![2,3,1,4],
+vec![2,3,1,5],
+vec![2,3,1,6],
+vec![2,3,2,2],
+vec![2,3,2,3],
+vec![2,3,2,4],
+vec![2,3,2,5],
+vec![2,3,2,6],
+vec![2,3,4,4],
+vec![2,3,4,5],
+vec![2,3,4,6],
+vec![2,3,5,5],
+vec![2,3,5,6],
+vec![2,3,6,5],
+vec![2,4,0,0],
+vec![2,4,0,1],
+vec![2,4,0,2],
+vec![2,4,0,3],
+vec![2,4,0,4],
+vec![2,4,0,5],
+vec![2,4,0,6],
+vec![2,4,1,1],
+vec![2,4,1,2],
+vec![2,4,1,3],
+vec![2,4,1,4],
+vec![2,4,1,5],
+vec![2,4,1,6],
+vec![2,4,2,2],
+vec![2,4,2,3],
+vec![2,4,2,4],
+vec![2,4,2,5],
+vec![2,4,2,6],
+vec![2,4,3,3],
+vec![2,4,3,4],
+vec![2,4,3,5],
+vec![2,4,3,6],
+vec![2,4,4,4],
+vec![2,4,4,5],
+vec![2,4,4,6],
+vec![2,4,5,5],
+vec![2,4,5,6],
+vec![2,4,6,5],
+vec![2,5,0,0],
+vec![2,5,0,1],
+vec![2,5,0,2],
+vec![2,5,0,3],
+vec![2,5,0,4],
+vec![2,5,0,5],
+vec![2,5,0,6],
+vec![2,5,1,0],
+vec![2,5,1,1],
+vec![2,5,1,2],
+vec![2,5,1,3],
+vec![2,5,1,4],
+vec![2,5,1,5],
+vec![2,5,1,6],
+vec![2,5,2,0],
+vec![2,5,2,1],
+vec![2,5,2,2],
+vec![2,5,2,3],
+vec![2,5,2,4],
+vec![2,5,2,5],
+vec![2,5,2,6],
+vec![2,5,3,0],
+vec![2,5,3,1],
+vec![2,5,3,2],
+vec![2,5,3,3],
+vec![2,5,3,4],
+vec![2,5,3,5],
+vec![2,5,3,6],
+vec![2,5,4,0],
+vec![2,5,4,1],
+vec![2,5,4,2],
+vec![2,5,4,3],
+vec![2,5,4,4],
+vec![2,5,4,5],
+vec![2,5,4,6],
+vec![2,5,5,0],
+vec![2,5,5,1],
+vec![2,5,5,2],
+vec![2,5,5,3],
+vec![2,5,5,4],
+vec![2,5,5,5],
+vec![2,5,5,6],
+vec![2,5,6,0],
+vec![2,5,6,1],
+vec![2,5,6,2],
+vec![2,5,6,3],
+vec![2,5,6,4],
+vec![2,5,6,5],
+vec![2,5,6,6],
+vec![3,2,0,0],
+vec![3,2,0,1],
+vec![3,2,0,2],
+vec![3,2,0,4],
+vec![3,2,0,5],
+vec![3,2,0,6],
+vec![3,2,1,1],
+vec![3,2,1,2],
+vec![3,2,1,4],
+vec![3,2,1,5],
+vec![3,2,1,6],
+vec![3,2,2,2],
+vec![3,2,2,3],
+vec![3,2,2,4],
+vec![3,2,2,5],
+vec![3,2,2,6],
+vec![3,2,4,4],
+vec![3,2,4,5],
+vec![3,2,4,6],
+vec![3,2,5,5],
+vec![3,2,5,6],
+vec![3,2,6,5],
+vec![3,4,0,0],
+vec![3,4,0,1],
+vec![3,4,0,2],
+vec![3,4,0,3],
+vec![3,4,0,4],
+vec![3,4,0,5],
+vec![3,4,0,6],
+vec![3,4,1,1],
+vec![3,4,1,2],
+vec![3,4,1,3],
+vec![3,4,1,4],
+vec![3,4,1,5],
+vec![3,4,1,6],
+vec![3,4,2,2],
+vec![3,4,2,3],
+vec![3,4,2,4],
+vec![3,4,2,5],
+vec![3,4,2,6],
+vec![3,4,3,3],
+vec![3,4,3,4],
+vec![3,4,3,5],
+vec![3,4,3,6],
+vec![3,4,4,4],
+vec![3,4,4,5],
+vec![3,4,4,6],
+vec![3,4,5,5],
+vec![3,4,5,6],
+vec![3,4,6,5],
+vec![3,5,0,0],
+vec![3,5,0,1],
+vec![3,5,0,2],
+vec![3,5,0,3],
+vec![3,5,0,4],
+vec![3,5,0,5],
+vec![3,5,0,6],
+vec![3,5,1,0],
+vec![3,5,1,1],
+vec![3,5,1,2],
+vec![3,5,1,3],
+vec![3,5,1,4],
+vec![3,5,1,5],
+vec![3,5,1,6],
+vec![3,5,2,0],
+vec![3,5,2,1],
+vec![3,5,2,2],
+vec![3,5,2,3],
+vec![3,5,2,4],
+vec![3,5,2,5],
+vec![3,5,2,6],
+vec![3,5,3,0],
+vec![3,5,3,1],
+vec![3,5,3,2],
+vec![3,5,3,3],
+vec![3,5,3,4],
+vec![3,5,3,5],
+vec![3,5,3,6],
+vec![3,5,4,0],
+vec![3,5,4,1],
+vec![3,5,4,2],
+vec![3,5,4,3],
+vec![3,5,4,4],
+vec![3,5,4,5],
+vec![3,5,4,6],
+vec![3,5,5,0],
+vec![3,5,5,1],
+vec![3,5,5,2],
+vec![3,5,5,3],
+vec![3,5,5,4],
+vec![3,5,5,5],
+vec![3,5,5,6],
+vec![3,5,6,0],
+vec![3,5,6,1],
+vec![3,5,6,2],
+vec![3,5,6,3],
+vec![3,5,6,4],
+vec![3,5,6,5],
+vec![3,5,6,6],
+vec![4,4,0,0],
+vec![4,4,0,1],
+vec![4,4,0,2],
+vec![4,4,0,4],
+vec![4,4,0,5],
+vec![4,4,0,6],
+vec![4,4,1,1],
+vec![4,4,1,2],
+vec![4,4,1,4],
+vec![4,4,1,5],
+vec![4,4,1,6],
+vec![4,4,2,2],
+vec![4,4,2,3],
+vec![4,4,2,4],
+vec![4,4,2,5],
+vec![4,4,2,6],
+vec![4,4,4,4],
+vec![4,4,4,5],
+vec![4,4,4,6],
+vec![4,4,5,5],
+vec![4,4,5,6],
+vec![4,4,6,5],
+vec![4,5,0,0],
+vec![4,5,0,1],
+vec![4,5,0,2],
+vec![4,5,0,3],
+vec![4,5,0,4],
+vec![4,5,0,5],
+vec![4,5,0,6],
+vec![4,5,1,0],
+vec![4,5,1,1],
+vec![4,5,1,2],
+vec![4,5,1,3],
+vec![4,5,1,4],
+vec![4,5,1,5],
+vec![4,5,1,6],
+vec![4,5,2,0],
+vec![4,5,2,1],
+vec![4,5,2,2],
+vec![4,5,2,3],
+vec![4,5,2,4],
+vec![4,5,2,5],
+vec![4,5,2,6],
+vec![4,5,3,0],
+vec![4,5,3,1],
+vec![4,5,3,2],
+vec![4,5,3,3],
+vec![4,5,3,4],
+vec![4,5,3,5],
+vec![4,5,3,6],
+vec![4,5,4,0],
+vec![4,5,4,1],
+vec![4,5,4,2],
+vec![4,5,4,3],
+vec![4,5,4,4],
+vec![4,5,4,5],
+vec![4,5,4,6],
+vec![4,5,5,0],
+vec![4,5,5,1],
+vec![4,5,5,2],
+vec![4,5,5,3],
+vec![4,5,5,4],
+vec![4,5,5,5],
+vec![4,5,5,6],
+vec![4,5,6,0],
+vec![4,5,6,1],
+vec![4,5,6,2],
+vec![4,5,6,3],
+vec![4,5,6,4],
+vec![4,5,6,5],
+vec![4,5,6,6],
+vec![5,5,0,0],
+vec![5,5,0,1],
+vec![5,5,0,2],
+vec![5,5,0,4],
+vec![5,5,0,5],
+vec![5,5,0,6],
+vec![5,5,1,0],
+vec![5,5,1,1],
+vec![5,5,1,2],
+vec![5,5,1,4],
+vec![5,5,1,5],
+vec![5,5,1,6],
+vec![5,5,2,0],
+vec![5,5,2,1],
+vec![5,5,2,2],
+vec![5,5,2,3],
+vec![5,5,2,4],
+vec![5,5,2,5],
+vec![5,5,2,6],
+vec![5,5,4,0],
+vec![5,5,4,1],
+vec![5,5,4,2],
+vec![5,5,4,4],
+vec![5,5,4,5],
+vec![5,5,4,6],
+vec![5,5,5,0],
+vec![5,5,5,1],
+vec![5,5,5,2],
+vec![5,5,5,4],
+vec![5,5,5,5],
+vec![5,5,5,6],
+vec![5,5,6,0],
+vec![5,5,6,1],
+vec![5,5,6,2],
+vec![5,5,6,4],
+vec![5,5,6,5],
+vec![5,5,6,6],
+vec![5,6,0,0],
+vec![5,6,0,1],
+vec![5,6,0,2],
+vec![5,6,0,3],
+vec![5,6,0,4],
+vec![5,6,0,5],
+vec![5,6,0,6],
+vec![5,6,1,1],
+vec![5,6,1,2],
+vec![5,6,1,3],
+vec![5,6,1,4],
+vec![5,6,1,5],
+vec![5,6,1,6],
+vec![5,6,2,2],
+vec![5,6,2,3],
+vec![5,6,2,4],
+vec![5,6,2,5],
+vec![5,6,2,6],
+vec![5,6,3,2],
+vec![5,6,3,4],
+vec![5,6,3,5],
+vec![5,6,3,6],
+vec![5,6,4,4],
+vec![5,6,4,5],
+vec![5,6,4,6],
+vec![5,6,5,5],
+vec![5,6,5,6],
+vec![5,6,6,5]
+    ];
+
+
+    // let fixed_vec = vec![0,0,0,0];
+
+    for fixed_vec in ff {
+        let tt = (0..5).map(|i| 0..7usize);
+    for var in tt.multi_cartesian_product() {        
+        hh.insert((0,2), fixed_vec[0]);
+        hh.insert((0,3), fixed_vec[1]);
+        hh.insert((0,5), fixed_vec[2]);
+        hh.insert((0,6), fixed_vec[3]);
+        hh.insert((1,0), var[0]);
+        hh.insert((1,2), var[1]);
+        hh.insert((1,3), var[2]);
+        hh.insert((1,5), var[3]);
+        hh.insert((1,6), var[4]);
+       
+        // hh.insert((0,6), var[4]);
+        // hh.insert((4,5), var[5]);
+        // hh.insert((4,6), var[6]);
+
+        let pp = (0usize..pord.len()).collect::<Vec<_>>();
+        let jj = get_images2(pp.into_iter().permutations(pord.len())
+            .filter(|pe| pe[0]==0 && pe[1]==1 && pe[4]==4)
+            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+
+        // println!("jj: {:?}", jj[0]);
+        if jj[0][0..4] == fixed_vec && jj[0][4..9] == var {
+            
+
+            if false {
+            let siz =  jj.len();       
+            // println!("{}", siz);
+            let mut b_first = true;
+            let mut b_second = true;
+            for vec_j in jj.iter() {
+                if b_first {
+                    print!("  \\item $\\mathbf{{");
+                    for e in vec_j {
+                        print!("{}", *e);
+                    }
+                    print!("}}$ ({}): ", siz);
+                    b_first = false;
+                }
+                else {
+                    if !b_second {
+                        print!(", ");
+                    }
+                    else {
+                        b_second = false;
+                    }
+                    
+                    print!("${{");
+                    for e in vec_j {
+                        print!("{}", *e);
+                    }
+                    print!("}}$");
+                }
+
+            }
+            //println!("{:?}", jj);
+            println!("\n\n");
+            }
+            else {
+                // println!("JJDBG: {:?}", jj[0]);
+                if l_alglib::l_alg_test_init_vector(&pord, &jj[0]).is_ok() {
+                    num_cls+=1;
+                    // for 408_1
+                    // println!("./target/release/gen_from_ord.exe 1728 9,{},{},{},{},{},9,{},{},{},{},{} 1> rc8sym-1728/hh7_pord_1728-{}{}{}{}{}_{}{}{}{}{}.txt 2> rc8sym-1728/hh7_pord_1728-{}{}{}{}{}_{}{}{}{}{}.log", var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9], var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9], var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9]);
+                    println!("./target/release/gen_from_ord_static.exe {},{},{},{},{},{},{},{},{} 1> rc8sym-0408_1/hh8_pord_0408-{}{}{}{}{}{}{}{}{}.txt 2> rc8sym-0408_1/hh8_pord_0408-{}{}{}{}{}{}{}{}{}.log", fixed_vec[0], fixed_vec[1], fixed_vec[2], fixed_vec[3], var[0], var[1], var[2], var[3], var[4], fixed_vec[0], fixed_vec[1], fixed_vec[2], fixed_vec[3], var[0], var[1], var[2], var[3], var[4], fixed_vec[0], fixed_vec[1], fixed_vec[2], fixed_vec[3], var[0], var[1], var[2], var[3], var[4]);
+                    // println!("./target/release/gen_from_ord.exe 1728 9,0,0,1,2,3,9,{},{},{},{},{} 1> rc8sym-1728/hh7_pord_1728-00123_{}{}{}{}{}.txt 2> rc8sym-1728/hh7_pord_1728-00123_{}{}{}{}{}.log", var[0], var[1], var[2], var[3], var[4], var[0], var[1], var[2], var[3], var[4], var[0], var[1], var[2], var[3], var[4]);
+                }
+            }
+        }    
+    }
+    eprintln!("{num_cls}");
+    eprintln!("Time elapsed: {:.2} s", ts.elapsed().as_secs_f32());
+}
+}
+
+ fn main_408_1() {
+    // 408
+    let pord = vec![vec![1usize, 1, 0, 0, 1, 0, 0, 1], vec![0, 1, 0, 0, 1, 0, 0, 1], vec![0, 0, 1, 0, 1, 0, 0, 1], vec![0, 0, 0, 1, 1, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+
+    let mut hh = HashMap::<(usize,usize), usize>::new();
+    let tt = (0..4).map(|i| 0..7usize);
+    let mut num_cls = 0usize;
+    let ts = Instant::now();
+
+    for var in tt.multi_cartesian_product() {
+        hh.insert((0,2), var[0]);
+        hh.insert((0,3), var[1]);
+        hh.insert((0,5), var[2]);
+        hh.insert((0,6), var[3]);
+       
+        // hh.insert((0,6), var[4]);
+        // hh.insert((4,5), var[5]);
+        // hh.insert((4,6), var[6]);
+
+        let pp = (0usize..pord.len()).collect::<Vec<_>>();
+        let jj = get_images2(pp.into_iter().permutations(pord.len())
+            .filter(|pe| pe[0]==0 && pe[1]==1 && pe[4]==4)
+            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+
+        if jj[0] == var {
+            num_cls+=1;
+            if false {
+            let siz =  jj.len();       
+            // println!("{}", siz);
+            let mut b_first = true;
+            let mut b_second = true;
+            for vec_j in jj.iter() {
+                if b_first {
+                    print!("  \\item $\\mathbf{{");
+                    for e in vec_j {
+                        print!("{}", *e);
+                    }
+                    print!("}}$ ({}): ", siz);
+                    b_first = false;
+                }
+                else {
+                    if !b_second {
+                        print!(", ");
+                    }
+                    else {
+                        b_second = false;
+                    }
+                    
+                    print!("${{");
+                    for e in vec_j {
+                        print!("{}", *e);
+                    }
+                    print!("}}$");
+                }
+
+            }
+            //println!("{:?}", jj);
+            println!("\n\n");
+            }
+            else {
+                // for 408_1
+                // println!("./target/release/gen_from_ord.exe 1728 9,{},{},{},{},{},9,{},{},{},{},{} 1> rc8sym-1728/hh7_pord_1728-{}{}{}{}{}_{}{}{}{}{}.txt 2> rc8sym-1728/hh7_pord_1728-{}{}{}{}{}_{}{}{}{}{}.log", var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9], var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9], var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9]);
+                println!("./target/release/gen_from_ord.exe 408 {},{},{},{} 1> rc8sym-0408_1/hh8_pord_0408-{}{}{}{}.txt 2> rc8sym-0408_1/hh8_pord_0408-{}{}{}{}.log", var[0], var[1], var[2], var[3], var[0], var[1], var[2], var[3], var[0], var[1], var[2], var[3]);
+                // println!("./target/release/gen_from_ord.exe 1728 9,0,0,1,2,3,9,{},{},{},{},{} 1> rc8sym-1728/hh7_pord_1728-00123_{}{}{}{}{}.txt 2> rc8sym-1728/hh7_pord_1728-00123_{}{}{}{}{}.log", var[0], var[1], var[2], var[3], var[4], var[0], var[1], var[2], var[3], var[4], var[0], var[1], var[2], var[3], var[4]);
+            }
+        }    
+    }
+    eprintln!("{num_cls}");
+    eprintln!("Time elapsed: {:.2} s", ts.elapsed().as_secs_f32());
+}
+
+
+fn main_408_2() {
     // 408
     let pord = vec![vec![1usize, 1, 0, 0, 1, 0, 0, 1], vec![0, 1, 0, 0, 1, 0, 0, 1], vec![0, 0, 1, 0, 1, 0, 0, 1], vec![0, 0, 0, 1, 1, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
 

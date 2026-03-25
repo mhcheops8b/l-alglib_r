@@ -288,6 +288,36 @@ pub fn l_alg_test_ax4_partial(limpl: &[Vec<usize>], b_print: bool) -> bool {
     true
 }
 
+pub fn l_alg_test_ax4_partial_as_result(limpl: &[Vec<usize>]) -> Result<bool, String> {
+    let m = limpl.len();
+
+    // test ax4 partial
+    for i in 0..m {
+        for j in 0..m {
+            if limpl[i][j] == m+1 {
+                continue;
+            }
+            if limpl[j][i] == m+1 {
+                continue;
+            }
+            for k in 0..m {
+                if limpl[i][k] == m+1 {
+                    continue;
+                }
+                if limpl[j][k] == m+1 {
+                    continue;
+                }
+                if limpl[limpl[i][j]][limpl[i][k]] != m+1 && limpl[limpl[j][i]][limpl[j][k]] != m+1 &&  
+                   limpl[limpl[i][j]][limpl[i][k]] != limpl[limpl[j][i]][limpl[j][k]] {
+                    return Err(format!("Partial ax4 is not satisfied for x = {}, y = {}, z = {}", i, j, k));
+                }
+            }
+        }
+    }
+    Ok(true)
+}
+
+
 pub fn gen_all_lalgs_rec(index:usize, positions:&Vec<(usize,usize)>, limpl: &mut Vec<Vec<usize>>, unit:usize, res:&mut HashSet<Vec<Vec<usize>>>, num_tested: &mut usize, num_models: &mut usize) {
     let n = positions.len();
     //eprintln!("FHFH: {index} / {n}");
@@ -742,3 +772,52 @@ pub fn l_alg_is_repr(limpl: &[Vec<usize>], b_minimal: bool) -> bool {
 //         parsed_vector
 
 // }
+
+pub fn l_alg_test_init_vector(pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>) -> Result<bool, String>{
+    let  n = pord.len();
+
+    let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
+            
+    // eprintln!("Order: {pord:?}");
+
+    let mut lalg_limpl = l_alg_alloc_limpl(n);
+    let mut positions = Vec::<(usize,usize)>::new();
+                
+    l_alg_init_from_ord(&mut lalg_limpl, &pord, n-1, &mut positions);
+
+    // apply init_vector
+    for i in 0usize..std::cmp::min(positions.len(), init_vector.len()) {
+        let x = positions[i].0;
+        let y = positions[i].1;
+        let e = init_vector[i];
+        // eprintln!("{},{},{}", x, y, e);
+
+        if e == n+1 {
+            // return Err(format!("Skipping initialization of ({}, {})", x, y));
+            // eprintln!("Skipping initialization of ({}, {})", x, y);
+            continue;
+        }
+
+        if e == n-1 {
+            return Err(format!("Element at ({}, {}) cannot be equal to unit ({}).",x,y,n-1));
+        }
+                
+        if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
+            return Err(format!("Element at ({}, {}) needs to be greater than {} since {} <= {}.",x,y,y,y,x));
+        }
+
+        for t in 0..y {
+            if lalg_limpl[t][y] == n-1 && lalg_limpl[x][t] != n+1 && lalg_limpl[lalg_limpl[x][t]][e] != n-1 {
+                return Err(format!("Element e={} at (x={}, y={}) needs to larger than {} since t={} <= y => x->t <= x->y.", e, x, y, lalg_limpl[x][t], t));
+            }
+        }
+
+        lalg_limpl[x][y] = e;
+        if let Err(res) = l_alg_test_ax4_partial_as_result(&lalg_limpl) {
+            //eprintln!("Partial ax4 is not satisfied");
+            return Err(res);
+        }
+    }
+    
+    Ok(true)
+}
