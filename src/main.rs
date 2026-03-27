@@ -105,6 +105,119 @@ fn get_images(perms_set: &HashSet::<Vec<usize>>, fun: &HashMap::<(usize,usize), 
  }
 
  fn main() {
+    let num_pord = 6;
+    // 6
+    let pord = vec![vec![1, 0, 0, 0, 1, 0, 0, 1], vec![0, 1, 0, 0, 1, 0, 0, 1], vec![0, 0, 1, 0, 1, 0, 0, 1], vec![0, 0, 0, 1, 1, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+    
+    
+    let fixed_vec: Vec<(usize, usize)> = vec![(0,1), (0,2), (0,3), (0,5), (0,6), (1,0), (1,2), (1,3), (1,5), (1,6)];
+    let mut hh = HashMap::<(usize,usize), usize>::new();
+    let tt = (0..fixed_vec.len()).map(|i| 0..7usize);
+    let mut num_cls = 0usize;
+    let ts = Instant::now();
+    let split_cnt = 5;
+    let mut b_first_split = true;
+    let mut split_vec = Vec::<usize>::new();
+    let dir_base = format!("rc8sym-{:0split_cnt$}_2", num_pord);
+    let mut sub_dir = String::new();
+    for var in tt.multi_cartesian_product() {
+        for (idx,v) in fixed_vec.iter().enumerate() {
+            hh.insert(*v, var[idx]);
+        }
+
+        let pp = (0usize..pord.len()).collect::<Vec<_>>();
+        let jj = get_images2(pp.into_iter().permutations(pord.len())
+            .filter(|pe| pe[0]==0 && pe[1] == 1 && pe[4]==4 && (pe[5] == 5 && pe[6]==6 || pe[5]==6 && pe[6]==5))
+            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+
+        if jj[0] == var {
+            if l_alglib::l_alg_test_init_vector(&pord, &var).is_ok() {
+                num_cls+=1;
+                if false {
+                let siz =  jj.len();       
+                // println!("{}", siz);
+                let mut b_first = true;
+                let mut b_second = true;
+                for vec_j in jj.iter() {
+                    if b_first {
+                        print!("  \\item $\\mathbf{{");
+                        for e in vec_j {
+                            print!("{}", *e);
+                        }
+                        print!("}}$ ({}): ", siz);
+                        b_first = false;
+                    }
+                    else {
+                        if !b_second {
+                            print!(", ");
+                        }
+                        else {
+                            b_second = false;
+                        }
+                        
+                        print!("${{");
+                        for e in vec_j {
+                            print!("{}", *e);
+                        }
+                        print!("}}$");
+                    }
+
+                }
+                //println!("{:?}", jj);
+                println!("\n\n");
+                }
+                else {
+                    let mut filename_base = format!("hh8_pord_{:0split_cnt$}-", num_pord);
+                    for i in 0..fixed_vec.len() {
+                        filename_base.push(var[i].to_string().chars().next().unwrap());
+                    }
+                    
+                    if b_first_split || split_vec != var[0..split_cnt] {
+                        b_first_split = false;
+                        sub_dir.clear();
+                        split_vec = var[0..split_cnt].to_vec();
+                        for i in 0..split_cnt {
+                            sub_dir.push(var[i].to_string().chars().next().unwrap());
+                        }
+                        println!("mkdir -p {}/{}",dir_base, sub_dir);
+                    }
+                    // for 408_1
+                    // println!("./target/release/gen_from_ord.exe 1728 9,{},{},{},{},{},9,{},{},{},{},{} 1> rc8sym-1728/hh7_pord_1728-{}{}{}{}{}_{}{}{}{}{}.txt 2> rc8sym-1728/hh7_pord_1728-{}{}{}{}{}_{}{}{}{}{}.log", var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9], var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9], var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9]);
+                    // println!("./target/release/gen_from_ord.exe {} {},{},{},{} 1> rc8sym-{:04}_1/hh8_pord_{:04}-{}{}{}{}.txt 2> rc8sym-{:04}_1/hh8_pord_{:04}-{}{}{}{}.log", num_pord, var[0], var[1], var[2], var[3], num_pord, num_pord, var[0], var[1], var[2], var[3], num_pord, num_pord, var[0], var[1], var[2], var[3]);
+                    // println!("./target/release/gen_from_ord.exe 1728 9,0,0,1,2,3,9,{},{},{},{},{} 1> rc8sym-1728/hh7_pord_1728-00123_{}{}{}{}{}.txt 2> rc8sym-1728/hh7_pord_1728-00123_{}{}{}{}{}.log", var[0], var[1], var[2], var[3], var[4], var[0], var[1], var[2], var[3], var[4], var[0], var[1], var[2], var[3], var[4]);
+
+                    print!("./target/release/gen_from_ord.exe {} ", num_pord);
+                    let mut b_first = true;
+                    for i in 0..fixed_vec.len() {
+                        if !b_first {
+                            print!(",");
+                        }
+                        else {
+                            b_first = false;
+                        }
+                        print!("{}", var[i]);
+                    }
+                    println!(" 1> {}/{}/{}.txt 2> {}/{}/{}.log", dir_base, sub_dir, filename_base, dir_base, sub_dir, filename_base);
+                    // print!(" 1> rc8sym-{:04}_1/hh8_pord_{:04}-", num_pord, num_pord);
+                    // for i in 0..fixed_vec.len() {
+                    //     print!("{}", var[i]);
+                    // }
+                    // print!(".txt 2> rc8sym-{:04}_1/hh8_pord_{:04}-", num_pord, num_pord);
+                    // for i in 0..fixed_vec.len() {
+                    //     print!("{}", var[i]);
+                    // }
+                    // println!(".log");
+
+                }
+            }  
+        }  
+    }
+    eprintln!("{num_cls}");
+    eprintln!("Time elapsed: {:.2} s", ts.elapsed().as_secs_f32());
+
+}
+
+ fn main_376_2() {
     // 376
     let num_pord = 376;
     let pord = vec![vec![1, 1, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
@@ -117,7 +230,7 @@ fn get_images(perms_set: &HashSet::<Vec<usize>>, fun: &HashMap::<(usize,usize), 
     let split_cnt = 4;
     let mut b_first_split = true;
     let mut split_vec = Vec::<usize>::new();
-    let dir_base = format!("rc8sym-{:04}_1", num_pord);
+    let dir_base = format!("rc8sym-{:0split_cnt$}_1", num_pord);
     let mut sub_dir = String::new();
     for var in tt.multi_cartesian_product() {
         for (idx,v) in fixed_vec.iter().enumerate() {
@@ -166,7 +279,7 @@ fn get_images(perms_set: &HashSet::<Vec<usize>>, fun: &HashMap::<(usize,usize), 
                 println!("\n\n");
                 }
                 else {
-                    let mut filename_base = format!("hh8_pord_{:04}-", num_pord);
+                    let mut filename_base = format!("hh8_pord_{:0split_cnt$}-", num_pord);
                     for i in 0..fixed_vec.len() {
                         filename_base.push(var[i].to_string().chars().next().unwrap());
                     }
