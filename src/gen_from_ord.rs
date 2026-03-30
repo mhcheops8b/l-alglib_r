@@ -43,6 +43,14 @@ use std::time::Instant;
 
 //#![feature(string_remove_matches)]
 fn main() {
+    // let v_str = String::from("(1,0)=3|(1,1)=4");
+    // let a  = v_str.split("|").map(|v| v.trim());
+    // for g in a {
+    //     println!("{:?}", g);
+    // }
+    // return;
+    //
+
     let args_len = std::env::args().len();
 
     if args_len < 2 {

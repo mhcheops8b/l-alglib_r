@@ -821,3 +821,52 @@ pub fn l_alg_test_init_vector(pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>) 
     
     Ok(true)
 }
+
+pub fn l_alg_test_init_vector_with_positions(pord: &Vec<Vec<usize>>, init_positions: &Vec<(usize,usize)>, init_vector: &Vec<usize>) -> Result<bool, String>{
+    let  n = pord.len();
+
+    // let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
+            
+    // eprintln!("Order: {pord:?}");
+
+    let mut lalg_limpl = l_alg_alloc_limpl(n);
+    let mut positions = Vec::<(usize,usize)>::new();
+                
+    l_alg_init_from_ord(&mut lalg_limpl, &pord, n-1, &mut positions);
+
+    // apply init_vector
+    for i in 0usize..init_positions.len() {
+        let x = init_positions[i].0;
+        let y = init_positions[i].1;
+        let e = init_vector[i];
+        // eprintln!("{},{},{}", x, y, e);
+
+        if e == n+1 {
+            // return Err(format!("Skipping initialization of ({}, {})", x, y));
+            // eprintln!("Skipping initialization of ({}, {})", x, y);
+            continue;
+        }
+
+        if e == n-1 {
+            return Err(format!("Element at ({}, {}) cannot be equal to unit ({}).",x,y,n-1));
+        }
+                
+        if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
+            return Err(format!("Element at ({}, {}) needs to be greater than {} since {} <= {}.",x,y,y,y,x));
+        }
+
+        for t in 0..y {
+            if lalg_limpl[t][y] == n-1 && lalg_limpl[x][t] != n+1 && lalg_limpl[lalg_limpl[x][t]][e] != n-1 {
+                return Err(format!("Element e={} at (x={}, y={}) needs to larger than {} since t={} <= y => x->t <= x->y.", e, x, y, lalg_limpl[x][t], t));
+            }
+        }
+
+        lalg_limpl[x][y] = e;
+        if let Err(res) = l_alg_test_ax4_partial_as_result(&lalg_limpl) {
+            //eprintln!("Partial ax4 is not satisfied");
+            return Err(res);
+        }
+    }
+    
+    Ok(true)
+}
