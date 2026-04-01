@@ -870,3 +870,35 @@ pub fn l_alg_test_init_vector_with_positions(pord: &Vec<Vec<usize>>, init_positi
     
     Ok(true)
 }
+
+pub fn l_alg_test_init_value(x: usize, y: usize, e:usize, lalg_limpl: &Vec<Vec<usize>>) -> bool {
+                // let x = positions[i].0;
+                // let y = positions[i].1;
+                // let e = init_vector[i];
+                // eprintln!("{},{},{}", x, y, e);
+    let n = lalg_limpl.len();
+    if e == n-1 {
+        // eprintln!("Element at ({}, {}) cannot be equal to unit ({}).",x,y,n-1);
+        return false;
+    }
+                
+    if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
+        // eprintln!("Element at ({}, {}) needs to be greater than {} since {} <= {}.",x,y,y,y,x);
+        return false;
+    }
+
+    for t in 0..y {
+        if lalg_limpl[t][y] == n-1 && lalg_limpl[x][t] != n+1 && lalg_limpl[lalg_limpl[x][t]][e] != n-1 {
+            // eprintln!("Element e={} at (x={}, y={}) needs to larger than {} since t={} <= y => x->t <= x->y.", e, x, y, lalg_limpl[x][t], t);
+            return false;
+        }
+    }
+
+    let mut lalg_limpl_copy = lalg_limpl.clone();
+    lalg_limpl_copy[x][y] = e;
+    if !l_alg_test_ax4_partial_xy(&lalg_limpl_copy, x, y, false) {
+        //eprintln!("Partial ax4 is not satisfied");
+        return false;
+    }
+    true
+}

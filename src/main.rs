@@ -1,5 +1,6 @@
 // use core::num;
 use std::collections::HashMap;
+use std::thread::current;
 use std::{collections::HashSet, io::BufRead};
 use itertools::{Itertools};
 // use l_alglib::l_alg_init_limpl;
@@ -104,8 +105,640 @@ fn get_images(perms_set: &HashSet::<Vec<usize>>, fun: &HashMap::<(usize,usize), 
      hs_v
  }
 
-// fn main_5_1() {
+fn main_1_1() {    
+    // 1
+    let num_pord = 1;
+    let pord = vec![vec![1, 0, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+        
+    let fixed_vec: Vec<(usize, usize)> = vec![(0,1), (0,2), (0,3), (0,4), (0,5), (0,6)];
+    let mut hh = HashMap::<(usize,usize), usize>::new();
+    let tt = (0..fixed_vec.len()).map(|i| 0..7usize);
+    let mut num_cls = 0usize;
+    let ts = Instant::now();
+
+    for var in tt.multi_cartesian_product() {
+        for (idx,v) in fixed_vec.iter().enumerate() {
+            hh.insert(*v, var[idx]);
+        }
+
+        let pp = (0usize..pord.len()).collect::<Vec<_>>();
+        let jj = get_images2(pp.into_iter().permutations(pord.len())
+            .filter(|pe| pe[0]==0)
+            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+
+        if jj[0] == var {
+            if l_alglib::l_alg_test_init_vector_with_positions(&pord, &fixed_vec, &var).is_ok() {
+            num_cls+=1;
+            if false {
+            let siz =  jj.len();       
+            // println!("{}", siz);
+            let mut b_first = true;
+            let mut b_second = true;
+            for vec_j in jj.iter() {
+                if b_first {
+                    print!("  \\item $\\mathbf{{");
+                    for e in vec_j {
+                        print!("{}", *e);
+                    }
+                    print!("}}$ ({}): ", siz);
+                    b_first = false;
+                }
+                else {
+                    if !b_second {
+                        print!(", ");
+                    }
+                    else {
+                        b_second = false;
+                    }
+                    
+                    print!("${{");
+                    for e in vec_j {
+                        print!("{}", *e);
+                    }
+                    print!("}}$");
+                }
+
+            }
+            //println!("{:?}", jj);
+            println!("\n\n");
+            }
+            else {
+                // for 408_1
+                // println!("./target/release/gen_from_ord.exe 1728 9,{},{},{},{},{},9,{},{},{},{},{} 1> rc8sym-1728/hh7_pord_1728-{}{}{}{}{}_{}{}{}{}{}.txt 2> rc8sym-1728/hh7_pord_1728-{}{}{}{}{}_{}{}{}{}{}.log", var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9], var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9], var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9]);
+                // println!("./target/release/gen_from_ord.exe {} {},{},{},{} 1> rc8sym-{:04}_1/hh8_pord_{:04}-{}{}{}{}.txt 2> rc8sym-{:04}_1/hh8_pord_{:04}-{}{}{}{}.log", num_pord, var[0], var[1], var[2], var[3], num_pord, num_pord, var[0], var[1], var[2], var[3], num_pord, num_pord, var[0], var[1], var[2], var[3]);
+                // println!("./target/release/gen_from_ord.exe 1728 9,0,0,1,2,3,9,{},{},{},{},{} 1> rc8sym-1728/hh7_pord_1728-00123_{}{}{}{}{}.txt 2> rc8sym-1728/hh7_pord_1728-00123_{}{}{}{}{}.log", var[0], var[1], var[2], var[3], var[4], var[0], var[1], var[2], var[3], var[4], var[0], var[1], var[2], var[3], var[4]);
+
+                print!("./target/release/gen_from_ord.exe {} ", num_pord);
+                if true {
+                    let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(pord.len());
+                    let mut positions = Vec::<(usize,usize)>::new();
+                
+                    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1, &mut positions);
+                    
+                    let mut b_first = true;
+                    let mut pos_idx = 0usize;
+                    for i in 0..fixed_vec.len() {
+                        if !b_first {
+                            print!(",");
+                        }
+                        else {
+                            b_first = false;
+                        }
+                        
+                        if positions[pos_idx] != fixed_vec[i] {    
+                            while positions[pos_idx] != fixed_vec[i] {
+                                pos_idx+=1;
+                                print!("{},", pord.len()+1);                                
+                            }
+                        }
+                        print!("{}", var[i]);
+                        pos_idx+=1;
+                    }
+                }
+                else {
+                    if false {
+                        let mut b_first = true;
+                        for i in 0..fixed_vec.len()-1 {
+                            if !b_first {
+                                print!(",");
+                            }
+                            else {
+                                b_first = false;
+                            }
+                            print!("{}", var[i]);
+                        }
+                        print!(",9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,{}", var[fixed_vec.len()-1]);
+                    }
+                    else {
+                        let mut b_first = true;
+                        for i in 0..fixed_vec.len()-2 {
+                            if !b_first {
+                                print!(",");
+                            }
+                            else {
+                                b_first = false;
+                            }
+                            print!("{}", var[i]);
+                        }
+                        print!(",9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,{},9,9,9,9,{}", var[fixed_vec.len()-2], var[fixed_vec.len()-1]);
+                    }
+                }
+                print!(" 1> rc8sym-{:04}_1/hh8_pord_{:04}-", num_pord, num_pord);
+                for i in 0..fixed_vec.len() {
+                    print!("{}", var[i]);
+                }
+                print!(".txt 2> rc8sym-{:04}_1/hh8_pord_{:04}-", num_pord, num_pord);
+                for i in 0..fixed_vec.len() {
+                    print!("{}", var[i]);
+                }
+                println!(".log");
+
+            }
+        }    
+    }
+    }
+    eprintln!("{num_cls}");
+    eprintln!("Time elapsed: {:.2} s", ts.elapsed().as_secs_f32());
+
+}
+
+fn main_2_1() {
+    // 2
+    let num_pord = 2;
+    let pord = vec![vec![1, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+        
+    let fixed_vec: Vec<(usize, usize)> = vec![(0,1), (0,2), (0,3), (0,4), (0,5), (6,0)];
+    let mut hh = HashMap::<(usize,usize), usize>::new();
+    let tt = (0..fixed_vec.len()).map(|i| 0..7usize);
+    let mut num_cls = 0usize;
+    let ts = Instant::now();
+
+    for var in tt.multi_cartesian_product() {
+        for (idx,v) in fixed_vec.iter().enumerate() {
+            hh.insert(*v, var[idx]);
+        }
+
+        let pp = (0usize..pord.len()).collect::<Vec<_>>();
+        let jj = get_images2(pp.into_iter().permutations(pord.len())
+            .filter(|pe| pe[0]==0)
+            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+
+        if jj[0] == var {
+            if l_alglib::l_alg_test_init_vector_with_positions(&pord, &fixed_vec, &var).is_ok() {
+            num_cls+=1;
+            if false {
+            let siz =  jj.len();       
+            // println!("{}", siz);
+            let mut b_first = true;
+            let mut b_second = true;
+            for vec_j in jj.iter() {
+                if b_first {
+                    print!("  \\item $\\mathbf{{");
+                    for e in vec_j {
+                        print!("{}", *e);
+                    }
+                    print!("}}$ ({}): ", siz);
+                    b_first = false;
+                }
+                else {
+                    if !b_second {
+                        print!(", ");
+                    }
+                    else {
+                        b_second = false;
+                    }
+                    
+                    print!("${{");
+                    for e in vec_j {
+                        print!("{}", *e);
+                    }
+                    print!("}}$");
+                }
+
+            }
+            //println!("{:?}", jj);
+            println!("\n\n");
+            }
+            else {
+                // for 408_1
+                // println!("./target/release/gen_from_ord.exe 1728 9,{},{},{},{},{},9,{},{},{},{},{} 1> rc8sym-1728/hh7_pord_1728-{}{}{}{}{}_{}{}{}{}{}.txt 2> rc8sym-1728/hh7_pord_1728-{}{}{}{}{}_{}{}{}{}{}.log", var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9], var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9], var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9]);
+                // println!("./target/release/gen_from_ord.exe {} {},{},{},{} 1> rc8sym-{:04}_1/hh8_pord_{:04}-{}{}{}{}.txt 2> rc8sym-{:04}_1/hh8_pord_{:04}-{}{}{}{}.log", num_pord, var[0], var[1], var[2], var[3], num_pord, num_pord, var[0], var[1], var[2], var[3], num_pord, num_pord, var[0], var[1], var[2], var[3]);
+                // println!("./target/release/gen_from_ord.exe 1728 9,0,0,1,2,3,9,{},{},{},{},{} 1> rc8sym-1728/hh7_pord_1728-00123_{}{}{}{}{}.txt 2> rc8sym-1728/hh7_pord_1728-00123_{}{}{}{}{}.log", var[0], var[1], var[2], var[3], var[4], var[0], var[1], var[2], var[3], var[4], var[0], var[1], var[2], var[3], var[4]);
+
+                print!("./target/release/gen_from_ord.exe {} ", num_pord);
+                if true {
+                    let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(pord.len());
+                    let mut positions = Vec::<(usize,usize)>::new();
+                
+                    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1, &mut positions);
+                    
+                    let mut b_first = true;
+                    let mut pos_idx = 0usize;
+                    for i in 0..fixed_vec.len() {
+                        if !b_first {
+                            print!(",");
+                        }
+                        else {
+                            b_first = false;
+                        }
+                        
+                        if positions[pos_idx] != fixed_vec[i] {    
+                            while positions[pos_idx] != fixed_vec[i] {
+                                pos_idx+=1;
+                                print!("{},", pord.len()+1);                                
+                            }
+                        }
+                        print!("{}", var[i]);
+                        pos_idx+=1;
+                    }
+                }
+                else {
+                    if false {
+                        let mut b_first = true;
+                        for i in 0..fixed_vec.len()-1 {
+                            if !b_first {
+                                print!(",");
+                            }
+                            else {
+                                b_first = false;
+                            }
+                            print!("{}", var[i]);
+                        }
+                        print!(",9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,{}", var[fixed_vec.len()-1]);
+                    }
+                    else {
+                        let mut b_first = true;
+                        for i in 0..fixed_vec.len()-2 {
+                            if !b_first {
+                                print!(",");
+                            }
+                            else {
+                                b_first = false;
+                            }
+                            print!("{}", var[i]);
+                        }
+                        print!(",9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,{},9,9,9,9,{}", var[fixed_vec.len()-2], var[fixed_vec.len()-1]);
+                    }
+                }
+                print!(" 1> rc8sym-{:04}_1/hh8_pord_{:04}-", num_pord, num_pord);
+                for i in 0..fixed_vec.len() {
+                    print!("{}", var[i]);
+                }
+                print!(".txt 2> rc8sym-{:04}_1/hh8_pord_{:04}-", num_pord, num_pord);
+                for i in 0..fixed_vec.len() {
+                    print!("{}", var[i]);
+                }
+                println!(".log");
+
+            }
+        }    
+    }
+    }
+    eprintln!("{num_cls}");
+    eprintln!("Time elapsed: {:.2} s", ts.elapsed().as_secs_f32());
+
+}
+
+fn get_plan_rec(lev:usize, n: usize, pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize,usize)>, positions: &Vec<(usize,usize)>, filter_fun: fn(&Vec<usize>)->bool, cur_lalg: &mut Vec<Vec<usize>>) {
+    if lev == fixed_vec.len() {
+        let mut hh = HashMap::<(usize,usize), usize>::new();
+        for (idx,v) in fixed_vec.iter().enumerate() {
+            hh.insert(fixed_vec[idx], cur_lalg[fixed_vec[idx].0][fixed_vec[idx].1]);
+        }
+
+        let pp = (0usize..pord.len()).collect::<Vec<_>>();
+        let jj = get_images2(pp.into_iter().permutations(pord.len())
+            .filter(|pe| filter_fun(pe))
+            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+
+        let mut b_ok = true;
+        for (idx, v) in fixed_vec.iter().enumerate() {
+            if jj[0][idx] != cur_lalg[fixed_vec[idx].0][fixed_vec[idx].1] {
+                b_ok = false;
+                break;
+            }
+        }
+        if b_ok {
+            print!("./target/release/gen_from_ord.exe {} ", num_pord);
+                
+            let mut b_first = true;
+            let mut pos_idx = 0usize;
+            for i in 0..fixed_vec.len() {
+                if !b_first {
+                    print!(",");
+                }
+                else {
+                    b_first = false;
+                }
+                
+                if positions[pos_idx] != fixed_vec[i] {    
+                    while positions[pos_idx] != fixed_vec[i] {
+                        pos_idx+=1;
+                        print!("{},", pord.len()+1);                                
+                    }
+                }
+                print!("{}", cur_lalg[fixed_vec[i].0][fixed_vec[i].1]);
+                pos_idx+=1;
+            }
+            print!(" 1> rc8sym-{:04}_1/hh8_pord_{:04}-", num_pord, num_pord);
+            for i in 0..fixed_vec.len() {
+                    print!("{}", cur_lalg[fixed_vec[i].0][fixed_vec[i].1]);
+            }
+            print!(".txt 2> rc8sym-{:04}_1/hh8_pord_{:04}-", num_pord, num_pord);
+            for i in 0..fixed_vec.len() {
+                print!("{}", cur_lalg[fixed_vec[i].0][fixed_vec[i].1]);
+            }
+            println!(".log");
+        }
+    }
+    else {
+        for i in 0..pord.len()-1 {
+            if l_alglib::l_alg_test_init_value(fixed_vec[lev].0, fixed_vec[lev].1, i, cur_lalg) {
+                cur_lalg[fixed_vec[lev].0][fixed_vec[lev].1] = i;
+                get_plan_rec(lev+1, n, pord, num_pord, fixed_vec, positions, filter_fun, cur_lalg);
+                cur_lalg[fixed_vec[lev].0][fixed_vec[lev].1] = pord.len()+1;
+            }
+        }
+    }
+}
+
 fn main() {
+    // 3
+    let num_pord = 3;
+    let pord = vec![vec![1, 0, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+        
+    let fixed_vec: Vec<(usize, usize)> = vec![(0,1), (0,2), (0,3), (0,4),(0,6), (1,0), (1,2), (1,3), (1,4), (1,6), (5,0), (5,1), (6,0), (6,1), (6,5)];
+    let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(pord.len());
+    let mut positions = Vec::<(usize,usize)>::new();
+    fn ff(pe: &Vec<usize>) -> bool {
+        (pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0) && pe[5]==5
+    }
+    // let ff = (|pe:Vec<usize>| (pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0) && pe[5]==5);
+    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1, &mut positions);
+
+    get_plan_rec(0, pord.len(), &pord, num_pord, &fixed_vec,&positions, ff, &mut lalg_limpl);
+}
+
+// fn main_3_1() {
+fn main_3_1() {
+    // 3
+    let num_pord = 3;
+    let pord = vec![vec![1, 0, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+        
+    let fixed_vec: Vec<(usize, usize)> = vec![(0,1), (0,2), (0,3), (0,4),(0,6), (1,0), (1,2), (1,3), (1,4), (1,6), (5,0), (5,1), (6,0), (6,1), (6,5)];
+    let mut hh = HashMap::<(usize,usize), usize>::new();
+    let tt = (0..fixed_vec.len()).map(|i| 0..7usize);
+    let mut num_cls = 0usize;
+    let ts = Instant::now();
+
+    for var in tt.multi_cartesian_product() {
+        for (idx,v) in fixed_vec.iter().enumerate() {
+            hh.insert(*v, var[idx]);
+        }
+
+        let pp = (0usize..pord.len()).collect::<Vec<_>>();
+        let jj = get_images2(pp.into_iter().permutations(pord.len())
+            .filter(|pe| (pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0) && pe[5]==5)
+            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+
+        if jj[0] == var {
+            if l_alglib::l_alg_test_init_vector_with_positions(&pord, &fixed_vec, &var).is_ok() {
+            num_cls+=1;
+            if false {
+            let siz =  jj.len();       
+            // println!("{}", siz);
+            let mut b_first = true;
+            let mut b_second = true;
+            for vec_j in jj.iter() {
+                if b_first {
+                    print!("  \\item $\\mathbf{{");
+                    for e in vec_j {
+                        print!("{}", *e);
+                    }
+                    print!("}}$ ({}): ", siz);
+                    b_first = false;
+                }
+                else {
+                    if !b_second {
+                        print!(", ");
+                    }
+                    else {
+                        b_second = false;
+                    }
+                    
+                    print!("${{");
+                    for e in vec_j {
+                        print!("{}", *e);
+                    }
+                    print!("}}$");
+                }
+
+            }
+            //println!("{:?}", jj);
+            println!("\n\n");
+            }
+            else {
+                // for 408_1
+                // println!("./target/release/gen_from_ord.exe 1728 9,{},{},{},{},{},9,{},{},{},{},{} 1> rc8sym-1728/hh7_pord_1728-{}{}{}{}{}_{}{}{}{}{}.txt 2> rc8sym-1728/hh7_pord_1728-{}{}{}{}{}_{}{}{}{}{}.log", var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9], var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9], var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9]);
+                // println!("./target/release/gen_from_ord.exe {} {},{},{},{} 1> rc8sym-{:04}_1/hh8_pord_{:04}-{}{}{}{}.txt 2> rc8sym-{:04}_1/hh8_pord_{:04}-{}{}{}{}.log", num_pord, var[0], var[1], var[2], var[3], num_pord, num_pord, var[0], var[1], var[2], var[3], num_pord, num_pord, var[0], var[1], var[2], var[3]);
+                // println!("./target/release/gen_from_ord.exe 1728 9,0,0,1,2,3,9,{},{},{},{},{} 1> rc8sym-1728/hh7_pord_1728-00123_{}{}{}{}{}.txt 2> rc8sym-1728/hh7_pord_1728-00123_{}{}{}{}{}.log", var[0], var[1], var[2], var[3], var[4], var[0], var[1], var[2], var[3], var[4], var[0], var[1], var[2], var[3], var[4]);
+
+                print!("./target/release/gen_from_ord.exe {} ", num_pord);
+                if true {
+                    let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(pord.len());
+                    let mut positions = Vec::<(usize,usize)>::new();
+                
+                    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1, &mut positions);
+                    
+                    let mut b_first = true;
+                    let mut pos_idx = 0usize;
+                    for i in 0..fixed_vec.len() {
+                        if !b_first {
+                            print!(",");
+                        }
+                        else {
+                            b_first = false;
+                        }
+                        
+                        if positions[pos_idx] == fixed_vec[i] {    
+                            print!("{}", var[i]);
+                            
+                        }
+                        else {
+                            while positions[pos_idx] != fixed_vec[i] {
+                                pos_idx+=1;
+                                print!("{},", pord.len()+1);                                
+                            }
+                            print!("{}", var[i]);
+                        }
+                        pos_idx+=1;
+                    }
+                }
+                else {
+                    if false {
+                        let mut b_first = true;
+                        for i in 0..fixed_vec.len()-1 {
+                            if !b_first {
+                                print!(",");
+                            }
+                            else {
+                                b_first = false;
+                            }
+                            print!("{}", var[i]);
+                        }
+                        print!(",9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,{}", var[fixed_vec.len()-1]);
+                    }
+                    else {
+                        let mut b_first = true;
+                        for i in 0..fixed_vec.len()-2 {
+                            if !b_first {
+                                print!(",");
+                            }
+                            else {
+                                b_first = false;
+                            }
+                            print!("{}", var[i]);
+                        }
+                        print!(",9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,{},9,9,9,9,{}", var[fixed_vec.len()-2], var[fixed_vec.len()-1]);
+                    }
+                }
+                print!(" 1> rc8sym-{:04}_1/hh8_pord_{:04}-", num_pord, num_pord);
+                for i in 0..fixed_vec.len() {
+                    print!("{}", var[i]);
+                }
+                print!(".txt 2> rc8sym-{:04}_1/hh8_pord_{:04}-", num_pord, num_pord);
+                for i in 0..fixed_vec.len() {
+                    print!("{}", var[i]);
+                }
+                println!(".log");
+
+            }
+        }    
+    }
+    }
+    eprintln!("{num_cls}");
+    eprintln!("Time elapsed: {:.2} s", ts.elapsed().as_secs_f32());
+
+}
+
+fn main_4_1() {
+    // 4
+    let num_pord = 4;
+    let pord = vec![vec![1, 0, 0, 0, 0, 1, 1, 1], vec![0, 1, 0, 0, 0, 1, 1, 1], vec![0, 0, 1, 0, 0, 1, 1, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+        
+    let fixed_vec: Vec<(usize, usize)> = vec![(0,1), (0,2), (0,3), (0,4), (5,0), (6,0)];
+    let mut hh = HashMap::<(usize,usize), usize>::new();
+    let tt = (0..fixed_vec.len()).map(|i| 0..7usize);
+    let mut num_cls = 0usize;
+    let ts = Instant::now();
+
+    for var in tt.multi_cartesian_product() {
+        for (idx,v) in fixed_vec.iter().enumerate() {
+            hh.insert(*v, var[idx]);
+        }
+
+        let pp = (0usize..pord.len()).collect::<Vec<_>>();
+        let jj = get_images2(pp.into_iter().permutations(pord.len())
+            .filter(|pe| pe[0]==0)
+            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+
+        if jj[0] == var {
+            if l_alglib::l_alg_test_init_vector_with_positions(&pord, &fixed_vec, &var).is_ok() {
+            num_cls+=1;
+            if false {
+            let siz =  jj.len();       
+            // println!("{}", siz);
+            let mut b_first = true;
+            let mut b_second = true;
+            for vec_j in jj.iter() {
+                if b_first {
+                    print!("  \\item $\\mathbf{{");
+                    for e in vec_j {
+                        print!("{}", *e);
+                    }
+                    print!("}}$ ({}): ", siz);
+                    b_first = false;
+                }
+                else {
+                    if !b_second {
+                        print!(", ");
+                    }
+                    else {
+                        b_second = false;
+                    }
+                    
+                    print!("${{");
+                    for e in vec_j {
+                        print!("{}", *e);
+                    }
+                    print!("}}$");
+                }
+
+            }
+            //println!("{:?}", jj);
+            println!("\n\n");
+            }
+            else {
+                // for 408_1
+                // println!("./target/release/gen_from_ord.exe 1728 9,{},{},{},{},{},9,{},{},{},{},{} 1> rc8sym-1728/hh7_pord_1728-{}{}{}{}{}_{}{}{}{}{}.txt 2> rc8sym-1728/hh7_pord_1728-{}{}{}{}{}_{}{}{}{}{}.log", var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9], var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9], var[0], var[1], var[2], var[3], var[4], var[5], var[6], var[7], var[8], var[9]);
+                // println!("./target/release/gen_from_ord.exe {} {},{},{},{} 1> rc8sym-{:04}_1/hh8_pord_{:04}-{}{}{}{}.txt 2> rc8sym-{:04}_1/hh8_pord_{:04}-{}{}{}{}.log", num_pord, var[0], var[1], var[2], var[3], num_pord, num_pord, var[0], var[1], var[2], var[3], num_pord, num_pord, var[0], var[1], var[2], var[3]);
+                // println!("./target/release/gen_from_ord.exe 1728 9,0,0,1,2,3,9,{},{},{},{},{} 1> rc8sym-1728/hh7_pord_1728-00123_{}{}{}{}{}.txt 2> rc8sym-1728/hh7_pord_1728-00123_{}{}{}{}{}.log", var[0], var[1], var[2], var[3], var[4], var[0], var[1], var[2], var[3], var[4], var[0], var[1], var[2], var[3], var[4]);
+
+                print!("./target/release/gen_from_ord.exe {} ", num_pord);
+                if true {
+                    let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(pord.len());
+                    let mut positions = Vec::<(usize,usize)>::new();
+                
+                    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1, &mut positions);
+                    
+                    let mut b_first = true;
+                    let mut pos_idx = 0usize;
+                    for i in 0..fixed_vec.len() {
+                        if !b_first {
+                            print!(",");
+                        }
+                        else {
+                            b_first = false;
+                        }
+                        
+                        if positions[pos_idx] != fixed_vec[i] {    
+                            while positions[pos_idx] != fixed_vec[i] {
+                                pos_idx+=1;
+                                print!("{},", pord.len()+1);                                
+                            }
+                        }
+                        print!("{}", var[i]);
+                        pos_idx+=1;
+                    }
+                }
+                else {
+                    if false {
+                        let mut b_first = true;
+                        for i in 0..fixed_vec.len()-1 {
+                            if !b_first {
+                                print!(",");
+                            }
+                            else {
+                                b_first = false;
+                            }
+                            print!("{}", var[i]);
+                        }
+                        print!(",9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,{}", var[fixed_vec.len()-1]);
+                    }
+                    else {
+                        let mut b_first = true;
+                        for i in 0..fixed_vec.len()-2 {
+                            if !b_first {
+                                print!(",");
+                            }
+                            else {
+                                b_first = false;
+                            }
+                            print!("{}", var[i]);
+                        }
+                        print!(",9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,{},9,9,9,9,{}", var[fixed_vec.len()-2], var[fixed_vec.len()-1]);
+                    }
+                }
+                print!(" 1> rc8sym-{:04}_1/hh8_pord_{:04}-", num_pord, num_pord);
+                for i in 0..fixed_vec.len() {
+                    print!("{}", var[i]);
+                }
+                print!(".txt 2> rc8sym-{:04}_1/hh8_pord_{:04}-", num_pord, num_pord);
+                for i in 0..fixed_vec.len() {
+                    print!("{}", var[i]);
+                }
+                println!(".log");
+
+            }
+        }    
+    }
+    }
+    eprintln!("{num_cls}");
+    eprintln!("Time elapsed: {:.2} s", ts.elapsed().as_secs_f32());
+
+}
+
+fn main_5_1() {
     // 5
     let num_pord = 5;
     let pord = vec![vec![1, 0, 0, 0, 0, 1, 1, 1], vec![0, 1, 0, 0, 0, 1, 1, 1], vec![0, 0, 1, 0, 0, 1, 1, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
@@ -185,17 +818,14 @@ fn main() {
                             b_first = false;
                         }
                         
-                        if positions[pos_idx] == fixed_vec[i] {    
-                            print!("{}", var[i]);
-                            pos_idx+=1;
-                        }
-                        else {
+                        if positions[pos_idx] != fixed_vec[i] {
                             while positions[pos_idx] != fixed_vec[i] {
                                 pos_idx+=1;
                                 print!("{},", pord.len()+1);                                
                             }
-                            print!("{}", var[i]);
                         }
+                        print!("{}", var[i]);
+                        pos_idx+=1;
                     }
                 }
                 else {
