@@ -484,7 +484,7 @@ fn get_plan_rec(lev:usize, n: usize, pord: &Vec<Vec<usize>>, num_pord: usize, fi
     }
 }
 
-fn main() {
+fn main_2_2() {
     // println!("HEH");
     // 2
     let num_pord = 2;
