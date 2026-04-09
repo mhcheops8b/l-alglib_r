@@ -443,6 +443,30 @@ fn get_plan_rec(lev:usize, n: usize, pord: &Vec<Vec<usize>>, num_pord: usize, fi
 }
 
 fn main() {
+    // println!("HEH");
+    // 2
+    let num_pord = 2;
+    let pord = vec![vec![1, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+
+    let fixed_vec: Vec<(usize, usize)> = vec![(0,1), (0,2), (0,3), (0,4), (0,5), (1,0), (1,2), (1,3), (1,4), (1,5), (2,0), (2,1), (2,3), (2,4), (2,5), (6,0), (6,1), (6,2)];
+    let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(pord.len());
+    let mut positions = Vec::<(usize,usize)>::new();
+    fn ff(pe: &Vec<usize>) -> bool {
+        std::cmp::min(std::cmp::min(pe[0], pe[1]), pe[2]) == 0 && std::cmp::max(std::cmp::max(pe[0], pe[1]), pe[2]) == 2
+//        pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0
+    }
+    // let ff = (|pe:Vec<usize>| (pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0) && pe[5]==5);
+    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1, &mut positions);
+
+    lalg_limpl[0][1] = 1;
+    lalg_limpl[0][2] = 1;
+    lalg_limpl[0][3] = 2;
+    lalg_limpl[0][4] = 3;
+    lalg_limpl[0][5] = 5;
+    get_plan_rec(5, pord.len(), &pord, num_pord, &fixed_vec,&positions, ff, &mut lalg_limpl);
+}
+
+fn main_3_2() {
     // 3
     let num_pord = 3;
     let pord = vec![vec![1, 0, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
