@@ -94,7 +94,7 @@ fn main() {
                 init_vector = line_str.split(",").map(|v| v.trim().parse().unwrap()).collect();
                 eprintln!("Init vector (int): {:?}", init_vector);
     
-                l_alglib::l_alg_gen_from_ord(&pord, &init_vector, &mut lalgs);
+                l_alglib::l_alg_gen_from_ord(&pord, &init_vector, &mut lalgs, true, true);
 
                 // println!("{cur_line:?}");
                 // let pord = l_alglib::parse_vector(&cur_line);

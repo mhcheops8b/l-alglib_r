@@ -242,7 +242,7 @@ fn main_1_1() {
 
 }
 
-fn main() {
+fn main_2_1_1() {
     // 2
     let num_pord = 2;
     let pord = vec![vec![1, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
@@ -484,7 +484,7 @@ fn get_plan_rec(lev:usize, n: usize, pord: &Vec<Vec<usize>>, num_pord: usize, fi
     }
 }
 
-fn main_2_2() {
+fn main() {
     // println!("HEH");
     // 2
     let num_pord = 2;

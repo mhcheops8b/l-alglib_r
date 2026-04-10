@@ -904,12 +904,15 @@ pub fn l_alg_test_init_value(x: usize, y: usize, e:usize, lalg_limpl: &Vec<Vec<u
     true
 }
 
-pub fn l_alg_gen_from_ord(pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>, lalgs: &mut HashSet<Vec<Vec<usize>>>) {
+pub fn l_alg_gen_from_ord(pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>, lalgs: &mut HashSet<Vec<Vec<usize>>>, b_test: bool, b_print: bool) {
 
     let n = pord.len();
     // let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
     // let pord = serde_json::from_str::<Vec<Vec<usize>>>(&cur_line).unwrap();
-    eprintln!("Order: {pord:?}");
+    
+    if b_print {
+        eprintln!("Order: {pord:?}");
+    }
 
     let mut lalg_limpl = l_alg_alloc_limpl(n);
     let mut positions = Vec::<(usize,usize)>::new();
@@ -919,42 +922,57 @@ pub fn l_alg_gen_from_ord(pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>, lalg
     // apply init_vector
     let mut b_first = true;
     for i in 0usize..std::cmp::min(positions.len(), init_vector.len()) {
-        if b_first {
-            b_first = false;
-        } 
-        else {
-            eprint!(", ");
+        if b_print {
+            if b_first {
+                b_first = false;
+            } 
+            else {
+                eprint!(", ");
+            }
         }
         let x = positions[i].0;
         let y = positions[i].1;
         let e = init_vector[i];
-        eprint!("({},{}) = {} ", x, y, e);
-
-        if e == n+1 {
-            eprint!("(skipping)");
-            continue;
+        if b_print {
+            eprint!("({},{}) = {} ", x, y, e);
         }
-        if e == n-1 {
-            eprint!("(Element at ({}, {}) cannot be equal to unit ({}).)",x,y,n-1);
-            return;
-        }
-            
-        if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
-            eprint!("(Element at ({}, {}) needs to be greater than {} since {} <= {}.)",x,y,y,y,x);
-            return;
-        }
-
-        for t in 0..y {
-            if lalg_limpl[t][y] == n-1 && lalg_limpl[x][t] != n+1 && lalg_limpl[lalg_limpl[x][t]][e] != n-1 {
-                eprint!("(Element e={} at (x={}, y={}) needs to larger than {} since t={} <= y => x->t <= x->y.)", e, x, y, lalg_limpl[x][t], t);
+        if b_test {
+            if e == n+1 {
+                if b_print {
+                    eprint!("(skipping)");
+                }
+                continue;
+            }
+            if e == n-1 {
+                if b_print {
+                    eprint!("(Element at ({}, {}) cannot be equal to unit ({}).)",x,y,n-1);
+                }
                 return;
+            }
+                
+            if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
+                if b_print {
+                    eprint!("(Element at ({}, {}) needs to be greater than {} since {} <= {}.)",x,y,y,y,x);
+                }
+                return;
+            }
+
+            for t in 0..y {
+                if lalg_limpl[t][y] == n-1 && lalg_limpl[x][t] != n+1 && lalg_limpl[lalg_limpl[x][t]][e] != n-1 {
+                    if b_print {
+                        eprint!("(Element e={} at (x={}, y={}) needs to larger than {} since t={} <= y => x->t <= x->y.)", e, x, y, lalg_limpl[x][t], t);
+                    }
+                    return;
+                }
             }
         }
 
         lalg_limpl[x][y] = e;
-        if !l_alg_test_ax4_partial(&lalg_limpl, true) {
-            //eprintln!("Partial ax4 is not satisfied");
-            return;
+        if b_test {
+            if !l_alg_test_ax4_partial(&lalg_limpl, true) {
+                //eprintln!("Partial ax4 is not satisfied");
+                return;
+            }
         }
     }
     eprintln!();    
@@ -963,16 +981,17 @@ pub fn l_alg_gen_from_ord(pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>, lalg
             positions.remove(i); 
         }
     }
-
-    eprintln!("Positions: {positions:?}");
-    eprintln!("Init limpl: {lalg_limpl:?}");
+    if b_print {
+        eprintln!("Positions: {positions:?}");
+        eprintln!("Init limpl: {lalg_limpl:?}");
+    }
         // return;
     let time_start = Instant::now();
     let mut num_tested = 0usize;
     let mut num_models = 0usize;
     gen_all_lalgs_rec(0, &positions, &mut lalg_limpl, n-1, lalgs, &mut num_tested, &mut num_models);
 
-    eprintln!("Computation time: {:.2} s", time_start.elapsed().as_secs_f32());
+    eprintln!("Computation time: {:.4} s", time_start.elapsed().as_secs_f32());
     eprintln!("Number recursive calls: {}", num_tested);
     eprintln!("Number of all models: {}", num_models);
     eprintln!("Number of representative models {}", lalgs.len());
