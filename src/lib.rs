@@ -1144,6 +1144,7 @@ pub fn get_plan_fixed_rec(lev:usize, num_iter: &mut usize, n: usize, pord: &Vec<
                         print!("{}", cur_lalg[fixed_vec[i].0][fixed_vec[i].1]);
                         pos_idx+=1;
                     }
+                    println!();  
                 }
             }
         }
@@ -1263,7 +1264,8 @@ pub fn get_plan_continue_rec(from_vec: &mut Vec<usize>, iter_cnt: &mut usize, ti
                         }
                         print!("{}", cur_lalg[fixed_vec[i].0][fixed_vec[i].1]);
                         pos_idx+=1;
-                    }                    
+                    }  
+                    println!();                  
             }
         }
         }

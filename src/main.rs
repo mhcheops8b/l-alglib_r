@@ -190,7 +190,8 @@ fn main_1_1() {
 }
 
 fn main() {
-    main_1_2();
+   main_1_2();
+   //main_1_3();
 }
 // fn main_1_2() {    
 fn main_1_2() {
@@ -260,10 +261,16 @@ fn main_1_3() {
         return;
 
     }
-    let mut from_vec = std::env::args().nth(1).unwrap().split(",").map(|v| v.trim().parse().unwrap()).collect();
+    let mut from_vec:Vec<_> = std::env::args().nth(1).unwrap().split(",").map(|v| v.trim().parse().unwrap()).collect();
     let mut iter_cnt =0usize;
-    let mut ts =Instant::now();
-    l_alglib::get_plan_continue_rec(&mut from_vec, &mut iter_cnt, &mut ts, 0, pord.len(), &pord, num_pord, &fixed_vec, &positions, ff, &mut lalg_limpl, &l_alglib::OutputType::Script);
+
+    for i in 0..from_vec.len() {
+        lalg_limpl[fixed_vec[i].0][fixed_vec[i].1] = from_vec[i];
+    }
+    l_alglib::get_plan_fixed_rec(from_vec.len(), &mut iter_cnt, pord.len(), &pord, num_pord, &fixed_vec,&positions, ff, &mut lalg_limpl, &l_alglib::OutputType::Script);
+
+    // let mut ts =Instant::now();
+    // l_alglib::get_plan_continue_rec(&mut from_vec, &mut iter_cnt, &mut ts, 0, pord.len(), &pord, num_pord, &fixed_vec, &positions, ff, &mut lalg_limpl, &l_alglib::OutputType::Script);
 }
 
 
