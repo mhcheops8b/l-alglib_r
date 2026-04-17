@@ -3,6 +3,7 @@ use std::collections::HashMap;
 use std::thread::current;
 use std::{collections::HashSet, io::BufRead};
 use itertools::{Itertools};
+use l_alglib::OutputType;
 // use l_alglib::l_alg_init_limpl;
 use std::fs::File;
 use bzip2::read::{BzDecoder};
@@ -51,60 +52,6 @@ use std::time::{Instant};
 
 //#![feature(string_remove_matches)]
 
-fn hashmap_perm_image(fun: &HashMap::<(usize,usize), usize>, perm: &Vec<usize>) -> HashMap::<(usize,usize), usize> {
-    let mut res_hm = HashMap::<(usize,usize), usize>::new();
-    
-
-    for k in fun.keys() {
-        let v = fun[k];
-        res_hm.insert((perm[k.0],perm[k.1]), perm[v]);
-    }
-    res_hm
-}
-
-fn get_images(perms_set: &HashSet::<Vec<usize>>, fun: &HashMap::<(usize,usize), usize>) -> Vec<Vec<usize>>{
-    let mut keys_sorted = fun.keys().collect::<Vec<_>>();
-    keys_sorted.sort();
-
-    let mut hs = HashSet::<Vec<usize>>::new();
-    for perm in perms_set {
-        let hh_img = hashmap_perm_image(fun, perm);
-        // get vector
-        let mut vv = Vec::<usize>::new();
-        for k in &keys_sorted {
-            vv.push(hh_img[k]);
-        }
-        hs.insert(vv);
-     }
-
-     let mut hs_v = hs.into_iter().collect::<Vec<_>>();
-     hs_v.sort();
-
-     hs_v
- }
-
- fn get_images2(perms_set: impl Iterator<Item=Vec<usize>>, fun: &HashMap::<(usize,usize), usize>) -> Vec<Vec<usize>> {
-
-    let mut keys_sorted = fun.keys().collect::<Vec<_>>();
-    keys_sorted.sort();
-
-    let mut hs = HashSet::<Vec<usize>>::new();
-    for perm in perms_set {
-         let hh_img = hashmap_perm_image(fun, &perm);
-         // get vector
-         let mut vv = Vec::<usize>::new();
-         for k in &keys_sorted {
-             vv.push(hh_img[k]);
-         }
-         hs.insert(vv);
-    }
-
-    let mut hs_v = hs.into_iter().collect::<Vec<_>>();
-    hs_v.sort();
-
-     hs_v
- }
-
 fn main_1_1() {    
     // 1
     let num_pord = 1;
@@ -122,7 +69,7 @@ fn main_1_1() {
         }
 
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
-        let jj = get_images2(pp.into_iter().permutations(pord.len())
+        let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0)
             .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
 
@@ -241,6 +188,84 @@ fn main_1_1() {
     eprintln!("Time elapsed: {:.2} s", ts.elapsed().as_secs_f32());
 
 }
+
+fn main() {
+    main_1_2();
+}
+// fn main_1_2() {    
+fn main_1_2() {
+    // 1
+    let num_pord = 1;
+    let pord = vec![vec![1, 0, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+        
+    let fixed_vec: Vec<(usize, usize)> = vec![(0,1), (0,2), (0,3), (0,4), (0,5), (0,6), (1,0), (1,2), (1,3), (1,4), (1,5), (1,6)];
+        let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(pord.len());
+    let mut positions = Vec::<(usize,usize)>::new();
+    fn ff(pe: &Vec<usize>) -> bool {
+        std::cmp::min(pe[0], pe[1])== 0 && std::cmp::max(pe[0], pe[1]) == 1
+    }
+    // let ff = (|pe:Vec<usize>| (pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0) && pe[5]==5);
+    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1, &mut positions);
+
+    if std::env::args().len() < 2 {
+        println!("Usage: {} <init_vector>", std::env::args().next().unwrap());
+        return;
+
+    }
+    let mut from_vec: Vec<_> = std::env::args().nth(1).unwrap().split(",").map(|v| v.trim().parse().unwrap()).collect();
+    if true {
+
+        for i in 0..from_vec.len() {
+        lalg_limpl[fixed_vec[i].0][fixed_vec[i].1] = from_vec[i];
+        }
+    
+        let mut num_iter =0usize;
+        l_alglib::get_plan_fixed_rec(from_vec.len(), &mut num_iter, pord.len(), &pord, num_pord, &fixed_vec,&positions, ff, &mut lalg_limpl, &l_alglib::OutputType::Script);
+    }
+    else {
+        let mut num_iter =0usize;
+        let mut ts =Instant::now();
+        l_alglib::get_plan_continue_rec(&mut from_vec, &mut num_iter, &mut ts, 0, pord.len(), &pord, num_pord, &fixed_vec,&positions, ff, &mut lalg_limpl, &l_alglib::OutputType::Script);
+    }
+}
+
+fn main_1_3() {
+    // 1
+    let num_pord = 1;
+    let pord = vec![vec![1, 0, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+        
+    let fixed_vec: Vec<(usize, usize)> = vec![(0,1), (0,2), (0,3), (0,4), (0,5), (0,6), 
+                                              (1,0), (1,2), (1,3), (1,4), (1,5), (1,6), 
+                                              (2,0), (2,1), (2,3), (2,4), (2,5), (2,6)];
+    let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(pord.len());
+    let mut positions = Vec::<(usize,usize)>::new();
+    fn ff(pe: &Vec<usize>) -> bool {
+        std::cmp::min(std::cmp::min(pe[0], pe[1]), pe[2]) == 0 && 
+        std::cmp::max(std::cmp::max(pe[0], pe[1]), pe[2]) == 2
+    }
+    // let ff = (|pe:Vec<usize>| (pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0) && pe[5]==5);
+    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1, &mut positions);
+
+    // lalg_limpl[0][1] = 1;
+    // lalg_limpl[0][2] = 1;
+    // lalg_limpl[0][3] = 2;
+    // lalg_limpl[0][4] = 3;
+    // lalg_limpl[0][5] = 5;
+    // get_plan_rec(5, pord.len(), &pord, num_pord, &fixed_vec,&positions, ff, &mut lalg_limpl);
+    // lalg_limpl[0][1] = 6;
+    // let mut from_vec= vec![2usize,0,0,5,6,4,4,6,6,6,6,6];
+    // let mut from_vec= vec![0,0,1,5,6,4,4,6,6,6,6,6];
+    if std::env::args().len() < 2 {
+        println!("Usage: {} <init_vector>", std::env::args().next().unwrap());
+        return;
+
+    }
+    let mut from_vec = std::env::args().nth(1).unwrap().split(",").map(|v| v.trim().parse().unwrap()).collect();
+    let mut iter_cnt =0usize;
+    let mut ts =Instant::now();
+    l_alglib::get_plan_continue_rec(&mut from_vec, &mut iter_cnt, &mut ts, 0, pord.len(), &pord, num_pord, &fixed_vec, &positions, ff, &mut lalg_limpl, &l_alglib::OutputType::Script);
+}
+
 
 fn main_2_1_1() {
     // 2
@@ -262,7 +287,8 @@ fn main_2_1_1() {
     lalg_limpl[0][4] = 6;
     lalg_limpl[0][5] = 6;
 
-    get_plan_rec(5, pord.len(), &pord, num_pord, &fixed_vec,&positions, ff, &mut lalg_limpl);
+    let mut num_iter=0usize;
+    l_alglib::get_plan_fixed_rec(5, &mut num_iter, pord.len(), &pord, num_pord, &fixed_vec,&positions, ff, &mut lalg_limpl, &l_alglib::OutputType::Script);
 }
 
 
@@ -280,7 +306,8 @@ fn main_2_11() {
     // let ff = (|pe:Vec<usize>| (pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0) && pe[5]==5);
     l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1, &mut positions);
 
-    get_plan_rec(0, pord.len(), &pord, num_pord, &fixed_vec,&positions, ff, &mut lalg_limpl);
+    let mut num_iter=0usize;
+    l_alglib::get_plan_fixed_rec(0, &mut num_iter, pord.len(), &pord, num_pord, &fixed_vec,&positions, ff, &mut lalg_limpl, &l_alglib::OutputType::Script);
 }
 
 
@@ -301,7 +328,7 @@ fn main_2_1() {
         }
 
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
-        let jj = get_images2(pp.into_iter().permutations(pord.len())
+        let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0)
             .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
 
@@ -421,70 +448,7 @@ fn main_2_1() {
 
 }
 
-fn get_plan_rec(lev:usize, n: usize, pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize,usize)>, positions: &Vec<(usize,usize)>, filter_fun: fn(&Vec<usize>)->bool, cur_lalg: &mut Vec<Vec<usize>>) {
-    if lev == fixed_vec.len() {
-        let mut hh = HashMap::<(usize,usize), usize>::new();
-        for (idx,v) in fixed_vec.iter().enumerate() {
-            hh.insert(fixed_vec[idx], cur_lalg[fixed_vec[idx].0][fixed_vec[idx].1]);
-        }
-
-        let pp = (0usize..pord.len()).collect::<Vec<_>>();
-        let jj = get_images2(pp.into_iter().permutations(pord.len())
-            .filter(|pe| filter_fun(pe))
-            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
-
-        let mut b_ok = true;
-        for (idx, v) in fixed_vec.iter().enumerate() {
-            if jj[0][idx] != cur_lalg[fixed_vec[idx].0][fixed_vec[idx].1] {
-                b_ok = false;
-                break;
-            }
-        }
-        if b_ok {
-            print!("./target/release/gen_from_ord.exe {} ", num_pord);
-                
-            let mut b_first = true;
-            let mut pos_idx = 0usize;
-            for i in 0..fixed_vec.len() {
-                if !b_first {
-                    print!(",");
-                }
-                else {
-                    b_first = false;
-                }
-                
-                if positions[pos_idx] != fixed_vec[i] {    
-                    while positions[pos_idx] != fixed_vec[i] {
-                        pos_idx+=1;
-                        print!("{},", pord.len()+1);                                
-                    }
-                }
-                print!("{}", cur_lalg[fixed_vec[i].0][fixed_vec[i].1]);
-                pos_idx+=1;
-            }
-            print!(" 1> rc8sym-{:04}_1/hh8_pord_{:04}-", num_pord, num_pord);
-            for i in 0..fixed_vec.len() {
-                    print!("{}", cur_lalg[fixed_vec[i].0][fixed_vec[i].1]);
-            }
-            print!(".txt 2> rc8sym-{:04}_1/hh8_pord_{:04}-", num_pord, num_pord);
-            for i in 0..fixed_vec.len() {
-                print!("{}", cur_lalg[fixed_vec[i].0][fixed_vec[i].1]);
-            }
-            println!(".log");
-        }
-    }
-    else {
-        for i in 0..pord.len()-1 {
-            if l_alglib::l_alg_test_init_value(fixed_vec[lev].0, fixed_vec[lev].1, i, cur_lalg) {
-                cur_lalg[fixed_vec[lev].0][fixed_vec[lev].1] = i;
-                get_plan_rec(lev+1, n, pord, num_pord, fixed_vec, positions, filter_fun, cur_lalg);
-                cur_lalg[fixed_vec[lev].0][fixed_vec[lev].1] = pord.len()+1;
-            }
-        }
-    }
-}
-
-fn main() {
+fn main_2_3_x() {
     // println!("HEH");
     // 2
     let num_pord = 2;
@@ -505,7 +469,8 @@ fn main() {
     lalg_limpl[0][3] = 2;
     lalg_limpl[0][4] = 3;
     lalg_limpl[0][5] = 5;
-    get_plan_rec(5, pord.len(), &pord, num_pord, &fixed_vec,&positions, ff, &mut lalg_limpl);
+    let mut num_iter=0usize;
+    l_alglib::get_plan_fixed_rec(5, &mut num_iter, pord.len(), &pord, num_pord, &fixed_vec,&positions, ff, &mut lalg_limpl, &l_alglib::OutputType::Script);
 }
 
 fn main_3_2() {
@@ -521,8 +486,9 @@ fn main_3_2() {
     }
     // let ff = (|pe:Vec<usize>| (pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0) && pe[5]==5);
     l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1, &mut positions);
+    let mut num_iter=0usize;
 
-    get_plan_rec(0, pord.len(), &pord, num_pord, &fixed_vec,&positions, ff, &mut lalg_limpl);
+    l_alglib::get_plan_fixed_rec(0, &mut num_iter, pord.len(), &pord, num_pord, &fixed_vec,&positions, ff, &mut lalg_limpl, &l_alglib::OutputType::Script);
 }
 
 // fn main_3_1() {
@@ -543,7 +509,7 @@ fn main_3_1() {
         }
 
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
-        let jj = get_images2(pp.into_iter().permutations(pord.len())
+        let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| (pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0) && pe[5]==5)
             .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
 
@@ -684,7 +650,7 @@ fn main_4_1() {
         }
 
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
-        let jj = get_images2(pp.into_iter().permutations(pord.len())
+        let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0)
             .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
 
@@ -821,7 +787,7 @@ fn main_5_1() {
         }
 
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
-        let jj = get_images2(pp.into_iter().permutations(pord.len())
+        let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0)
             .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
 
@@ -960,7 +926,7 @@ fn main_17_1() {
         }
 
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
-        let jj = get_images2(pp.into_iter().permutations(pord.len())
+        let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0 && pe[3] == 3)
             .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
 
@@ -1068,7 +1034,7 @@ fn main_338_1() {
         }
 
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
-        let jj = get_images2(pp.into_iter().permutations(pord.len())
+        let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0 && pe[1] == 1)
             .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
 
@@ -1162,7 +1128,7 @@ fn main_357_1() {
         }
 
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
-        let jj = get_images2(pp.into_iter().permutations(pord.len())
+        let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0 && pe[1] == 1)
             .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
 
@@ -1257,7 +1223,7 @@ fn main_362_1() {
         }
 
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
-        let jj = get_images2(pp.into_iter().permutations(pord.len())
+        let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0 && pe[1] == 1)
             .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
 
@@ -1354,7 +1320,7 @@ fn main_369_1() {
         }
 
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
-        let jj = get_images2(pp.into_iter().permutations(pord.len())
+        let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0 && pe[1] == 1 && pe[6] == 6)
             .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
 
@@ -1450,7 +1416,7 @@ fn main_369_1() {
         }
 
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
-        let jj = get_images2(pp.into_iter().permutations(pord.len())
+        let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0 && pe[1] == 1 && pe[4]==4 && (pe[5] == 5 && pe[6]==6 || pe[5]==6 && pe[6]==5))
             .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
 
@@ -1562,7 +1528,7 @@ fn main_369_1() {
         }
 
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
-        let jj = get_images2(pp.into_iter().permutations(pord.len())
+        let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0 && pe[1] == 1 && pe[5] == 5 && pe[6]==6)
             .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
 
@@ -1672,7 +1638,7 @@ fn main_376_1() {
         }
 
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
-        let jj = get_images2(pp.into_iter().permutations(pord.len())
+        let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0 && pe[1] == 1 && pe[5] == 5 && pe[6]==6)
             .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
 
@@ -1767,7 +1733,7 @@ fn main_6_1() {
         // hh.insert((4,6), var[6]);
 
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
-        let jj = get_images2(pp.into_iter().permutations(pord.len())
+        let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0 && pe[4] == 4 && (pe[5]==5 && pe[6]==6 || pe[5]==6 && pe[6]==5))
             .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
 
@@ -1841,7 +1807,7 @@ fn main_10_1() {
         // hh.insert((4,6), var[6]);
 
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
-        let jj = get_images2(pp.into_iter().permutations(pord.len())
+        let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0 && pe[6]==6 && (pe[4]==4 && pe[5]==5 || pe[4]==5 && pe[5]==4))
             .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
 
@@ -2627,7 +2593,7 @@ vec![5,6,6,5]
         // hh.insert((4,6), var[6]);
 
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
-        let jj = get_images2(pp.into_iter().permutations(pord.len())
+        let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0 && pe[1]==1 && pe[4]==4)
             .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
 
@@ -2705,7 +2671,7 @@ vec![5,6,6,5]
         // hh.insert((4,6), var[6]);
 
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
-        let jj = get_images2(pp.into_iter().permutations(pord.len())
+        let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0 && pe[1]==1 && pe[4]==4)
             .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
 
@@ -2782,7 +2748,7 @@ fn main_408_2() {
         // hh.insert((4,6), var[6]);
 
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
-        let jj = get_images2(pp.into_iter().permutations(pord.len())
+        let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0 && pe[1]==1 && pe[4]==4)
             .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
 
@@ -2853,7 +2819,7 @@ fn main1728() {
         // hh.insert((4,6), var[6]);
 
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
-        let jj = get_images2(pp.into_iter().permutations(pord.len())
+        let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[1]==1)
             .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
 
@@ -2979,7 +2945,7 @@ COMMANDS=(
         // hh.insert((4,6), var[6]);
 
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
-        let jj = get_images2(pp.into_iter().permutations(pord.len())
+        let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[1]==1 && pe[2] ==2 || pe[1]==2 && pe[2] == 1)
             .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
         // for perm in pp.into_iter().permutations(pord.len())
@@ -3092,7 +3058,7 @@ done
         hh.insert((0,5), var[4]);
         
         
-        let jj = get_images2(pp.into_iter().permutations(7).filter(|pe| pe[0]==0 && l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+        let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(7).filter(|pe| pe[0]==0 && l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
         
         if jj[0] == var {
             num_cls+=1;
@@ -3147,7 +3113,7 @@ done
     hh.insert((0,4), 6);
     hh.insert((0,5), 6);
     
-    println!("{:?}", get_images(&perms_set, &hh));
+    println!("{:?}", l_alglib::perm_hashset_get_images(&perms_set, &hh));
     return;
 
 
