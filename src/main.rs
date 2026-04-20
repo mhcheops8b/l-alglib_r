@@ -7,7 +7,7 @@ use l_alglib::OutputType;
 // use l_alglib::l_alg_init_limpl;
 use std::fs::File;
 use bzip2::read::{BzDecoder};
-use std::io::{BufReader};
+use std::io::{BufReader, Write};
 use std::time::{Instant};
 
 
@@ -189,6 +189,27 @@ fn main_1_1() {
 
 }
 
+fn get_iter(n: usize, positions: &Vec::<(usize,usize)>, lalg_limpl: &Vec<Vec<usize>>) -> Vec<usize> {
+    let mut res_vec = Vec::<usize>::new();
+
+    for i in 0..n {
+        res_vec.push(lalg_limpl[positions[i].0][positions[i].1]);
+    }
+    res_vec
+}
+
+fn print_vec<T: std::io::Write>(outf: &mut T, vec: &Vec<usize>) {
+    let mut b_first = true;
+    for i in 0..vec.len() {
+        if !b_first {
+            outf.write_fmt(format_args!(",")).unwrap();
+        }
+        else {
+            b_first = false;
+        }
+        outf.write_fmt(format_args!("{}", vec[i])).unwrap();
+    }
+}
 fn main() {
    main_1_2();
    //main_1_3();
@@ -217,16 +238,23 @@ fn main_1_2() {
     if true {
 
         for i in 0..from_vec.len() {
-        lalg_limpl[fixed_vec[i].0][fixed_vec[i].1] = from_vec[i];
+            if l_alglib::l_alg_test_init_value(fixed_vec[i].0, fixed_vec[i].1, from_vec[i], &mut lalg_limpl) {
+                lalg_limpl[fixed_vec[i].0][fixed_vec[i].1] = from_vec[i];
+            }
+            else {
+                return;
+            }
         }
     
         let mut num_iter =0usize;
-        l_alglib::get_plan_fixed_rec(from_vec.len(), &mut num_iter, pord.len(), &pord, num_pord, &fixed_vec,&positions, ff, &mut lalg_limpl, &l_alglib::OutputType::Script);
+        l_alglib::get_plan_fixed_rec(from_vec.len(), &mut num_iter, pord.len(), &pord, num_pord, &fixed_vec,&positions, ff, &mut lalg_limpl, &l_alglib::OutputType::List);
+        // print_vec(&mut std::io::stderr(), &get_iter(fixed_vec.len(), &fixed_vec, &lalg_limpl));
+        eprintln!("Finished.");
     }
     else {
         let mut num_iter =0usize;
         let mut ts =Instant::now();
-        l_alglib::get_plan_continue_rec(&mut from_vec, &mut num_iter, &mut ts, 0, pord.len(), &pord, num_pord, &fixed_vec,&positions, ff, &mut lalg_limpl, &l_alglib::OutputType::Script);
+        l_alglib::get_plan_continue_rec(&mut from_vec, &mut num_iter, &mut ts, 0, pord.len(), &pord, num_pord, &fixed_vec,&positions, ff, &mut lalg_limpl, &l_alglib::OutputType::List);
     }
 }
 
@@ -265,9 +293,14 @@ fn main_1_3() {
     let mut iter_cnt =0usize;
 
     for i in 0..from_vec.len() {
-        lalg_limpl[fixed_vec[i].0][fixed_vec[i].1] = from_vec[i];
+        if l_alglib::l_alg_test_init_value(fixed_vec[i].0, fixed_vec[i].1, from_vec[i], &mut lalg_limpl) {
+            lalg_limpl[fixed_vec[i].0][fixed_vec[i].1] = from_vec[i];
+        }
+        else {
+            return;
+        }
     }
-    l_alglib::get_plan_fixed_rec(from_vec.len(), &mut iter_cnt, pord.len(), &pord, num_pord, &fixed_vec,&positions, ff, &mut lalg_limpl, &l_alglib::OutputType::Script);
+    l_alglib::get_plan_fixed_rec(from_vec.len(), &mut iter_cnt, pord.len(), &pord, num_pord, &fixed_vec,&positions, ff, &mut lalg_limpl, &l_alglib::OutputType::List);
 
     // let mut ts =Instant::now();
     // l_alglib::get_plan_continue_rec(&mut from_vec, &mut iter_cnt, &mut ts, 0, pord.len(), &pord, num_pord, &fixed_vec, &positions, ff, &mut lalg_limpl, &l_alglib::OutputType::Script);
