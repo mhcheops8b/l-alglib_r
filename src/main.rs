@@ -212,7 +212,7 @@ fn print_vec<T: std::io::Write>(outf: &mut T, vec: &Vec<usize>) {
 }
 fn main() {
    main_1_2();
-   //main_1_3();
+//    main_1_3();
 }
 // fn main_1_2() {    
 fn main_1_2() {

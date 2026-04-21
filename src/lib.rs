@@ -433,6 +433,130 @@ pub fn gen_all_lalgs_rec(index:usize, positions:&Vec<(usize,usize)>, limpl: &mut
     }
 }
 
+const SHORT_STOP_ITER_COUNT:usize = 250_000_000;
+
+pub fn gen_all_lalgs_rec_short(b_stop: &mut bool, index:usize, positions:&Vec<(usize,usize)>, limpl: &mut Vec<Vec<usize>>, unit:usize, res:&mut HashSet<Vec<Vec<usize>>>, num_tested: &mut usize, num_models: &mut usize) {
+    if *b_stop {
+        return;
+    }
+    let n = positions.len();
+    //eprintln!("FHFH: {index} / {n}");
+    *num_tested+=1;
+    if *num_tested % 10_000_000 == 1 {
+        eprintln!("Cur_progress: {limpl:?}");    
+    }
+    if *num_tested == SHORT_STOP_ITER_COUNT {
+        *b_stop = true;
+        return;
+    }
+    if index >= n {
+        //eprintln!("FHFH: {index} / {n}");
+        //eprintln!("{limpl:?}");
+        // *num_tested+=1;
+        // if true || *num_tested % 1000 == 1 {
+        //     eprintln!("Cur_progress: {limpl:?}");
+        //     // eprintln!("{:?}", l_alg_get_repr(limpl, true));
+        // }
+        if l_alg_is_l_algebra(limpl, unit, false) {
+            *num_models +=1;
+            // println!("{:?}", l_alg_get_repr(limpl, true));
+            // eprintln!("== {:?}", limpl);
+            // eprintln!("-> {:?}", l_alg_get_repr(limpl, true));
+            // *num_tested+=1;
+            // if *num_tested % 1000 == 1 {
+            //     eprintln!("Cur_progress: {limpl:?}");
+            //     // eprintln!("{:?}", l_alg_get_repr(limpl, true));
+            // }
+            let l_alg_repr = l_alg_get_repr(limpl, true, true);
+            if res.insert(l_alg_repr.clone()) {
+                println!("{:?}", l_alg_repr);
+            }
+            // if l_alg_is_repr(limpl, true) {
+            //     println!("{limpl:?}");
+            //     // std::io::stdout().flush().unwrap();
+            //     res.insert(limpl.clone());
+            // }
+            // if res.len() % 1000 == 0 {
+            //     eprintln!("{limpl:?}");
+            // }
+            
+            // let ll = l_alg_get_repr(&limpl, true);
+            // if !res.contains(&ll) {
+            //     // eprintln!("{ll:?}");
+            //     res.insert(ll);//limpl.clone());
+            // }
+        }
+
+    }
+    else {
+        let x = positions[index].0;
+        let y = positions[index].1;
+        let m = limpl.len();
+        // let o_v = limpl[x][y];
+        for e in 0.. m {
+            if e == unit {
+                continue;
+            }
+            if limpl[y][x] == unit && limpl[y][e] != unit {
+                continue;
+            }
+
+            let mut b_found = false;
+            for t in 0..y {
+                if limpl[t][y] == unit && limpl[limpl[x][t]][e] != unit {
+                    b_found = true;
+                    break;
+                }
+            }
+            if b_found {
+                continue;
+            }
+            limpl[x][y] = e;
+
+            // // test ax4 partial
+            // let mut b_problem = false;
+            // for i in 0..m {
+            //     if b_problem {
+            //         break;
+            //     }
+            //     for j in 0..m {
+            //         if b_problem {
+            //             break;
+            //         }
+            //         if limpl[i][j] == m+1 {
+            //             continue;
+            //         }
+            //         if limpl[j][i] == m+1 {
+            //             continue;
+            //         }
+            //         for k in 0..m {
+            //             if limpl[i][k] == m+1 {
+            //                 continue;
+            //             }
+            //             if limpl[j][k] == m+1 {
+            //                 continue;
+            //             }
+            //             if limpl[limpl[i][j]][limpl[i][k]] != m+1 && limpl[limpl[j][i]][limpl[j][k]] != m+1 &&  limpl[limpl[i][j]][limpl[i][k]] != limpl[limpl[j][i]][limpl[j][k]] {
+            //                 b_problem = true;
+            //                 break;
+            //             }
+            //         }
+            //     }
+            // }
+
+            if !l_alg_test_ax4_partial_xy(limpl, x, y, false) {
+            // if !l_alg_test_ax4_partial(limpl, false) {
+                limpl[x][y] = m+1;
+                continue;
+            }
+            
+            gen_all_lalgs_rec_short(b_stop, index+1, positions, limpl, unit, res, num_tested, num_models);
+        }
+        limpl[x][y] = m+1; //unfilled element
+    }
+}
+
+
 pub fn l_alg_isomorphic_image(limpl: &[Vec<usize>], unit: usize, perm:&[usize]) -> (Vec<Vec<usize>>, usize) {
     let n = limpl.len();
     let mut res = Vec::<Vec<usize>>::new();
@@ -997,6 +1121,106 @@ pub fn l_alg_gen_from_ord(pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>, lalg
     eprintln!("Number of all models: {}", num_models);
     eprintln!("Number of representative models {}", lalgs.len());
 }
+
+pub fn l_alg_gen_from_ord_short(pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>, lalgs: &mut HashSet<Vec<Vec<usize>>>, b_test: bool, b_print: bool) {
+
+    let n = pord.len();
+    // let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
+    // let pord = serde_json::from_str::<Vec<Vec<usize>>>(&cur_line).unwrap();
+    
+    if b_print {
+        eprintln!("Order: {pord:?}");
+    }
+
+    let mut lalg_limpl = l_alg_alloc_limpl(n);
+    let mut positions = Vec::<(usize,usize)>::new();
+                
+    l_alg_init_from_ord(&mut lalg_limpl, &pord, n-1, &mut positions);
+
+    // apply init_vector
+    let mut b_first = true;
+    for i in 0usize..std::cmp::min(positions.len(), init_vector.len()) {
+        if b_print {
+            if b_first {
+                b_first = false;
+            } 
+            else {
+                eprint!(", ");
+            }
+        }
+        let x = positions[i].0;
+        let y = positions[i].1;
+        let e = init_vector[i];
+        if b_print {
+            eprint!("({},{}) = {} ", x, y, e);
+        }
+        if b_test {
+            if e == n+1 {
+                if b_print {
+                    eprint!("(skipping)");
+                }
+                continue;
+            }
+            if e == n-1 {
+                if b_print {
+                    eprint!("(Element at ({}, {}) cannot be equal to unit ({}).)",x,y,n-1);
+                }
+                return;
+            }
+                
+            if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
+                if b_print {
+                    eprint!("(Element at ({}, {}) needs to be greater than {} since {} <= {}.)",x,y,y,y,x);
+                }
+                return;
+            }
+
+            for t in 0..y {
+                if lalg_limpl[t][y] == n-1 && lalg_limpl[x][t] != n+1 && lalg_limpl[lalg_limpl[x][t]][e] != n-1 {
+                    if b_print {
+                        eprint!("(Element e={} at (x={}, y={}) needs to larger than {} since t={} <= y => x->t <= x->y.)", e, x, y, lalg_limpl[x][t], t);
+                    }
+                    return;
+                }
+            }
+        }
+
+        lalg_limpl[x][y] = e;
+        if b_test {
+            if !l_alg_test_ax4_partial(&lalg_limpl, true) {
+                //eprintln!("Partial ax4 is not satisfied");
+                return;
+            }
+        }
+    }
+    eprintln!();    
+    for i in (0usize..std::cmp::min(positions.len(), init_vector.len())).rev() {
+        if init_vector[i] != n+1 {
+            positions.remove(i); 
+        }
+    }
+    if b_print {
+        eprintln!("Positions: {positions:?}");
+        eprintln!("Init limpl: {lalg_limpl:?}");
+    }
+        // return;
+    let time_start = Instant::now();
+    let mut num_tested = 0usize;
+    let mut num_models = 0usize;
+    let mut b_stop = false;
+    gen_all_lalgs_rec_short(&mut b_stop, 0, &positions, &mut lalg_limpl, n-1, lalgs, &mut num_tested, &mut num_models);
+
+    if b_stop {
+        eprintln!("Skipped computation - {init_vector:?}, more than {SHORT_STOP_ITER_COUNT} iterations (time: {}).", time_start.elapsed().as_secs_f32());
+    }
+    else {
+        eprintln!("Computation time: {:.4} s", time_start.elapsed().as_secs_f32());
+        eprintln!("Number recursive calls: {}", num_tested);
+        eprintln!("Number of all models: {}", num_models);
+        eprintln!("Number of representative models {}", lalgs.len());
+    }
+}
+
 
 pub fn hashmap_perm_image(fun: &HashMap::<(usize,usize), usize>, perm: &Vec<usize>) -> HashMap::<(usize,usize), usize> {
     let mut res_hm = HashMap::<(usize,usize), usize>::new();
