@@ -301,7 +301,7 @@ fn main_1_3() {
         }
     }
     l_alglib::get_plan_fixed_rec(from_vec.len(), &mut iter_cnt, pord.len(), &pord, num_pord, &fixed_vec,&positions, ff, &mut lalg_limpl, &l_alglib::OutputType::List);
-
+    eprintln!("Finished.");
     // let mut ts =Instant::now();
     // l_alglib::get_plan_continue_rec(&mut from_vec, &mut iter_cnt, &mut ts, 0, pord.len(), &pord, num_pord, &fixed_vec, &positions, ff, &mut lalg_limpl, &l_alglib::OutputType::Script);
 }
