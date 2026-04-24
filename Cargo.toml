@@ -8,6 +8,10 @@ name = "gen_from_ord"
 path = "src/gen_from_ord.rs"
 
 [[bin]]
+name = "gen_from_ord_short"
+path = "src/gen_from_ord_short.rs"
+
+[[bin]]
 name = "gen_from_ord_multi"
 path = "src/gen_from_ord_multi.rs"
 
