@@ -223,7 +223,7 @@ fn main_1_2() {
     let fixed_vec: Vec<(usize, usize)> = vec![(0,1), (0,2), (0,3), (0,4), (0,5), (0,6), (1,0), (1,2), (1,3), (1,4), (1,5), (1,6)];
         let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(pord.len());
     let mut positions = Vec::<(usize,usize)>::new();
-    fn ff(pe: &Vec<usize>) -> bool {
+    fn ff(pe: &[usize]) -> bool {
         std::cmp::min(pe[0], pe[1])== 0 && std::cmp::max(pe[0], pe[1]) == 1
     }
     // let ff = (|pe:Vec<usize>| (pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0) && pe[5]==5);
@@ -268,7 +268,7 @@ fn main_1_3() {
                                               (2,0), (2,1), (2,3), (2,4), (2,5), (2,6)];
     let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(pord.len());
     let mut positions = Vec::<(usize,usize)>::new();
-    fn ff(pe: &Vec<usize>) -> bool {
+    fn ff(pe: &[usize]) -> bool {
         std::cmp::min(std::cmp::min(pe[0], pe[1]), pe[2]) == 0 && 
         std::cmp::max(std::cmp::max(pe[0], pe[1]), pe[2]) == 2
     }
@@ -315,7 +315,7 @@ fn main_2_1_1() {
     let fixed_vec: Vec<(usize, usize)> = vec![(0,1), (0,2), (0,3), (0,4), (0,5), (1,0), (1,2), (1,3), (1,4), (1,5), (6,0), (6,1)];
     let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(pord.len());
     let mut positions = Vec::<(usize,usize)>::new();
-    fn ff(pe: &Vec<usize>) -> bool {
+    fn ff(pe: &[usize]) -> bool {
         pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0
     }
     // let ff = (|pe:Vec<usize>| (pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0) && pe[5]==5);
@@ -340,7 +340,7 @@ fn main_2_11() {
     let fixed_vec: Vec<(usize, usize)> = vec![(0,1), (0,2), (0,3), (0,4), (0,5), (6,0)];
     let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(pord.len());
     let mut positions = Vec::<(usize,usize)>::new();
-    fn ff(pe: &Vec<usize>) -> bool {
+    fn ff(pe: &[usize]) -> bool {
         pe[0]==0
     }
     // let ff = (|pe:Vec<usize>| (pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0) && pe[5]==5);
@@ -497,7 +497,7 @@ fn main_2_3_x() {
     let fixed_vec: Vec<(usize, usize)> = vec![(0,1), (0,2), (0,3), (0,4), (0,5), (1,0), (1,2), (1,3), (1,4), (1,5), (2,0), (2,1), (2,3), (2,4), (2,5), (6,0), (6,1), (6,2)];
     let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(pord.len());
     let mut positions = Vec::<(usize,usize)>::new();
-    fn ff(pe: &Vec<usize>) -> bool {
+    fn ff(pe: &[usize]  ) -> bool {
         std::cmp::min(std::cmp::min(pe[0], pe[1]), pe[2]) == 0 && std::cmp::max(std::cmp::max(pe[0], pe[1]), pe[2]) == 2
 //        pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0
     }
@@ -521,7 +521,7 @@ fn main_3_2() {
     let fixed_vec: Vec<(usize, usize)> = vec![(0,1), (0,2), (0,3), (0,4),(0,6), (1,0), (1,2), (1,3), (1,4), (1,6), (5,0), (5,1), (6,0), (6,1), (6,5)];
     let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(pord.len());
     let mut positions = Vec::<(usize,usize)>::new();
-    fn ff(pe: &Vec<usize>) -> bool {
+    fn ff(pe: &[usize]) -> bool {
         (pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0) && pe[5]==5
     }
     // let ff = (|pe:Vec<usize>| (pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0) && pe[5]==5);

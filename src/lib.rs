@@ -1281,7 +1281,7 @@ pub enum OutputType {
     List,
 }
 
-pub fn get_plan_fixed_rec(lev:usize, num_iter: &mut usize, n: usize, pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize,usize)>, positions: &Vec<(usize,usize)>, filter_fun: fn(&Vec<usize>)->bool, cur_lalg: &mut Vec<Vec<usize>>, out_type: &OutputType) {
+pub fn get_plan_fixed_rec(lev:usize, num_iter: &mut usize, n: usize, pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize,usize)>, positions: &Vec<(usize,usize)>, filter_fun: fn(&[usize])->bool, cur_lalg: &mut Vec<Vec<usize>>, out_type: &OutputType) {
     *num_iter+=1;
 
     if (*num_iter-1) % 125_000 == 0 {
@@ -1384,7 +1384,7 @@ pub fn get_plan_fixed_rec(lev:usize, num_iter: &mut usize, n: usize, pord: &Vec<
     }
 }
 
-pub fn get_plan_continue_rec(from_vec: &mut Vec<usize>, iter_cnt: &mut usize, time_ts: &mut Instant, lev:usize, n: usize, pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize,usize)>, positions: &Vec<(usize,usize)>, filter_fun: fn(&Vec<usize>)->bool, cur_lalg: &mut Vec<Vec<usize>>, out_type: &OutputType) {
+pub fn get_plan_continue_rec(from_vec: &mut Vec<usize>, iter_cnt: &mut usize, time_ts: &mut Instant, lev:usize, n: usize, pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize,usize)>, positions: &Vec<(usize,usize)>, filter_fun: fn(&[usize])->bool, cur_lalg: &mut Vec<Vec<usize>>, out_type: &OutputType) {
     *iter_cnt +=1;
 
     if *iter_cnt == 1 {

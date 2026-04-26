@@ -31,6 +31,15 @@ path = "src/get_repr.rs"
 name = "extract_pord"
 path = "src/extract_pord.rs"
 
+[[bin]]
+name = "plan8-1_2"
+path = "src/plan8-1_2.rs"
+
+[[bin]]
+name = "plan8-1_3"
+path = "src/plan8-1_3.rs"
+
+
 [dependencies]
 bzip2 = "0.6.1"
 itertools = "0.14.0"
