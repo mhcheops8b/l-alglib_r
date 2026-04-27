@@ -39,6 +39,10 @@ path = "src/plan8-1_2.rs"
 name = "plan8-1_3"
 path = "src/plan8-1_3.rs"
 
+[[bin]]
+name = "plan8-1_4"
+path = "src/plan8-1_4.rs"
+
 
 [dependencies]
 bzip2 = "0.6.1"
