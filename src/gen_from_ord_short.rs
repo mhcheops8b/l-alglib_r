@@ -50,7 +50,8 @@ fn main() {
             
             eprintln!("Order: {pord:?}");
 
-            l_alglib::l_alg_gen_from_ord_short(&pord, &init_vector, &mut lalgs, true, true);
+            // l_alglib::l_alg_gen_from_ord_short_iter(&pord, &init_vector, &mut lalgs, true, true);
+            l_alglib::l_alg_gen_from_ord_short_time(&pord, &init_vector, &mut lalgs, true, true);
             
         }
     }    
