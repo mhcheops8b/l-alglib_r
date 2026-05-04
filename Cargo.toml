@@ -8,16 +8,32 @@ name = "gen_from_ord"
 path = "src/gen_from_ord.rs"
 
 [[bin]]
+name = "gen_from_ord_cmd"
+path = "src/gen_from_ord_cmd.rs"
+
+[[bin]]
 name = "gen_from_ord_short"
 path = "src/gen_from_ord_short.rs"
+
+[[bin]]
+name = "gen_from_ord_file_short"
+path = "src/gen_from_ord_file_short.rs"
 
 [[bin]]
 name = "gen_from_ord_short_with_time_limit"
 path = "src/gen_from_ord_short_with_time_limit.rs"
 
 [[bin]]
+name = "gen_from_ord_file_short_with_time_limit"
+path = "src/gen_from_ord_file_short_with_time_limit.rs"
+
+[[bin]]
 name = "gen_from_ord_multi"
 path = "src/gen_from_ord_multi.rs"
+
+[[bin]]
+name = "gen_from_ord_file_multi"
+path = "src/gen_from_ord_file_multi.rs"
 
 [[bin]]
 name = "gen_from_ord_multi_short"
@@ -26,6 +42,10 @@ path = "src/gen_from_ord_multi_short.rs"
 [[bin]]
 name = "gen_from_ord_multi_short_with_time_limit"
 path = "src/gen_from_ord_multi_short_with_time_limit.rs"
+
+[[bin]]
+name = "gen_from_ord_file_multi_short_with_time_limit"
+path = "src/gen_from_ord_file_multi_short_with_time_limit.rs"
 
 [[bin]]
 name = "gen_from_ord_static"
