@@ -1,6 +1,7 @@
 use std::{collections::HashSet, io::BufRead};
 use std::fs::File;
 use std::io::{BufReader};
+use std::time::Instant;
 
 fn main() {
     
@@ -27,10 +28,11 @@ fn main() {
         
 
         if cur_line_no == pord_num {
+            let ts = Instant::now();
             let task_file = BufReader::new(File::open(&task_file_path).expect("Cannot open file"));
             let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
             let pord = serde_json::from_str::<Vec<Vec<usize>>>(&cur_line).unwrap();
-            
+
             eprintln!("Order: {pord:?}");
 
             for line in task_file.lines() {
@@ -41,6 +43,7 @@ fn main() {
     
                 l_alglib::l_alg_gen_from_ord(&pord, &init_vector, &mut lalgs, true, true);
             }
+            eprintln!("===\nTotal Computational Time: {:.4} s", ts.elapsed().as_secs_f32());
         }
     }
 }

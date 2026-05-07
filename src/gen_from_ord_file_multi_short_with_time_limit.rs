@@ -33,14 +33,14 @@ fn main() {
         
 
         if cur_line_no == pord_num {
+            let ts: Instant = Instant::now();
             let task_file = BufReader::new(File::open(&task_file_path).expect("Cannot open task file"));
             let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
             let pord = serde_json::from_str::<Vec<Vec<usize>>>(&cur_line).unwrap();
             
             eprintln!("Order: {pord:?}");
-            let ts: Instant = Instant::now();
-            for line in task_file.lines() {
-                
+            
+            for line in task_file.lines() {    
                 let line_str = line.unwrap();
                 eprintln!("Init vector (str): {}", line_str);
                 let init_vector = line_str.split(",").map(|v| v.trim().parse().unwrap()).collect();
