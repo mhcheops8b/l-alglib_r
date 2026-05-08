@@ -38,7 +38,7 @@ fn main() {
     let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(n);
     let mut positions = Vec::<(usize,usize)>::new();
         
-    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, n-1, &mut positions);
+    l_alglib::l_alg_init_from_ord_(&mut lalg_limpl, &pord, n-1, &mut positions);
 
     // apply init_vector
     for i in 0usize..std::cmp::min(positions.len(), init_vector.len()) {
@@ -81,13 +81,9 @@ fn main() {
             positions.remove(i); 
         }
     }
-    // for _ in 0usize..std::cmp::min(positions.len(), init_vector.len()) {
-    //     positions.remove(0);
-    // }
 
     eprintln!("Positions: {positions:?}");
     eprintln!("Init limpl: {lalg_limpl:?}");
-    // return;
     let time_start = Instant::now();
     let mut num_tested = 0usize;
     let mut num_models = 0usize;

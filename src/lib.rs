@@ -874,6 +874,69 @@ pub fn l_alg_init_from_ord(limpl: &mut [Vec<usize>], order: &[Vec<usize>], unit_
         }
     }
 }
+
+pub fn positions_process_pair(order: &[Vec<usize>], already_processed: &mut HashSet<(usize,usize)>, unfilled_positions: &mut Vec<(usize,usize)>, i: usize, j:usize) {
+    if order[i][j] == 0 {
+        if !already_processed.contains(&(i,j)) {
+            unfilled_positions.push((i,j));
+            already_processed.insert((i,j));
+        }
+    }
+}
+pub fn positions_process_triple(order: &[Vec<usize>], already_processed: &mut HashSet<(usize,usize)>, unfilled_positions: &mut Vec<(usize,usize)>, i: usize, j:usize, k:usize) {
+    positions_process_pair(order, already_processed, unfilled_positions, i, j);
+    positions_process_pair(order, already_processed, unfilled_positions, i, k);
+    positions_process_pair(order, already_processed, unfilled_positions, j, i);
+    positions_process_pair(order, already_processed, unfilled_positions, j, k);
+    positions_process_pair(order, already_processed, unfilled_positions, k, i);
+    positions_process_pair(order, already_processed, unfilled_positions, k, j);
+}
+
+pub fn l_alg_init_from_ord_(limpl: &mut [Vec<usize>], order: &[Vec<usize>], unit_elem:usize, unfilled_positions: &mut Vec<(usize,usize)>) {
+    let n = limpl.len();
+    for i in 0.. n {
+        if i != unit_elem {
+            for j in 0.. n {
+                if order[i][j] == 1 {
+                    limpl[i][j] = unit_elem;
+                }
+                else {
+                    // unfilled_positions.push((i,j));
+                    limpl[i][j] = n+1;
+                }
+            }
+        }
+        else {
+            for j in 0.. n {
+                limpl[i][j] = j;
+            }
+        }
+    }
+
+    let mut already_processed = HashSet::<(usize,usize)>::new();
+    for i in 1..n-1 {
+        for j in 0..i {
+            positions_process_pair(order, &mut already_processed, unfilled_positions, j, i);
+        }
+        for j in 0..i {
+            positions_process_pair(order, &mut already_processed, unfilled_positions, i, j);
+        }
+
+    }
+    // let mut positions = Vec::<(usize, usize)>::new();
+    // for k in 2.. n-1 {
+    //     for i in 0..k {
+    //         for j in i+1..k {
+    //             if i!=j && i!=k && j!=k {
+    //                 positions_process_triple(order, &mut already_processed, unfilled_positions, i, j, k);
+    //             }
+    //         }
+    //     }
+    // }
+
+}
+
+
 pub fn qord_is_antisymmetric(qord: &[Vec<usize>]) -> bool {
     let n = qord.len();
 
