@@ -56,7 +56,7 @@ fn main() {
                 let init_vector = line_str.split(",").map(|v| v.trim().parse().unwrap()).collect();
                 eprintln!("Init vector (int): {:?}", init_vector);
     
-                l_alglib::l_alg_gen_from_ord_short_time_with_limit(Duration::new(time_limit, 0), &pord, &init_vector, &mut lalgs, true, true);
+                l_alglib::l_alg_gen_from_ord_short_time_with_limit_old(Duration::new(time_limit, 0), &pord, &init_vector, &mut lalgs, true, true);
 
             }
             eprintln!("===\nTotal Computational Time: {:.4} s", ts.elapsed().as_secs_f32());

@@ -48,7 +48,7 @@ fn main() {
             eprintln!("Order: {pord:?}");
 
             
-            l_alglib::l_alg_gen_from_ord_short_time_with_limit(Duration::new(time_limit, 0), 
+            l_alglib::l_alg_gen_from_ord_short_time_with_limit_old(Duration::new(time_limit, 0), 
                       &pord, &init_vector, &mut lalgs, true, true);
             
         }

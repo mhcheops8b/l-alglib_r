@@ -1653,7 +1653,7 @@ pub fn l_alg_gen_from_ord_short_iter(pord: &Vec<Vec<usize>>, init_vector: &Vec<u
     }
 }
 
-pub fn l_alg_gen_from_ord_short_iter_(iter_limit:usize, print_limit: usize, pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>, lalgs: &mut HashSet<Vec<Vec<usize>>>, b_test: bool, b_print: bool) {
+pub fn l_alg_gen_from_ord_short_iter_limit_old(iter_limit:usize, print_limit: usize, pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>, lalgs: &mut HashSet<Vec<Vec<usize>>>, b_test: bool, b_print: bool) {
 
     let n = pord.len();
     // let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
@@ -1668,6 +1668,106 @@ pub fn l_alg_gen_from_ord_short_iter_(iter_limit:usize, print_limit: usize, pord
                 
     l_alg_init_from_ord(&mut lalg_limpl, &pord, n-1);
     l_alg_init_get_positions_old(pord, &mut positions);
+    
+    // apply init_vector
+    let mut b_first = true;
+    for i in 0usize..std::cmp::min(positions.len(), init_vector.len()) {
+        if b_print {
+            if b_first {
+                b_first = false;
+            } 
+            else {
+                eprint!(", ");
+            }
+        }
+        let x = positions[i].0;
+        let y = positions[i].1;
+        let e = init_vector[i];
+        if b_print {
+            eprint!("({},{}) = {} ", x, y, e);
+        }
+        if b_test {
+            if e == n+1 {
+                if b_print {
+                    eprint!("(skipping)");
+                }
+                continue;
+            }
+            if e == n-1 {
+                if b_print {
+                    eprint!("(Element at ({}, {}) cannot be equal to unit ({}).)",x,y,n-1);
+                }
+                return;
+            }
+                
+            if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
+                if b_print {
+                    eprint!("(Element at ({}, {}) needs to be greater than {} since {} <= {}.)",x,y,y,y,x);
+                }
+                return;
+            }
+
+            for t in 0..y {
+                if lalg_limpl[t][y] == n-1 && lalg_limpl[x][t] != n+1 && lalg_limpl[lalg_limpl[x][t]][e] != n-1 {
+                    if b_print {
+                        eprint!("(Element e={} at (x={}, y={}) needs to larger than {} since t={} <= y => x->t <= x->y.)", e, x, y, lalg_limpl[x][t], t);
+                    }
+                    return;
+                }
+            }
+        }
+
+        lalg_limpl[x][y] = e;
+        if b_test {
+            if !l_alg_test_ax4_partial(&lalg_limpl, true) {
+                //eprintln!("Partial ax4 is not satisfied");
+                return;
+            }
+        }
+    }
+    eprintln!();    
+    for i in (0usize..std::cmp::min(positions.len(), init_vector.len())).rev() {
+        if init_vector[i] != n+1 {
+            positions.remove(i); 
+        }
+    }
+    if b_print {
+        eprintln!("Positions: {positions:?}");
+        eprintln!("Init limpl: {lalg_limpl:?}");
+    }
+        // return;
+    let time_start = Instant::now();
+    let mut num_tested = 0usize;
+    let mut num_models = 0usize;
+    let mut b_stop = false;
+    gen_all_lalgs_rec_short_iter_(iter_limit, print_limit, &mut b_stop, 0, &positions, &mut lalg_limpl, n-1, lalgs, &mut num_tested, &mut num_models);
+
+    if b_stop {
+        eprintln!("Skipped computation - {init_vector:?}, more than {iter_limit} iterations (time: {}).", time_start.elapsed().as_secs_f32());
+    }
+    else {
+        eprintln!("Computation time: {:.4} s", time_start.elapsed().as_secs_f32());
+        eprintln!("Number recursive calls: {}", num_tested);
+        eprintln!("Number of all models: {}", num_models);
+        eprintln!("Number of representative models {}", lalgs.len());
+    }
+}
+
+pub fn l_alg_gen_from_ord_short_iter_limit_new(iter_limit:usize, print_limit: usize, pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>, lalgs: &mut HashSet<Vec<Vec<usize>>>, b_test: bool, b_print: bool) {
+
+    let n = pord.len();
+    // let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
+    // let pord = serde_json::from_str::<Vec<Vec<usize>>>(&cur_line).unwrap();
+    
+    if b_print {
+        eprintln!("Order: {pord:?}");
+    }
+
+    let mut lalg_limpl = l_alg_alloc_limpl(n);
+    let mut positions = Vec::<(usize,usize)>::new();
+                
+    l_alg_init_from_ord(&mut lalg_limpl, &pord, n-1);
+    l_alg_init_get_positions_new(pord, &mut positions);
     
     // apply init_vector
     let mut b_first = true;
@@ -1855,7 +1955,7 @@ pub fn l_alg_gen_from_ord_short_time(pord: &Vec<Vec<usize>>, init_vector: &Vec<u
     }
 }
 
-pub fn l_alg_gen_from_ord_short_time_with_limit(time_limit: Duration, pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>, lalgs: &mut HashSet<Vec<Vec<usize>>>, b_test: bool, b_print: bool) {
+pub fn l_alg_gen_from_ord_short_time_with_limit_old(time_limit: Duration, pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>, lalgs: &mut HashSet<Vec<Vec<usize>>>, b_test: bool, b_print: bool) {
 
     let n = pord.len();
     // let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
@@ -1954,6 +2054,107 @@ pub fn l_alg_gen_from_ord_short_time_with_limit(time_limit: Duration, pord: &Vec
         eprintln!("Number of representative models {}", lalgs.len());
     }
 }
+
+pub fn l_alg_gen_from_ord_short_time_with_limit_new(time_limit: Duration, pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>, lalgs: &mut HashSet<Vec<Vec<usize>>>, b_test: bool, b_print: bool) {
+
+    let n = pord.len();
+    // let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
+    // let pord = serde_json::from_str::<Vec<Vec<usize>>>(&cur_line).unwrap();
+    
+    if b_print {
+        eprintln!("Order: {pord:?}");
+    }
+
+    let mut lalg_limpl = l_alg_alloc_limpl(n);
+    let mut positions = Vec::<(usize,usize)>::new();
+                
+    l_alg_init_from_ord(&mut lalg_limpl, &pord, n-1);
+    l_alg_init_get_positions_new(pord, &mut positions);
+
+    // apply init_vector
+    let mut b_first = true;
+    for i in 0usize..std::cmp::min(positions.len(), init_vector.len()) {
+        if b_print {
+            if b_first {
+                b_first = false;
+            } 
+            else {
+                eprint!(", ");
+            }
+        }
+        let x = positions[i].0;
+        let y = positions[i].1;
+        let e = init_vector[i];
+        if b_print {
+            eprint!("({},{}) = {} ", x, y, e);
+        }
+        if b_test {
+            if e == n+1 {
+                if b_print {
+                    eprint!("(skipping)");
+                }
+                continue;
+            }
+            if e == n-1 {
+                if b_print {
+                    eprint!("(Element at ({}, {}) cannot be equal to unit ({}).)",x,y,n-1);
+                }
+                return;
+            }
+                
+            if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
+                if b_print {
+                    eprint!("(Element at ({}, {}) needs to be greater than {} since {} <= {}.)",x,y,y,y,x);
+                }
+                return;
+            }
+
+            for t in 0..y {
+                if lalg_limpl[t][y] == n-1 && lalg_limpl[x][t] != n+1 && lalg_limpl[lalg_limpl[x][t]][e] != n-1 {
+                    if b_print {
+                        eprint!("(Element e={} at (x={}, y={}) needs to larger than {} since t={} <= y => x->t <= x->y.)", e, x, y, lalg_limpl[x][t], t);
+                    }
+                    return;
+                }
+            }
+        }
+
+        lalg_limpl[x][y] = e;
+        if b_test {
+            if !l_alg_test_ax4_partial(&lalg_limpl, true) {
+                //eprintln!("Partial ax4 is not satisfied");
+                return;
+            }
+        }
+    }
+    eprintln!();    
+    for i in (0usize..std::cmp::min(positions.len(), init_vector.len())).rev() {
+        if init_vector[i] != n+1 {
+            positions.remove(i); 
+        }
+    }
+    if b_print {
+        eprintln!("Positions: {positions:?}");
+        eprintln!("Init limpl: {lalg_limpl:?}");
+    }
+        // return;
+    let time_start = Instant::now();
+    let mut num_tested = 0usize;
+    let mut num_models = 0usize;
+    let mut b_stop = false;
+    gen_all_lalgs_rec_short_time_with_limit(time_limit, &mut b_stop, time_start, 0, &positions, &mut lalg_limpl, n-1, lalgs, &mut num_tested, &mut num_models);
+
+    if b_stop {
+        eprintln!("Skipped computation - {init_vector:?}, running more than {} s (time: {}).", time_limit.as_secs(), time_start.elapsed().as_secs_f32());
+    }
+    else {
+        eprintln!("Computation time: {:.4} s", time_start.elapsed().as_secs_f32());
+        eprintln!("Number recursive calls: {}", num_tested);
+        eprintln!("Number of all models: {}", num_models);
+        eprintln!("Number of representative models {}", lalgs.len());
+    }
+}
+
 
 
 pub fn hashmap_perm_image(fun: &HashMap::<(usize,usize), usize>, perm: &Vec<usize>) -> HashMap::<(usize,usize), usize> {

@@ -6,8 +6,8 @@ fn main() {
 
     let args_len = std::env::args().len();
 
-    if args_len < 5 {
-        println!("Usage: {} <iterations limit> <print limit> <pord_filename> <pord_num> [init_vec_string]", std::env::args().next().unwrap());
+    if args_len < 5 || args_len == 6 {
+        println!("Usage: {} <iterations limit> <print limit> <pord_filename> <pord_num> [<need transform> <init_vec_string>]", std::env::args().next().unwrap());
         return;
     }
 
@@ -34,8 +34,19 @@ fn main() {
     };
 
     let mut init_vector = Vec::<usize>::new();
-    if args_len == 6 {
-        let init_vector_str = std::env::args().nth(5).unwrap();
+    let mut b_need_transform = false;
+    if args_len >= 7 {
+        b_need_transform = match std::env::args().nth(5).unwrap().parse::<usize>() {
+            Ok(val) => {match val {
+                                0=> false, 
+                                1=>true, 
+                                _ => {eprintln!("Argument must be 0 or 1."); return;}
+                              }
+                            },
+            Err(_e) => {eprintln!("First argument must be a number (iter limit)."); return;}
+                        };
+
+        let init_vector_str = std::env::args().nth(6).unwrap();
         eprintln!("Init vector (str): {}", init_vector_str);
         init_vector = init_vector_str.split(",").map(|v| v.trim().parse().unwrap()).collect();
         eprintln!("Init vector (int): {:?}", init_vector);
@@ -54,9 +65,22 @@ fn main() {
             let pord = serde_json::from_str::<Vec<Vec<usize>>>(&cur_line).unwrap();
             
             eprintln!("Order: {pord:?}");
+            let mut positions = Vec::<(usize,usize)>::new();
+            let mut positions_old = Vec::<(usize,usize)>::new();
+                
+            l_alglib::l_alg_init_get_positions_old(&pord, &mut positions_old); 
+            l_alglib::l_alg_init_get_positions_new(&pord, &mut positions);
+ 
+            if b_need_transform {
+                // eprintln!("Positions_old: {positions_old:?}");
+                // eprintln!("Positions_new: {positions:?}");
 
-            
-            l_alglib::l_alg_gen_from_ord_short_iter_limit_old(iter_limit, print_limit, &pord, &init_vector, &mut lalgs, true, true);           
+                let trf_init_vector = l_alglib::transform_init_vector(pord.len(), &positions_old, &positions, &init_vector);
+                eprintln!("Transformed init vector (int): {:?}", trf_init_vector);
+                init_vector = trf_init_vector;
+            }
+
+            l_alglib::l_alg_gen_from_ord_short_iter_limit_new(iter_limit, print_limit, &pord, &init_vector, &mut lalgs, true, true);           
         }
     }    
 }
