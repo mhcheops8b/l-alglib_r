@@ -5,8 +5,8 @@ fn main() {
    
     let args_len = std::env::args().len();
 
-    if args_len < 2 {
-        println!("Usage: {} <pord_init_string> [starting_init_vec_string]", std::env::args().next().unwrap());
+    if args_len < 2 || args_len == 3 {
+        println!("Usage: {} <pord_init_string> [<need transform> <starting_init_vec_string>]", std::env::args().next().unwrap());
         return;
     }
 
@@ -24,23 +24,54 @@ fn main() {
     let n = pord.len();
 
     let mut init_vector = Vec::<usize>::new();
-    if args_len == 3 {
-        let init_vector_str = std::env::args().nth(2).unwrap();
+    let mut b_need_transform =false;
+    
+    if args_len >= 4 {
+        b_need_transform = match std::env::args().nth(2).unwrap().parse::<usize>() {
+            Ok(val) => {match val {
+                                0=> false, 
+                                1=>true, 
+                                _ => {eprintln!("Argument must be 0 or 1."); return;}
+                              }
+                            },
+            Err(_e) => {eprintln!("First argument must be a number (iter limit)."); return;}
+                        };
+        
+    
+        
+        let init_vector_str = std::env::args().nth(3).unwrap();
         eprintln!("Init vector (str): {}", init_vector_str);
         init_vector = init_vector_str.split(",").map(|v| v.trim().parse().unwrap()).collect();
         eprintln!("Init vector (int): {:?}", init_vector);
     }
     
+
+
     let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
     
     eprintln!("Order: {pord:?}");
 
     let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(n);
     let mut positions = Vec::<(usize,usize)>::new();
-        
-    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, n-1);
-    l_alglib::l_alg_init_get_positions_old(&pord, &mut positions); 
+    let mut positions_old = Vec::<(usize,usize)>::new();
     
+    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, n-1);
+    l_alglib::l_alg_init_get_positions_new(&pord, &mut positions); 
+
+    if b_need_transform {
+    
+        l_alglib::l_alg_init_get_positions_old(&pord, &mut positions_old); 
+        
+        eprintln!("Positions_old: {positions_old:?}");
+        eprintln!("Positions_new: {positions:?}");
+        
+        let trf_init_vector = l_alglib::transform_init_vector(n, &positions_old, &positions, &init_vector);
+        eprintln!("Transformed init vector (int): {:?}", trf_init_vector);
+        init_vector = trf_init_vector;
+    }
+    //
+    
+    // let init_vector = trf_init_vector;
     // apply init_vector
     for i in 0usize..std::cmp::min(positions.len(), init_vector.len()) {
         let x = positions[i].0;

@@ -12,6 +12,19 @@ name = "gen_from_ord_cmd"
 path = "src/gen_from_ord_cmd.rs"
 
 [[bin]]
+name = "gen_from_ord_file"
+path = "src/gen_from_ord_file.rs"
+
+[[bin]]
+name = "gen_from_ord_file_new_pos"
+path = "src/gen_from_ord_file_new_pos.rs"
+
+
+[[bin]]
+name = "gen_from_ord_cmd_new_pos"
+path = "src/gen_from_ord_cmd_new_pos.rs"
+
+[[bin]]
 name = "gen_from_ord_short"
 path = "src/gen_from_ord_short.rs"
 
@@ -36,8 +49,16 @@ name = "gen_from_ord_multi"
 path = "src/gen_from_ord_multi.rs"
 
 [[bin]]
+name = "gen_from_ord_multi_new_pos"
+path = "src/gen_from_ord_multi_new_pos.rs"
+
+[[bin]]
 name = "gen_from_ord_file_multi"
 path = "src/gen_from_ord_file_multi.rs"
+
+[[bin]]
+name = "gen_from_ord_file_multi_new_pos"
+path = "src/gen_from_ord_file_multi_new_pos.rs"
 
 [[bin]]
 name = "gen_from_ord_multi_short"

@@ -853,7 +853,7 @@ pub fn l_alg_init_limpl(limpl: &mut [Vec<usize>]) {
 } 
 
 
-pub fn l_alg_init_from_ord(limpl: &mut [Vec<usize>], order: &[Vec<usize>], unit_elem:usize, unfilled_positions: &mut Vec<(usize,usize)>) {
+pub fn l_alg_init_from_ord(limpl: &mut [Vec<usize>], order: &[Vec<usize>], unit_elem:usize) {
     let n = limpl.len();
     for i in 0.. n {
         if i != unit_elem {
@@ -862,7 +862,6 @@ pub fn l_alg_init_from_ord(limpl: &mut [Vec<usize>], order: &[Vec<usize>], unit_
                     limpl[i][j] = unit_elem;
                 }
                 else {
-                    unfilled_positions.push((i,j));
                     limpl[i][j] = n+1;
                 }
             }
@@ -871,6 +870,30 @@ pub fn l_alg_init_from_ord(limpl: &mut [Vec<usize>], order: &[Vec<usize>], unit_
             for j in 0.. n {
                 limpl[i][j] = j;
             }
+        }
+    }
+}
+
+pub fn l_alg_init_get_positions_old(order: &[Vec<usize>], unfilled_positions: &mut Vec<(usize,usize)>) {
+    let n = order.len();
+    for i in 0..n-1 {
+        for j in 0..n {
+            if order[i][j] == 0 {
+                unfilled_positions.push((i,j));
+            }
+        }
+    }
+}
+
+pub fn l_alg_init_get_positions_new(order: &[Vec<usize>], unfilled_positions: &mut Vec<(usize,usize)>) {
+    let n = order.len();
+    let mut already_processed = HashSet::<(usize,usize)>::new();
+    for i in 1..n-1 {
+        for j in 0..i {
+            positions_process_pair(order, &mut already_processed, unfilled_positions, j, i);
+        }
+        for j in 0..i {
+            positions_process_pair(order, &mut already_processed, unfilled_positions, i, j);
         }
     }
 }
@@ -1219,7 +1242,8 @@ pub fn l_alg_test_init_vector(pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>) 
     let mut lalg_limpl = l_alg_alloc_limpl(n);
     let mut positions = Vec::<(usize,usize)>::new();
                 
-    l_alg_init_from_ord(&mut lalg_limpl, &pord, n-1, &mut positions);
+    l_alg_init_from_ord(&mut lalg_limpl, &pord, n-1);
+    l_alg_init_get_positions_old(pord, &mut positions);
 
     // apply init_vector
     for i in 0usize..std::cmp::min(positions.len(), init_vector.len()) {
@@ -1267,8 +1291,9 @@ pub fn l_alg_test_init_vector_with_positions(pord: &Vec<Vec<usize>>, init_positi
 
     let mut lalg_limpl = l_alg_alloc_limpl(n);
     let mut positions = Vec::<(usize,usize)>::new();
-                
-    l_alg_init_from_ord(&mut lalg_limpl, &pord, n-1, &mut positions);
+                    
+    l_alg_init_from_ord(&mut lalg_limpl, &pord, n-1);
+    l_alg_init_get_positions_old(pord, &mut positions);
 
     // apply init_vector
     for i in 0usize..init_positions.len() {
@@ -1353,7 +1378,102 @@ pub fn l_alg_gen_from_ord(pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>, lalg
     let mut lalg_limpl = l_alg_alloc_limpl(n);
     let mut positions = Vec::<(usize,usize)>::new();
                 
-    l_alg_init_from_ord(&mut lalg_limpl, &pord, n-1, &mut positions);
+    l_alg_init_from_ord(&mut lalg_limpl, &pord, n-1);
+    l_alg_init_get_positions_old(pord, &mut positions);
+
+    // apply init_vector
+    let mut b_first = true;
+    for i in 0usize..std::cmp::min(positions.len(), init_vector.len()) {
+        if b_print {
+            if b_first {
+                b_first = false;
+            } 
+            else {
+                eprint!(", ");
+            }
+        }
+        let x = positions[i].0;
+        let y = positions[i].1;
+        let e = init_vector[i];
+        if b_print {
+            eprint!("({},{}) = {} ", x, y, e);
+        }
+        if b_test {
+            if e == n+1 {
+                if b_print {
+                    eprint!("(skipping)");
+                }
+                continue;
+            }
+            if e == n-1 {
+                if b_print {
+                    eprint!("(Element at ({}, {}) cannot be equal to unit ({}).)",x,y,n-1);
+                }
+                return;
+            }
+                
+            if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
+                if b_print {
+                    eprint!("(Element at ({}, {}) needs to be greater than {} since {} <= {}.)",x,y,y,y,x);
+                }
+                return;
+            }
+
+            for t in 0..y {
+                if lalg_limpl[t][y] == n-1 && lalg_limpl[x][t] != n+1 && lalg_limpl[lalg_limpl[x][t]][e] != n-1 {
+                    if b_print {
+                        eprint!("(Element e={} at (x={}, y={}) needs to larger than {} since t={} <= y => x->t <= x->y.)", e, x, y, lalg_limpl[x][t], t);
+                    }
+                    return;
+                }
+            }
+        }
+
+        lalg_limpl[x][y] = e;
+        if b_test {
+            if !l_alg_test_ax4_partial(&lalg_limpl, true) {
+                //eprintln!("Partial ax4 is not satisfied");
+                return;
+            }
+        }
+    }
+    eprintln!();    
+    for i in (0usize..std::cmp::min(positions.len(), init_vector.len())).rev() {
+        if init_vector[i] != n+1 {
+            positions.remove(i); 
+        }
+    }
+    if b_print {
+        eprintln!("Positions: {positions:?}");
+        eprintln!("Init limpl: {lalg_limpl:?}");
+    }
+        // return;
+    let time_start = Instant::now();
+    let mut num_tested = 0usize;
+    let mut num_models = 0usize;
+    gen_all_lalgs_rec(0, &positions, &mut lalg_limpl, n-1, lalgs, &mut num_tested, &mut num_models);
+
+    eprintln!("Computation time: {:.4} s", time_start.elapsed().as_secs_f32());
+    eprintln!("Number recursive calls: {}", num_tested);
+    eprintln!("Number of all models: {}", num_models);
+    eprintln!("Number of representative models {}", lalgs.len());
+}
+
+pub fn l_alg_gen_from_ord_new(pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>, lalgs: &mut HashSet<Vec<Vec<usize>>>, b_test: bool, b_print: bool) {
+
+    let n = pord.len();
+    // let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
+    // let pord = serde_json::from_str::<Vec<Vec<usize>>>(&cur_line).unwrap();
+    
+    if b_print {
+        eprintln!("Order: {pord:?}");
+    }
+
+    let mut lalg_limpl = l_alg_alloc_limpl(n);
+    let mut positions = Vec::<(usize,usize)>::new();
+                
+    l_alg_init_from_ord(&mut lalg_limpl, &pord, n-1);
+    l_alg_init_get_positions_new(pord, &mut positions);
 
     // apply init_vector
     let mut b_first = true;
@@ -1446,8 +1566,9 @@ pub fn l_alg_gen_from_ord_short_iter(pord: &Vec<Vec<usize>>, init_vector: &Vec<u
     let mut lalg_limpl = l_alg_alloc_limpl(n);
     let mut positions = Vec::<(usize,usize)>::new();
                 
-    l_alg_init_from_ord(&mut lalg_limpl, &pord, n-1, &mut positions);
-
+    l_alg_init_from_ord(&mut lalg_limpl, &pord, n-1);
+    l_alg_init_get_positions_old(pord, &mut positions);
+    
     // apply init_vector
     let mut b_first = true;
     for i in 0usize..std::cmp::min(positions.len(), init_vector.len()) {
@@ -1545,8 +1666,9 @@ pub fn l_alg_gen_from_ord_short_iter_(iter_limit:usize, print_limit: usize, pord
     let mut lalg_limpl = l_alg_alloc_limpl(n);
     let mut positions = Vec::<(usize,usize)>::new();
                 
-    l_alg_init_from_ord(&mut lalg_limpl, &pord, n-1, &mut positions);
-
+    l_alg_init_from_ord(&mut lalg_limpl, &pord, n-1);
+    l_alg_init_get_positions_old(pord, &mut positions);
+    
     // apply init_vector
     let mut b_first = true;
     for i in 0usize..std::cmp::min(positions.len(), init_vector.len()) {
@@ -1646,8 +1768,9 @@ pub fn l_alg_gen_from_ord_short_time(pord: &Vec<Vec<usize>>, init_vector: &Vec<u
     let mut lalg_limpl = l_alg_alloc_limpl(n);
     let mut positions = Vec::<(usize,usize)>::new();
                 
-    l_alg_init_from_ord(&mut lalg_limpl, &pord, n-1, &mut positions);
-
+    l_alg_init_from_ord(&mut lalg_limpl, &pord, n-1);
+    l_alg_init_get_positions_old(pord, &mut positions);
+    
     // apply init_vector
     let mut b_first = true;
     for i in 0usize..std::cmp::min(positions.len(), init_vector.len()) {
@@ -1745,7 +1868,8 @@ pub fn l_alg_gen_from_ord_short_time_with_limit(time_limit: Duration, pord: &Vec
     let mut lalg_limpl = l_alg_alloc_limpl(n);
     let mut positions = Vec::<(usize,usize)>::new();
                 
-    l_alg_init_from_ord(&mut lalg_limpl, &pord, n-1, &mut positions);
+    l_alg_init_from_ord(&mut lalg_limpl, &pord, n-1);
+    l_alg_init_get_positions_old(pord, &mut positions);
 
     // apply init_vector
     let mut b_first = true;
@@ -2118,4 +2242,29 @@ pub fn get_plan_continue_rec(from_vec: &mut Vec<usize>, iter_cnt: &mut usize, ti
             }
         }
     }
+}
+
+pub fn transform_init_vector(n: usize, from_positions: &Vec<(usize,usize)>, to_positions: &Vec<(usize,usize)>, init_vector: &Vec<usize>) -> Vec<usize> {
+        // get transformed init_vector
+    let mut trf_init_vector = Vec::<usize>::new();
+    let init_vector_size = init_vector.len();
+    let mut number_filled = 0usize;
+    for xy in to_positions.iter() {
+    
+        let index = from_positions.iter().position(|&oxoy| oxoy.0==xy.0 && oxoy.1==xy.1);
+        
+        let pos = index.unwrap();
+        // eprintln!("Pos: {pos}");
+        if pos < init_vector_size {
+            trf_init_vector.push(init_vector[index.unwrap()]);
+            number_filled+=1;
+            if number_filled == init_vector_size {
+                break;
+            }
+        }
+        else {
+            trf_init_vector.push(n+1);    
+        }
+    }
+    trf_init_vector
 }

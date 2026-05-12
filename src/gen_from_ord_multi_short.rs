@@ -327,11 +327,8 @@ fn main() {
             let mut falg = l_alglib::l_alg_alloc_limpl(n+1);
             let mut positions = Vec::<(usize,usize)>::new();
             
-
-            
-
-
-            l_alglib::l_alg_init_from_ord(&mut falg, &qord_n1, n, &mut positions);
+            l_alglib::l_alg_init_from_ord(&mut falg, &qord_n1, n);
+            l_alglib::l_alg_init_get_positions_old(&qord_n1, &mut positions);
 
             //falg[0][1] = 4;
             //falg[0][2] = 4;
@@ -375,7 +372,8 @@ fn main7() {
     let mut falg = l_alglib::l_alg_alloc_limpl(n);
     let mut positions = Vec::<(usize,usize)>::new();
 
-    l_alglib::l_alg_init_from_ord(&mut falg, &lin_ord_3, unit, &mut positions);
+    l_alglib::l_alg_init_from_ord(&mut falg, &lin_ord_3, n);
+    l_alglib::l_alg_init_get_positions_old(&lin_ord_3, &mut positions);
 
     eprintln!("{falg:?}");
     eprintln!("{positions:?}");

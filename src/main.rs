@@ -119,9 +119,10 @@ fn main_1_1() {
                 if true {
                     let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(pord.len());
                     let mut positions = Vec::<(usize,usize)>::new();
-                
-                    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1, &mut positions);
-                    
+            
+                    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1);
+                    l_alglib::l_alg_init_get_positions_old(&pord, &mut positions);
+
                     let mut b_first = true;
                     let mut pos_idx = 0usize;
                     for i in 0..fixed_vec.len() {
@@ -227,7 +228,8 @@ fn main_1_2() {
         std::cmp::min(pe[0], pe[1])== 0 && std::cmp::max(pe[0], pe[1]) == 1
     }
     // let ff = (|pe:Vec<usize>| (pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0) && pe[5]==5);
-    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1, &mut positions);
+    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1);
+    l_alglib::l_alg_init_get_positions_old(&pord, &mut positions);
 
     if std::env::args().len() < 2 {
         println!("Usage: {} <init_vector>", std::env::args().next().unwrap());
@@ -273,7 +275,8 @@ fn main_1_3() {
         std::cmp::max(std::cmp::max(pe[0], pe[1]), pe[2]) == 2
     }
     // let ff = (|pe:Vec<usize>| (pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0) && pe[5]==5);
-    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1, &mut positions);
+    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1);
+    l_alglib::l_alg_init_get_positions_old(&pord, &mut positions);
 
     // lalg_limpl[0][1] = 1;
     // lalg_limpl[0][2] = 1;
@@ -319,8 +322,9 @@ fn main_2_1_1() {
         pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0
     }
     // let ff = (|pe:Vec<usize>| (pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0) && pe[5]==5);
-    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1, &mut positions);
-
+    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1);
+    l_alglib::l_alg_init_get_positions_old(&pord, &mut positions);
+    
     lalg_limpl[0][1] = 0;
     lalg_limpl[0][2] = 3;
     lalg_limpl[0][3] = 2;
@@ -344,8 +348,9 @@ fn main_2_11() {
         pe[0]==0
     }
     // let ff = (|pe:Vec<usize>| (pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0) && pe[5]==5);
-    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1, &mut positions);
-
+    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1);
+    l_alglib::l_alg_init_get_positions_old(&pord, &mut positions);
+    
     let mut num_iter=0usize;
     l_alglib::get_plan_fixed_rec(0, &mut num_iter, pord.len(), &pord, num_pord, &fixed_vec,&positions, ff, &mut lalg_limpl, &l_alglib::OutputType::Script);
 }
@@ -419,7 +424,8 @@ fn main_2_1() {
                     let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(pord.len());
                     let mut positions = Vec::<(usize,usize)>::new();
                 
-                    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1, &mut positions);
+                        l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1);
+                        l_alglib::l_alg_init_get_positions_old(&pord, &mut positions);
                     
                     let mut b_first = true;
                     let mut pos_idx = 0usize;
@@ -502,7 +508,8 @@ fn main_2_3_x() {
 //        pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0
     }
     // let ff = (|pe:Vec<usize>| (pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0) && pe[5]==5);
-    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1, &mut positions);
+    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1);
+    l_alglib::l_alg_init_get_positions_old(&pord, &mut positions);
 
     lalg_limpl[0][1] = 1;
     lalg_limpl[0][2] = 1;
@@ -525,7 +532,9 @@ fn main_3_2() {
         (pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0) && pe[5]==5
     }
     // let ff = (|pe:Vec<usize>| (pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0) && pe[5]==5);
-    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1, &mut positions);
+    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1);
+    l_alglib::l_alg_init_get_positions_old(&pord, &mut positions);
+
     let mut num_iter=0usize;
 
     l_alglib::get_plan_fixed_rec(0, &mut num_iter, pord.len(), &pord, num_pord, &fixed_vec,&positions, ff, &mut lalg_limpl, &l_alglib::OutputType::Script);
@@ -600,8 +609,9 @@ fn main_3_1() {
                     let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(pord.len());
                     let mut positions = Vec::<(usize,usize)>::new();
                 
-                    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1, &mut positions);
-                    
+                    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1);
+                    l_alglib::l_alg_init_get_positions_old(&pord, &mut positions);
+                                            
                     let mut b_first = true;
                     let mut pos_idx = 0usize;
                     for i in 0..fixed_vec.len() {
@@ -741,7 +751,8 @@ fn main_4_1() {
                     let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(pord.len());
                     let mut positions = Vec::<(usize,usize)>::new();
                 
-                    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1, &mut positions);
+                    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1);
+                    l_alglib::l_alg_init_get_positions_old(&pord, &mut positions);
                     
                     let mut b_first = true;
                     let mut pos_idx = 0usize;
@@ -878,7 +889,8 @@ fn main_5_1() {
                     let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(pord.len());
                     let mut positions = Vec::<(usize,usize)>::new();
                 
-                    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1, &mut positions);
+                    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1);
+                    l_alglib::l_alg_init_get_positions_old(&pord, &mut positions);
                     
                     let mut b_first = true;
                     let mut pos_idx = 0usize;
@@ -3496,11 +3508,8 @@ done
             let mut falg = l_alglib::l_alg_alloc_limpl(n+1);
             let mut positions = Vec::<(usize,usize)>::new();
             
-
-            
-
-
-            l_alglib::l_alg_init_from_ord(&mut falg, &qord_n1, n, &mut positions);
+            l_alglib::l_alg_init_from_ord(&mut falg, &qord_n1, n);
+            l_alglib::l_alg_init_get_positions_old(&qord_n1, &mut positions);
 
             //falg[0][1] = 4;
             //falg[0][2] = 4;
@@ -3543,14 +3552,15 @@ fn main7() {
     let mut falg = l_alglib::l_alg_alloc_limpl(n);
     let mut positions = Vec::<(usize,usize)>::new();
 
-    l_alglib::l_alg_init_from_ord(&mut falg, &lin_ord_3, unit, &mut positions);
+    l_alglib::l_alg_init_from_ord(&mut falg, &lin_ord_3, unit);
+    l_alglib::l_alg_init_get_positions_old(&lin_ord_3, &mut positions);
 
     eprintln!("{falg:?}");
     eprintln!("{positions:?}");
     let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
     let mut num_tested = 0usize;
     let mut num_models = 0usize;
-    l_alglib::gen_all_lalgs_rec(0, &positions, &mut falg, unit, &mut lalgs, &mut num_tested, &mut  num_models);
+    l_alglib::gen_all_lalgs_rec(0, &positions, &mut falg, unit, &mut lalgs, &mut num_tested, &mut num_models);
 
     eprintln!("{lalgs:?}");
 }

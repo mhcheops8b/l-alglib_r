@@ -17,8 +17,9 @@ fn main_1_3() {
         std::cmp::max(std::cmp::max(pe[0], pe[1]), pe[2]) == 2
     }
     // let ff = (|pe:Vec<usize>| (pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0) && pe[5]==5);
-    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1, &mut positions);
-
+    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1);
+    l_alglib::l_alg_init_get_positions_old(&pord, &mut positions);
+    
     if std::env::args().len() < 2 {
         println!("Usage: {} <init_vector>", std::env::args().next().unwrap());
         return;
