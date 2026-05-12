@@ -41,8 +41,16 @@ name = "gen_from_ord_file_short_with_time_limit"
 path = "src/gen_from_ord_file_short_with_time_limit.rs"
 
 [[bin]]
+name = "gen_from_ord_file_short_with_time_limit_new_pos"
+path = "src/gen_from_ord_file_short_with_time_limit_new_pos.rs"
+
+[[bin]]
 name = "gen_from_ord_file_short_with_iter_limit"
 path = "src/gen_from_ord_file_short_with_iter_limit.rs"
+
+[[bin]]
+name = "gen_from_ord_file_short_with_iter_limit_new_pos"
+path = "src/gen_from_ord_file_short_with_iter_limit_new_pos.rs"
 
 [[bin]]
 name = "gen_from_ord_multi"
@@ -73,8 +81,17 @@ name = "gen_from_ord_file_multi_short_with_iter_limit"
 path = "src/gen_from_ord_file_multi_short_with_iter_limit.rs"
 
 [[bin]]
+name = "gen_from_ord_file_multi_short_with_iter_limit_new_pos"
+path = "src/gen_from_ord_file_multi_short_with_iter_limit_new_pos.rs"
+
+[[bin]]
 name = "gen_from_ord_file_multi_short_with_time_limit"
 path = "src/gen_from_ord_file_multi_short_with_time_limit.rs"
+
+[[bin]]
+name = "gen_from_ord_file_multi_short_with_time_limit_new_pos"
+path = "src/gen_from_ord_file_multi_short_with_time_limit_new_pos.rs"
+
 
 [[bin]]
 name = "gen_from_ord_static"
