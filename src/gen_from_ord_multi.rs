@@ -94,7 +94,7 @@ fn main() {
                 init_vector = line_str.split(",").map(|v| v.trim().parse().unwrap()).collect();
                 eprintln!("Init vector (int): {:?}", init_vector);
     
-                l_alglib::l_alg_gen_from_ord(&pord, &init_vector, &mut lalgs, true, true);
+                l_alglib::l_alg_gen_from_ord(&pord, &init_vector, &mut lalgs, true, true, 10_000_000);
 
                 // println!("{cur_line:?}");
                 // let pord = l_alglib::parse_vector(&cur_line);
@@ -162,7 +162,7 @@ fn main() {
                 // let time_start = Instant::now();
                 // let mut num_tested = 0usize;
                 // let mut num_models = 0usize;
-                // l_alglib::gen_all_lalgs_rec(0, &positions, &mut lalg_limpl, n-1, &mut lalgs, &mut num_tested, &mut num_models);
+                // l_alglib::gen_all_lalgs_rec(0, &positions, &mut lalg_limpl, n-1, &mut lalgs, &mut num_tested, &mut num_models, 10_000_000);
 
                 // eprintln!("Computation time: {:.2} s", time_start.elapsed().as_secs_f32());
                 // eprintln!("Number recursive calls: {}", num_tested);
@@ -345,7 +345,7 @@ fn main() {
             eprintln!("{positions:?}");
             let mut num_tested = 0usize;
             let mut num_models = 0usize;
-            l_alglib::gen_all_lalgs_rec(0, &positions, &mut falg, n, &mut lalgs, &mut num_tested, &mut num_models);
+            l_alglib::gen_all_lalgs_rec(0, &positions, &mut falg, n, &mut lalgs, &mut num_tested, &mut num_models, 10_000_000);
 
             eprintln!("{}", lalgs.len());
         }
@@ -381,7 +381,7 @@ fn main7() {
     let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
     let mut num_tested = 0usize;
     let mut num_models = 0usize;
-    l_alglib::gen_all_lalgs_rec(0, &positions, &mut falg, unit, &mut lalgs, &mut num_tested, &mut num_models);
+    l_alglib::gen_all_lalgs_rec(0, &positions, &mut falg, unit, &mut lalgs, &mut num_tested, &mut num_models, 10_000_000);
 
     eprintln!("{lalgs:?}");
 }
@@ -413,7 +413,7 @@ fn main6() {
     let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
     let mut num_tested = 0usize;
     let mut num_models = 0usize;
-    l_alglib::gen_all_lalgs_rec(0, &positions, &mut lalg_impl, lalg_unit, &mut lalgs, &mut num_tested, &mut num_models);
+    l_alglib::gen_all_lalgs_rec(0, &positions, &mut lalg_impl, lalg_unit, &mut lalgs, &mut num_tested, &mut num_models, 10_000_000);
 
     // eliminate isomorphic
     let mut lalgs_processed = HashSet::<Vec<Vec<usize>>>::new();
@@ -487,7 +487,7 @@ fn main33() {
     
     let mut num_tested = 0usize;
     let mut num_models = 0usize;
-    l_alglib::gen_all_lalgs_rec(0, &positions4, &mut limpl4, unit4, &mut lalgs, &mut num_tested, &mut num_models);
+    l_alglib::gen_all_lalgs_rec(0, &positions4, &mut limpl4, unit4, &mut lalgs, &mut num_tested, &mut num_models, 10_000_000);
 
     // println!("{lalgs:?}");
     // return;
@@ -554,7 +554,7 @@ fn main4() {
     
     let mut num_tested = 0usize;
     let mut num_models = 0usize;
-    l_alglib::gen_all_lalgs_rec(0, &positions, &mut ex3_limpl, ex3_unit, &mut lalgs, &mut num_tested, &mut num_models);
+    l_alglib::gen_all_lalgs_rec(0, &positions, &mut ex3_limpl, ex3_unit, &mut lalgs, &mut num_tested, &mut num_models, 10_000_000);
 
     // println!("{lalgs:?}");
     // return;

@@ -69,7 +69,7 @@ fn main() {
                     init_vector = trf_init_vector;
                 }
 
-                l_alglib::l_alg_gen_from_ord_new(&pord, &init_vector, &mut lalgs, true, true);
+                l_alglib::l_alg_gen_from_ord_new(&pord, &init_vector, &mut lalgs, true, true, 10_000_000);
             }
             eprintln!("===\nTotal Computational Time: {:.4} s", ts.elapsed().as_secs_f32());
         }

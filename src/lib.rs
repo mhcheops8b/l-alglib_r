@@ -318,12 +318,12 @@ pub fn l_alg_test_ax4_partial_as_result(limpl: &[Vec<usize>]) -> Result<bool, St
     Ok(true)
 }
 
-
-pub fn gen_all_lalgs_rec(index:usize, positions:&Vec<(usize,usize)>, limpl: &mut Vec<Vec<usize>>, unit:usize, res:&mut HashSet<Vec<Vec<usize>>>, num_tested: &mut usize, num_models: &mut usize) {
+// status_output_limit = 10_000_000
+pub fn gen_all_lalgs_rec(index:usize, positions:&Vec<(usize,usize)>, limpl: &mut Vec<Vec<usize>>, unit:usize, res:&mut HashSet<Vec<Vec<usize>>>, num_tested: &mut usize, num_models: &mut usize, status_output_limit: usize) {
     let n = positions.len();
     //eprintln!("FHFH: {index} / {n}");
     *num_tested+=1;
-    if *num_tested % 10_000_000 == 1 {
+    if *num_tested % status_output_limit == 1 {
         eprintln!("Cur_progress: {limpl:?}");
     }
     if index >= n {
@@ -390,44 +390,13 @@ pub fn gen_all_lalgs_rec(index:usize, positions:&Vec<(usize,usize)>, limpl: &mut
             }
             limpl[x][y] = e;
 
-            // // test ax4 partial
-            // let mut b_problem = false;
-            // for i in 0..m {
-            //     if b_problem {
-            //         break;
-            //     }
-            //     for j in 0..m {
-            //         if b_problem {
-            //             break;
-            //         }
-            //         if limpl[i][j] == m+1 {
-            //             continue;
-            //         }
-            //         if limpl[j][i] == m+1 {
-            //             continue;
-            //         }
-            //         for k in 0..m {
-            //             if limpl[i][k] == m+1 {
-            //                 continue;
-            //             }
-            //             if limpl[j][k] == m+1 {
-            //                 continue;
-            //             }
-            //             if limpl[limpl[i][j]][limpl[i][k]] != m+1 && limpl[limpl[j][i]][limpl[j][k]] != m+1 &&  limpl[limpl[i][j]][limpl[i][k]] != limpl[limpl[j][i]][limpl[j][k]] {
-            //                 b_problem = true;
-            //                 break;
-            //             }
-            //         }
-            //     }
-            // }
-
             if !l_alg_test_ax4_partial_xy(limpl, x, y, false) {
             // if !l_alg_test_ax4_partial(limpl, false) {
                 limpl[x][y] = m+1;
                 continue;
             }
             
-            gen_all_lalgs_rec(index+1, positions, limpl, unit, res, num_tested, num_models);
+            gen_all_lalgs_rec(index+1, positions, limpl, unit, res, num_tested, num_models, status_output_limit);
         }
         limpl[x][y] = m+1; //unfilled element
     }
@@ -1365,7 +1334,7 @@ pub fn l_alg_test_init_value(x: usize, y: usize, e:usize, lalg_limpl: &Vec<Vec<u
     true
 }
 
-pub fn l_alg_gen_from_ord(pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>, lalgs: &mut HashSet<Vec<Vec<usize>>>, b_test: bool, b_print: bool) {
+pub fn l_alg_gen_from_ord(pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>, lalgs: &mut HashSet<Vec<Vec<usize>>>, b_test: bool, b_print: bool, status_output_limit: usize) {
 
     let n = pord.len();
     // let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
@@ -1451,7 +1420,7 @@ pub fn l_alg_gen_from_ord(pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>, lalg
     let time_start = Instant::now();
     let mut num_tested = 0usize;
     let mut num_models = 0usize;
-    gen_all_lalgs_rec(0, &positions, &mut lalg_limpl, n-1, lalgs, &mut num_tested, &mut num_models);
+    gen_all_lalgs_rec(0, &positions, &mut lalg_limpl, n-1, lalgs, &mut num_tested, &mut num_models, status_output_limit);
 
     eprintln!("Computation time: {:.4} s", time_start.elapsed().as_secs_f32());
     eprintln!("Number recursive calls: {}", num_tested);
@@ -1459,7 +1428,7 @@ pub fn l_alg_gen_from_ord(pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>, lalg
     eprintln!("Number of representative models {}", lalgs.len());
 }
 
-pub fn l_alg_gen_from_ord_new(pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>, lalgs: &mut HashSet<Vec<Vec<usize>>>, b_test: bool, b_print: bool) {
+pub fn l_alg_gen_from_ord_new(pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>, lalgs: &mut HashSet<Vec<Vec<usize>>>, b_test: bool, b_print: bool, status_output_limit: usize) {
 
     let n = pord.len();
     // let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
@@ -1545,7 +1514,7 @@ pub fn l_alg_gen_from_ord_new(pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>, 
     let time_start = Instant::now();
     let mut num_tested = 0usize;
     let mut num_models = 0usize;
-    gen_all_lalgs_rec(0, &positions, &mut lalg_limpl, n-1, lalgs, &mut num_tested, &mut num_models);
+    gen_all_lalgs_rec(0, &positions, &mut lalg_limpl, n-1, lalgs, &mut num_tested, &mut num_models, status_output_limit);
 
     eprintln!("Computation time: {:.4} s", time_start.elapsed().as_secs_f32());
     eprintln!("Number recursive calls: {}", num_tested);

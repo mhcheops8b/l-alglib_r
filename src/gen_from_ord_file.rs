@@ -40,7 +40,7 @@ fn main() {
             
             eprintln!("Order: {pord:?}");
 
-            l_alglib::l_alg_gen_from_ord(&pord, &init_vector, &mut lalgs, true, true);            
+            l_alglib::l_alg_gen_from_ord(&pord, &init_vector, &mut lalgs, true, true, 10_000_000);            
         }
     }    
 }
