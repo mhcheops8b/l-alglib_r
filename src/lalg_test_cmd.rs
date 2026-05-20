@@ -76,7 +76,7 @@ fn lalg_self_similar(lalg: &Vec<Vec<usize>>)  -> Result<bool, String> {
     let mut b_err = false;
     for i in 0..n {
         for j in 0..n {
-            if lalg[i][lalg[j][i]] != lalg[j][lalg[j][i]] {
+            if lalg[i][lalg[j][i]] != lalg[j][lalg[i][j]] {
                 b_err=true;
                 if b_first_err {
                     b_first_err = false;
