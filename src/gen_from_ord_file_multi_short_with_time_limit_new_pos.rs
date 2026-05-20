@@ -62,7 +62,6 @@ fn main() {
                 let mut init_vector = line_str.split(",").map(|v| v.trim().parse().unwrap()).collect();
                 eprintln!("Init vector (int): {:?}", init_vector);
 
-    
                 if b_need_transform {
                     // eprintln!("Positions_old: {positions_old:?}");
                     // eprintln!("Positions_new: {positions:?}");

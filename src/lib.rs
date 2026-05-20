@@ -374,9 +374,11 @@ pub fn gen_all_lalgs_rec(index:usize, positions:&Vec<(usize,usize)>, limpl: &mut
             if e == unit {
                 continue;
             }
-            if limpl[y][x] == unit && limpl[y][e] != unit {
-                continue;
-            }
+
+            // self-similar property: x -> (y -> x) = y -> (x -> y)
+            // if limpl[y][x] == unit && limpl[y][e] != unit {
+            //     continue;
+            // }
 
             let mut b_found = false;
             for t in 0..y {
@@ -466,9 +468,11 @@ pub fn gen_all_lalgs_rec_short_iter(b_stop: &mut bool, index:usize, positions:&V
             if e == unit {
                 continue;
             }
-            if limpl[y][x] == unit && limpl[y][e] != unit {
-                continue;
-            }
+
+            // self-similar property: x -> (y -> x) = y -> (x -> y)
+            // if limpl[y][x] == unit && limpl[y][e] != unit {
+            //     continue;
+            // }
 
             let mut b_found = false;
             for t in 0..y {
@@ -560,9 +564,11 @@ pub fn gen_all_lalgs_rec_short_iter_(iter_limit: usize, print_limit: usize, b_st
             if e == unit {
                 continue;
             }
-            if limpl[y][x] == unit && limpl[y][e] != unit {
-                continue;
-            }
+            
+            // self-similar property: x -> (y -> x) = y -> (x -> y)
+            // if limpl[y][x] == unit && limpl[y][e] != unit {
+            //     continue;
+            // }
 
             let mut b_found = false;
             for t in 0..y {
@@ -676,9 +682,11 @@ pub fn gen_all_lalgs_rec_short_time(b_stop: &mut bool, from_time: Instant, index
             if e == unit {
                 continue;
             }
-            if limpl[y][x] == unit && limpl[y][e] != unit {
-                continue;
-            }
+
+            // self-similar property: x -> (y -> x) = y -> (x -> y)
+            // if limpl[y][x] == unit && limpl[y][e] != unit {
+            //     continue;
+            // }
 
             let mut b_found = false;
             for t in 0..y {
@@ -771,9 +779,11 @@ pub fn gen_all_lalgs_rec_short_time_with_limit(time_limit: Duration, b_stop: &mu
             if e == unit {
                 continue;
             }
-            if limpl[y][x] == unit && limpl[y][e] != unit {
-                continue;
-            }
+
+            // self-similar property: x -> (y -> x) = y -> (x -> y)
+            // if limpl[y][x] == unit && limpl[y][e] != unit {
+            //     continue;
+            // }
 
             let mut b_found = false;
             for t in 0..y {
@@ -1231,9 +1241,10 @@ pub fn l_alg_test_init_vector(pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>) 
             return Err(format!("Element at ({}, {}) cannot be equal to unit ({}).",x,y,n-1));
         }
                 
-        if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
-            return Err(format!("Element at ({}, {}) needs to be greater than {} since {} <= {}.",x,y,y,y,x));
-        }
+        // self-similar property: x -> (y -> x) = y -> (x -> y)
+        // if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
+        //     return Err(format!("Element at ({}, {}) needs to be greater than {} since {} <= {}.",x,y,y,y,x));
+        // }
 
         for t in 0..y {
             if lalg_limpl[t][y] == n-1 && lalg_limpl[x][t] != n+1 && lalg_limpl[lalg_limpl[x][t]][e] != n-1 {
@@ -1280,10 +1291,11 @@ pub fn l_alg_test_init_vector_with_positions(pord: &Vec<Vec<usize>>, init_positi
         if e == n-1 {
             return Err(format!("Element at ({}, {}) cannot be equal to unit ({}).",x,y,n-1));
         }
-                
-        if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
-            return Err(format!("Element at ({}, {}) needs to be greater than {} since {} <= {}.",x,y,y,y,x));
-        }
+
+        // self-similar property: x -> (y -> x) = y -> (x -> y)        
+        // if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
+        //     return Err(format!("Element at ({}, {}) needs to be greater than {} since {} <= {}.",x,y,y,y,x));
+        // }
 
         for t in 0..y {
             if lalg_limpl[t][y] == n-1 && lalg_limpl[x][t] != n+1 && lalg_limpl[lalg_limpl[x][t]][e] != n-1 {
@@ -1307,15 +1319,17 @@ pub fn l_alg_test_init_value(x: usize, y: usize, e:usize, lalg_limpl: &Vec<Vec<u
                 // let e = init_vector[i];
                 // eprintln!("{},{},{}", x, y, e);
     let n = lalg_limpl.len();
+    
     if e == n-1 {
         // eprintln!("Element at ({}, {}) cannot be equal to unit ({}).",x,y,n-1);
         return false;
     }
-                
-    if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
-        // eprintln!("Element at ({}, {}) needs to be greater than {} since {} <= {}.",x,y,y,y,x);
-        return false;
-    }
+
+    // self-similar property: x -> (y -> x) = y -> (x -> y)            
+    // if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
+    //     // eprintln!("Element at ({}, {}) needs to be greater than {} since {} <= {}.",x,y,y,y,x);
+    //     return false;
+    // }
 
     for t in 0..y {
         if lalg_limpl[t][y] == n-1 && lalg_limpl[x][t] != n+1 && lalg_limpl[lalg_limpl[x][t]][e] != n-1 {
@@ -1380,13 +1394,14 @@ pub fn l_alg_gen_from_ord(pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>, lalg
                 }
                 return;
             }
-                
-            if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
-                if b_print {
-                    eprint!("(Element at ({}, {}) needs to be greater than {} since {} <= {}.)",x,y,y,y,x);
-                }
-                return;
-            }
+
+            // self-similar property: x -> (y -> x) = y -> (x -> y)    
+            // if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
+            //     if b_print {
+            //         eprint!("(Element at ({}, {}) needs to be greater than {} since {} <= {}.)",x,y,y,y,x);
+            //     }
+            //     return;
+            // }
 
             for t in 0..y {
                 if lalg_limpl[t][y] == n-1 && lalg_limpl[x][t] != n+1 && lalg_limpl[lalg_limpl[x][t]][e] != n-1 {
@@ -1474,13 +1489,14 @@ pub fn l_alg_gen_from_ord_new(pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>, 
                 }
                 return;
             }
-                
-            if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
-                if b_print {
-                    eprint!("(Element at ({}, {}) needs to be greater than {} since {} <= {}.)",x,y,y,y,x);
-                }
-                return;
-            }
+
+            // self-similar property: x -> (y -> x) = y -> (x -> y)    
+            // if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
+            //     if b_print {
+            //         eprint!("(Element at ({}, {}) needs to be greater than {} since {} <= {}.)",x,y,y,y,x);
+            //     }
+            //     return;
+            // }
 
             for t in 0..y {
                 if lalg_limpl[t][y] == n-1 && lalg_limpl[x][t] != n+1 && lalg_limpl[lalg_limpl[x][t]][e] != n-1 {
@@ -1568,13 +1584,14 @@ pub fn l_alg_gen_from_ord_short_iter(pord: &Vec<Vec<usize>>, init_vector: &Vec<u
                 }
                 return;
             }
-                
-            if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
-                if b_print {
-                    eprint!("(Element at ({}, {}) needs to be greater than {} since {} <= {}.)",x,y,y,y,x);
-                }
-                return;
-            }
+
+            // self-similar property: x -> (y -> x) = y -> (x -> y)    
+            // if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
+            //     if b_print {
+            //         eprint!("(Element at ({}, {}) needs to be greater than {} since {} <= {}.)",x,y,y,y,x);
+            //     }
+            //     return;
+            // }
 
             for t in 0..y {
                 if lalg_limpl[t][y] == n-1 && lalg_limpl[x][t] != n+1 && lalg_limpl[lalg_limpl[x][t]][e] != n-1 {
@@ -1668,13 +1685,14 @@ pub fn l_alg_gen_from_ord_short_iter_limit_old(iter_limit:usize, print_limit: us
                 }
                 return;
             }
-                
-            if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
-                if b_print {
-                    eprint!("(Element at ({}, {}) needs to be greater than {} since {} <= {}.)",x,y,y,y,x);
-                }
-                return;
-            }
+
+            // self-similar property: x -> (y -> x) = y -> (x -> y)    
+            // if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
+            //     if b_print {
+            //         eprint!("(Element at ({}, {}) needs to be greater than {} since {} <= {}.)",x,y,y,y,x);
+            //     }
+            //     return;
+            // }
 
             for t in 0..y {
                 if lalg_limpl[t][y] == n-1 && lalg_limpl[x][t] != n+1 && lalg_limpl[lalg_limpl[x][t]][e] != n-1 {
@@ -1768,13 +1786,14 @@ pub fn l_alg_gen_from_ord_short_iter_limit_new(iter_limit:usize, print_limit: us
                 }
                 return;
             }
-                
-            if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
-                if b_print {
-                    eprint!("(Element at ({}, {}) needs to be greater than {} since {} <= {}.)",x,y,y,y,x);
-                }
-                return;
-            }
+
+            // self-similar property: x -> (y -> x) = y -> (x -> y)    
+            // if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
+            //     if b_print {
+            //         eprint!("(Element at ({}, {}) needs to be greater than {} since {} <= {}.)",x,y,y,y,x);
+            //     }
+            //     return;
+            // }
 
             for t in 0..y {
                 if lalg_limpl[t][y] == n-1 && lalg_limpl[x][t] != n+1 && lalg_limpl[lalg_limpl[x][t]][e] != n-1 {
@@ -1870,13 +1889,14 @@ pub fn l_alg_gen_from_ord_short_time(pord: &Vec<Vec<usize>>, init_vector: &Vec<u
                 }
                 return;
             }
-                
-            if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
-                if b_print {
-                    eprint!("(Element at ({}, {}) needs to be greater than {} since {} <= {}.)",x,y,y,y,x);
-                }
-                return;
-            }
+
+            // self-similar property: x -> (y -> x) = y -> (x -> y)    
+            // if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
+            //     if b_print {
+            //         eprint!("(Element at ({}, {}) needs to be greater than {} since {} <= {}.)",x,y,y,y,x);
+            //     }
+            //     return;
+            // }
 
             for t in 0..y {
                 if lalg_limpl[t][y] == n-1 && lalg_limpl[x][t] != n+1 && lalg_limpl[lalg_limpl[x][t]][e] != n-1 {
@@ -1970,13 +1990,14 @@ pub fn l_alg_gen_from_ord_short_time_with_limit_old(time_limit: Duration, pord: 
                 }
                 return;
             }
-                
-            if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
-                if b_print {
-                    eprint!("(Element at ({}, {}) needs to be greater than {} since {} <= {}.)",x,y,y,y,x);
-                }
-                return;
-            }
+
+            // self-similar property: x -> (y -> x) = y -> (x -> y)    
+            // if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
+            //     if b_print {
+            //         eprint!("(Element at ({}, {}) needs to be greater than {} since {} <= {}.)",x,y,y,y,x);
+            //     }
+            //     return;
+            // }
 
             for t in 0..y {
                 if lalg_limpl[t][y] == n-1 && lalg_limpl[x][t] != n+1 && lalg_limpl[lalg_limpl[x][t]][e] != n-1 {
@@ -2070,13 +2091,14 @@ pub fn l_alg_gen_from_ord_short_time_with_limit_new(time_limit: Duration, pord: 
                 }
                 return;
             }
-                
-            if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
-                if b_print {
-                    eprint!("(Element at ({}, {}) needs to be greater than {} since {} <= {}.)",x,y,y,y,x);
-                }
-                return;
-            }
+
+            // self-similar property: x -> (y -> x) = y -> (x -> y)    
+            // if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
+            //     if b_print {
+            //         eprint!("(Element at ({}, {}) needs to be greater than {} since {} <= {}.)",x,y,y,y,x);
+            //     }
+            //     return;
+            // }
 
             for t in 0..y {
                 if lalg_limpl[t][y] == n-1 && lalg_limpl[x][t] != n+1 && lalg_limpl[lalg_limpl[x][t]][e] != n-1 {

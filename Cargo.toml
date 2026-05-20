@@ -121,6 +121,11 @@ path = "src/plan8-1_4.rs"
 name = "plan8-1728_1"
 path = "src/plan8-1728_1.rs"
 
+[[bin]]
+name = "lalg_test_cmd"
+path = "src/lalg_test_cmd.rs"
+
+
 
 
 [dependencies]
