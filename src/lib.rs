@@ -540,6 +540,7 @@ pub fn gen_all_lalgs_rec_short_iter_(iter_limit: usize, print_limit: usize, b_st
         eprintln!("Cur_progress: {limpl:?}");    
     }
     if *num_tested == iter_limit {
+        eprintln!("Terminating state: {limpl:?}");
         *b_stop = true;
         return;
     }
@@ -754,6 +755,7 @@ pub fn gen_all_lalgs_rec_short_time_with_limit(time_limit: Duration, b_stop: &mu
         eprintln!("Cur_progress: {limpl:?}");    
     }
     if from_time.elapsed() >= time_limit {
+        eprintln!("Terminating state: {limpl:?}");
         *b_stop = true;
         return;
     }

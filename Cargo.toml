@@ -107,26 +107,123 @@ path = "src/extract_pord.rs"
 
 [[bin]]
 name = "plan8-1_2"
-path = "src/plan8-1_2.rs"
+path = "src/plans/plan8-1_2.rs"
 
 [[bin]]
 name = "plan8-1_3"
-path = "src/plan8-1_3.rs"
+path = "src/plans/plan8-1_3.rs"
 
 [[bin]]
 name = "plan8-1_4"
-path = "src/plan8-1_4.rs"
+path = "src/plans/plan8-1_4.rs"
 
 [[bin]]
 name = "plan8-1728_1"
-path = "src/plan8-1728_1.rs"
+path = "src/plans/plan8-1728_1.rs"
+
+[[bin]]
+name = "plan8-1762_2"
+path = "src/plans/plan8-1762_2.rs"
+
+[[bin]]
+name = "plan8-1793_2"
+path = "src/plans/plan8-1793_2.rs"
+
+[[bin]]
+name = "plan8-1794_2"
+path = "src/plans/plan8-1794_2.rs"
+
+[[bin]]
+name = "plan8-1795_2"
+path = "src/plans/plan8-1795_2.rs"
+
+[[bin]]
+name = "plan8-1798_2"
+path = "src/plans/plan8-1798_2.rs"
+
+[[bin]]
+name = "plan8-1799_2"
+path = "src/plans/plan8-1799_2.rs"
+
+[[bin]]
+name = "plan8-1800_2"
+path = "src/plans/plan8-1800_2.rs"
+
+[[bin]]
+name = "plan8-1802_2"
+path = "src/plans/plan8-1802_2.rs"
+
+[[bin]]
+name = "plan8-1808_2"
+path = "src/plans/plan8-1808_2.rs"
+
+[[bin]]
+name = "plan8-1820_2"
+path = "src/plans/plan8-1820_2.rs"
+
+[[bin]]
+name = "plan8-1877_2"
+path = "src/plans/plan8-1877_2.rs"
+
+[[bin]]
+name = "plan8-1879_2"
+path = "src/plans/plan8-1879_2.rs"
+
+[[bin]]
+name = "plan8-1881_2"
+path = "src/plans/plan8-1881_2.rs"
+
+[[bin]]
+name = "plan8-1890_2"
+path = "src/plans/plan8-1890_2.rs"
+
+[[bin]]
+name = "plan8-1935_2"
+path = "src/plans/plan8-1935_2.rs"
 
 [[bin]]
 name = "lalg_test_cmd"
 path = "src/lalg_test_cmd.rs"
 
+[[bin]]
+name = "plan7-1_2"
+path = "src/plans/plan7-1_2.rs"
 
+[[bin]]
+name = "plan7-2_2"
+path = "src/plans/plan7-2_2.rs"
 
+[[bin]]
+name = "plan7-3_2"
+path = "src/plans/plan7-3_2.rs"
+
+[[bin]]
+name = "plan7-4_2"
+path = "src/plans/plan7-4_2.rs"
+
+[[bin]]
+name = "plan7-5_2"
+path = "src/plans/plan7-5_2.rs"
+
+[[bin]]
+name = "plan7-66_2"
+path = "src/plans/plan7-66_2.rs"
+
+[[bin]]
+name = "plan7-75_2"
+path = "src/plans/plan7-75_2.rs"
+
+[[bin]]
+name = "plan7-256_2"
+path = "src/plans/plan7-256_2.rs"
+
+[[bin]]
+name = "plan7-257_2"
+path = "src/plans/plan7-257_2.rs"
+
+[[bin]]
+name = "plan7-272_2"
+path = "src/plans/plan7-272_2.rs"
 
 [dependencies]
 bzip2 = "0.6.1"
