@@ -1487,7 +1487,7 @@ pub fn l_alg_gen_from_ord_new(pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>, 
             }
             if e == n-1 {
                 if b_print {
-                    eprint!("(Element at ({}, {}) cannot be equal to unit ({}).)",x,y,n-1);
+                    eprintln!("(Element at ({}, {}) cannot be equal to unit ({}).)",x,y,n-1);
                 }
                 return;
             }
@@ -1503,7 +1503,7 @@ pub fn l_alg_gen_from_ord_new(pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>, 
             for t in 0..y {
                 if lalg_limpl[t][y] == n-1 && lalg_limpl[x][t] != n+1 && lalg_limpl[lalg_limpl[x][t]][e] != n-1 {
                     if b_print {
-                        eprint!("(Element e={} at (x={}, y={}) needs to larger than {} since t={} <= y => x->t <= x->y.)", e, x, y, lalg_limpl[x][t], t);
+                        eprintln!("(Element e={} at (x={}, y={}) needs to larger than {} since t={} <= y => x->t <= x->y.)", e, x, y, lalg_limpl[x][t], t);
                     }
                     return;
                 }

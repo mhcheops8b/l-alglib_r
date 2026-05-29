@@ -122,6 +122,22 @@ name = "plan8-1728_1"
 path = "src/plans/plan8-1728_1.rs"
 
 [[bin]]
+name = "plan8-various"
+path = "src/plans/plan8-various.rs"
+
+[[bin]]
+name = "plan8-1733_2"
+path = "src/plans/plan8-1733_2.rs"
+
+[[bin]]
+name = "plan8-1744_2"
+path = "src/plans/plan8-1744_2.rs"
+
+[[bin]]
+name = "plan8-1745_2"
+path = "src/plans/plan8-1745_2.rs"
+
+[[bin]]
 name = "plan8-1762_2"
 path = "src/plans/plan8-1762_2.rs"
 
