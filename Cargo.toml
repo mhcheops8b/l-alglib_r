@@ -92,6 +92,9 @@ path = "src/gen_from_ord_file_multi_short_with_time_limit.rs"
 name = "gen_from_ord_file_multi_short_with_time_limit_new_pos"
 path = "src/gen_from_ord_file_multi_short_with_time_limit_new_pos.rs"
 
+[[bin]]
+name = "get_new_state"
+path = "src/get_new_state.rs"
 
 [[bin]]
 name = "gen_from_ord_static"

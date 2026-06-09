@@ -192,6 +192,21 @@ pub fn l_alg_is_filter(limpl: &[Vec<usize>], unit: usize, subset: &HashSet<usize
     true
 }
 
+pub fn l_alg_get_order(limpl: &[Vec<usize>]) -> Vec<Vec<usize>> {
+    let n = limpl.len();
+    let mut res = vec![vec![0usize;n];n];
+
+    for i in 0..n {
+        for j in 0..n {
+            if limpl[i][j] == n-1 {
+                res[i][j] = 1;
+            }
+        }
+    }
+    
+    res
+}
+
 pub fn l_alg_get_all_filters(limpl: &[Vec<usize>], unit: usize) {
     let n = limpl.len();
 
