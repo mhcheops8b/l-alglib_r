@@ -4,7 +4,7 @@ use itertools::{Itertools};
 
 
 fn main() {
-    main_1_1();
+    // main_1_1();
     // main_2_1();
     // main_3_1();
     // main_4_1();
@@ -155,6 +155,7 @@ fn main() {
     // main_1665_1();
     // main_1681_1();
     // main_1728_1();
+    main_1728_2()
     // main_1729_1();
     // main_1730_1()
     // main_1731_1();
@@ -2981,40 +2982,55 @@ fn main_1728_1() {
 }
 
 fn main_1728_2() {
-    // 
-    let num_pord = 1728;
-    // 
-    let pord = vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
-                                        
-    // let pp = (0usize..pord.len()).collect::<Vec<_>>();
-    // let jj:Vec<_> = pp.into_iter().permutations(pord.len())
-    //         .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe))
-    //         .filter(|pe| pe[1]==1 && pe[2]==2 && pe[3]==3 && pe[4]==4)
-    //         .collect();
-
-    // eprintln!("{jj:?}");
-    // return;
-    
-    
-    //    
-    let fixed_vec: Vec<(usize, usize)> = vec![(1,0), (1,2), (1,3), (1,4), (1,5), (1,6), (2,0), (2,1), (2,3), (2,4), (2,5), (2,6)];
-    // 
-    fn fix_pred(pe: &[usize]) -> bool {
-        std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2]) == 2
-    }
-    
-    // if std::env::args().len() < 2 {
-    //     println!("Usage: {} <init_vector>", std::env::args().next().unwrap());
-    //     return;
-
-    // }
-    let mut from_vec = Vec::<usize>::new();
-    if std::env::args().len() == 2 {
-        from_vec = std::env::args().nth(1).unwrap().split(",").map(|v| v.trim().parse::<usize>().unwrap()).collect();
-    }
-
-    gen_plans(&pord, num_pord, &fixed_vec, fix_pred, &from_vec);
+    gen_plans_main(
+        //
+        &vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]],
+        //
+        1728,
+        //
+        &vec![(1,0), (1,2), (1,3), (1,4), (1,5), (1,6), (2,0), (2,1), (2,3), (2,4), (2,5), (2,6)],
+        //
+        |pe| pe[0]==0 
+        && std::cmp::min(pe[1], pe[2]) == 1 && std::cmp::max(pe[1], pe[2]) == 2 
+    )
 }
+
+
+// fn main_1728_2() {
+//     // 
+//     let num_pord = 1728;
+//     // 
+//     let pord = vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+                                        
+//     // let pp = (0usize..pord.len()).collect::<Vec<_>>();
+//     // let jj:Vec<_> = pp.into_iter().permutations(pord.len())
+//     //         .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe))
+//     //         .filter(|pe| pe[1]==1 && pe[2]==2 && pe[3]==3 && pe[4]==4)
+//     //         .collect();
+
+//     // eprintln!("{jj:?}");
+//     // return;
+    
+    
+//     //    
+//     let fixed_vec: Vec<(usize, usize)> = vec![(1,0), (1,2), (1,3), (1,4), (1,5), (1,6), (2,0), (2,1), (2,3), (2,4), (2,5), (2,6)];
+//     // 
+//     fn fix_pred(pe: &[usize]) -> bool {
+//         std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2]) == 2
+//     }
+    
+//     // if std::env::args().len() < 2 {
+//     //     println!("Usage: {} <init_vector>", std::env::args().next().unwrap());
+//     //     return;
+
+//     // }
+//     let mut from_vec = Vec::<usize>::new();
+//     if std::env::args().len() == 2 {
+//         from_vec = std::env::args().nth(1).unwrap().split(",").map(|v| v.trim().parse::<usize>().unwrap()).collect();
+//     }
+
+//     gen_plans(&pord, num_pord, &fixed_vec, fix_pred, &from_vec);
+// }
 
 fn main_1729_1() {
     // 
