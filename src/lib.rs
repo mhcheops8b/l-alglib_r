@@ -227,12 +227,15 @@ pub fn l_alg_get_all_filters(limpl: &[Vec<usize>], unit: usize) {
     }
 }
 
+// unit = m-1!
 pub fn l_alg_test_ax4_partial_xy(limpl: &[Vec<usize>], x: usize, y: usize, b_print: bool) -> bool {
     let m = limpl.len();
 
     if limpl[y][x] != m+1 {
-        for z in 0..m {
-            if limpl[x][z] != m+1 && limpl[y][z] != m+1 
+        for z in 0..m-1 {
+
+            if x!=z && y!=z 
+            && limpl[x][z] != m+1 && limpl[y][z] != m+1 
             && limpl[limpl[x][y]][limpl[x][z]] != m+1
             && limpl[limpl[y][x]][limpl[y][z]] != m+1
             && limpl[limpl[x][y]][limpl[x][z]] != limpl[limpl[y][x]][limpl[y][z]] {
@@ -240,8 +243,9 @@ pub fn l_alg_test_ax4_partial_xy(limpl: &[Vec<usize>], x: usize, y: usize, b_pri
             }
         }
     }
-    for z in 0..m {
-        if limpl[x][z] == m+1 || limpl[z][x] == m+1 || limpl[z][y] == m+1 {
+    for z in 0..m-1 {
+
+        if z==x || z==y || limpl[x][z] == m+1 || limpl[z][x] == m+1 || limpl[z][y] == m+1 {
             continue;
         }
 
@@ -251,10 +255,10 @@ pub fn l_alg_test_ax4_partial_xy(limpl: &[Vec<usize>], x: usize, y: usize, b_pri
             return false;
            }
     }
-    for s in 0..m {
-        for t in 0..m {
+    for s in 0..m-1 {
+        for t in 0..m-1 {
             if limpl[s][t] == x {
-                for u in 0..m {
+                for u in 0..m-1 {
                     if limpl[s][u] == y {
                         if limpl[t][s] != m+1 && limpl[t][u] != m+1 &&
                            limpl[limpl[t][s]][limpl[t][u]] != m+1 && 
@@ -271,20 +275,27 @@ pub fn l_alg_test_ax4_partial_xy(limpl: &[Vec<usize>], x: usize, y: usize, b_pri
     true
 }
 
-
+// unit = m-1
 pub fn l_alg_test_ax4_partial(limpl: &[Vec<usize>], b_print: bool) -> bool {
     let m = limpl.len();
 
     // test ax4 partial
-    for i in 0..m {
-        for j in 0..m {
+    for i in 0..m-1 {
+        for j in 0..m-1 {
+            if i==j {
+                continue;
+            }
+
             if limpl[i][j] == m+1 {
                 continue;
             }
             if limpl[j][i] == m+1 {
                 continue;
             }
-            for k in 0..m {
+            for k in 0..m-1 {
+                if i==k || j==k {
+                    continue;
+                }
                 if limpl[i][k] == m+1 {
                     continue;
                 }
