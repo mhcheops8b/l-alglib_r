@@ -4,14 +4,19 @@ use itertools::{Itertools};
 
 
 fn main() {
+    // tst_iso_fun();
     // main_1_1();
     // main_2_1();
-    main_2_1_new();
+    // main_2_1_new();
+    // main_2_1_new2();
     // main_2_2();
     // main_2_2_new();
+    // main_2_2_new2();
     // main_2_3();
     // main_3_1();
+    // main_3_1_new2();
     // main_3_2();
+    main_3_2_new2();
     // main_4_1();
     // main_5_1();
     // main_6_1();
@@ -219,6 +224,28 @@ fn gen_plans_new(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize
     eprintln!("Finished.");
 }
 
+fn gen_plans_new2(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize,usize)>, init_vector: &Vec<usize>) {
+    let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(pord.len());
+    let mut positions = Vec::<(usize,usize)>::new();
+
+    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1);
+    l_alglib::l_alg_init_get_positions_old(&pord, &mut positions);
+    
+    for i in 0..init_vector.len() {
+        if l_alglib::l_alg_test_init_value(fixed_vec[i].0, fixed_vec[i].1, init_vector[i], &lalg_limpl) {
+            lalg_limpl[fixed_vec[i].0][fixed_vec[i].1] = init_vector[i];
+        }
+        else {
+            return;
+        }
+    }
+    
+    let mut num_iter =0usize;
+    l_alglib::get_plan_fixed_rec_new2(init_vector.len(), &mut num_iter, pord.len(), &pord, num_pord, fixed_vec,&positions, &mut lalg_limpl, &l_alglib::OutputType::List);
+    // print_vec(&mut std::io::stderr(), &get_iter(fixed_vec.len(), &fixed_vec, &lalg_limpl));
+    eprintln!("Finished.");
+}
+
 fn gen_plans_main(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize,usize)>, fixed_predicate: fn(&[usize])->bool) {
 
     let mut from_vec = Vec::<usize>::new();
@@ -239,12 +266,61 @@ fn gen_plans_main_new(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(
     gen_plans_new(&pord, num_pord, &fixed_vec, fixed_predicate, &from_vec);
 }
 
+fn gen_plans_main_new2(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize,usize)>) {
+
+    let mut from_vec = Vec::<usize>::new();
+    if std::env::args().len() == 2 {
+        from_vec = std::env::args().nth(1).unwrap().split(",").map(|v| v.trim().parse::<usize>().unwrap()).collect();
+    }
+
+    gen_plans_new2(&pord, num_pord, &fixed_vec, &from_vec);
+}
+
 //  1: 
 //  2: 
 //  3: 
 //  4: 
 //  5: 
 //  6: 
+
+fn tst_iso_fun() {
+    let mut hh = std::collections::HashMap::<(usize,usize),usize>::new();
+    // hh.insert((0,1),0);
+    // hh.insert((0,2),0);
+    // hh.insert((0,3),0);
+    // hh.insert((0,4),1);
+    // hh.insert((0,5),0);
+    
+    // hh.insert((0,1),0);
+    // hh.insert((0,2),0);
+    // hh.insert((0,3),0);
+    // hh.insert((0,4),0);
+    // hh.insert((0,5),1);
+    // hh.insert((1,0),0);
+    // hh.insert((1,2),0);
+    // hh.insert((1,3),0);
+    // hh.insert((1,4),0);
+    // hh.insert((1,5),1);
+
+    hh.insert((0,1),0);
+    hh.insert((0,2),0);
+    hh.insert((0,3),0);
+    hh.insert((0,4),0);
+    hh.insert((0,5),2);
+    hh.insert((1,0),0);
+    hh.insert((1,2),0);
+    hh.insert((1,3),0);
+    hh.insert((1,4),0);
+    hh.insert((1,5),1);
+
+    
+    
+    let pord = vec![vec![1usize, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+    let pp = (0usize..pord.len()).collect::<Vec<_>>();
+    let jj = l_alglib::perm_iter_get_images_new2(pp.into_iter().permutations(pord.len())
+            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+    eprintln!("{jj}");
+}
 
 fn main_1_1() {
     rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
@@ -321,6 +397,19 @@ fn main_2_1_new() {
     )
 }
 
+fn main_2_1_new2() {
+    // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
+    // return;
+    gen_plans_main_new2(
+        // 
+        &vec![vec![1, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]],
+        //
+        2,
+        // 
+        &vec![(0,1), (0,2), (0,3), (0,4), (0,5)]
+    )
+}
+
 fn main_2_2_new() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -340,6 +429,20 @@ fn main_2_2_new() {
 
     )
 }
+
+fn main_2_2_new2() {
+    // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
+    // return;
+    gen_plans_main_new2(
+        // 
+        &vec![vec![1, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]],
+        //
+        2,
+        // 
+        &vec![(0,1), (0,2), (0,3), (0,4), (0,5), (1,0), (1,2), (1,3), (1,4), (1,5)]
+    )
+}
+
 
 fn main_2_3() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
@@ -379,6 +482,20 @@ fn main_3_1() {
     )
 }
 
+fn main_3_1_new2() {
+    // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
+    // return;
+    gen_plans_main_new2(
+        // 
+        &vec![vec![1, 0, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]],
+        //
+        3,
+        // 
+        &vec![(0,1), (0,2), (0,3), (0,4), (0,6)]
+    )
+}
+
+
 fn main_3_2() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -397,6 +514,20 @@ fn main_3_2() {
 
     )
 }
+
+fn main_3_2_new2() {
+    // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
+    // return;
+    gen_plans_main_new2(
+        // 
+        &vec![vec![1, 0, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]],
+        //
+        3,
+        // 
+        &vec![(0,1), (0,2), (0,3), (0,4), (0,6), (1,0), (1,2), (1,3), (1,4), (1,6)]          
+    )
+}
+
 
 fn main_4_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 1, 1, 1], vec![0, 1, 0, 0, 0, 1, 1, 1], vec![0, 0, 1, 0, 0, 1, 1, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
@@ -3490,4 +3621,5 @@ fn main_1_2() {
 //         l_alglib::get_plan_continue_rec(&mut from_vec, &mut num_iter, &mut ts, 0, pord.len(), &pord, num_pord, &fixed_vec,&positions, ff, &mut lalg_limpl, &l_alglib::OutputType::List);
 //     }
 // }
+
 
