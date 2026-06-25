@@ -1128,12 +1128,28 @@ pub fn pord_is_canonical(pord: &[Vec<usize>]) -> bool {
 }
 
 // canonical preserve e_i < e_j iff i < j
-pub fn pord_perm_preserve_ord(pord: &[Vec<usize>], iso_perm_vec: &[usize]) -> bool {
+pub fn pord_perm_canonical_preserve_ord(pord: &[Vec<usize>], iso_perm_vec: &[usize]) -> bool {
         let n = pord.len();
         
         for idx1 in 0..n {
             for idx2 in (idx1+1)..n {                
                 if pord[idx1][idx2] == 1 && iso_perm_vec[idx1] > iso_perm_vec[idx2] {
+                    return false;
+                }
+            }
+        }
+        true
+}
+
+// isomorphism iso_perm_vec generates the same order pord
+// a<=b, iff iso_perm_vec[a]<=iso_perm_vec[b]
+// we assume canonical
+ pub fn pord_perm_preserve_ord(pord: &[Vec<usize>], iso_perm_vec: &[usize]) -> bool {
+        let n = pord.len();
+        
+        for idx1 in 0..n {
+            for idx2 in 0..n {                
+                if idx1!=idx2 && pord[idx1][idx2] == 1 && pord[iso_perm_vec[idx1]][iso_perm_vec[idx2]] == 0 {
                     return false;
                 }
             }
@@ -2330,7 +2346,7 @@ pub fn get_plan_fixed_rec(lev:usize, num_iter: &mut usize, n: usize, pord: &Vec<
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
         let jj = perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| filter_fun(pe))
-            .filter(|pe| pord_perm_preserve_ord(&pord, &pe)), &hh);
+            .filter(|pe| pord_perm_canonical_preserve_ord(&pord, &pe)), &hh);
 
         let mut b_ok = true;
         for (idx, v) in fixed_vec.iter().enumerate() {
@@ -2433,7 +2449,7 @@ pub fn get_plan_fixed_rec_new(lev:usize, num_iter: &mut usize, n: usize, pord: &
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
         let jj = perm_iter_get_images_new(pp.into_iter().permutations(pord.len())
             .filter(|pe| filter_fun(pe))
-            .filter(|pe| pord_perm_preserve_ord(&pord, &pe)), &hh);
+            .filter(|pe| pord_perm_canonical_preserve_ord(&pord, &pe)), &hh);
 
         let mut b_ok = true;
         for (idx, v) in fixed_vec.iter().enumerate() {
@@ -2535,7 +2551,9 @@ pub fn get_plan_fixed_rec_new2(lev:usize, num_iter: &mut usize, n: usize, pord: 
 
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
         let has_strict_prefix = perm_iter_get_images_new2(pp.into_iter().permutations(pord.len())            
-            .filter(|pe| pord_perm_preserve_ord(&pord, &pe)), &hh);
+            .filter(|pe| pord_perm_preserve_ord(&pord, &pe))
+            // .filter(|pe| pord_perm_canonical_preserve_ord(&pord, &pe))
+            , &hh);
 
         // let mut b_ok = true;
         // for (idx, v) in fixed_vec.iter().enumerate() {
@@ -2658,7 +2676,7 @@ pub fn get_plan_continue_rec(from_vec: &mut Vec<usize>, iter_cnt: &mut usize, ti
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
         let jj = perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| filter_fun(pe))
-            .filter(|pe| pord_perm_preserve_ord(&pord, &pe)), &hh);
+            .filter(|pe| pord_perm_canonical_preserve_ord(&pord, &pe)), &hh);
 
         let mut b_ok = true;
         for (idx, v) in fixed_vec.iter().enumerate() {

@@ -71,7 +71,7 @@ fn main_1_1() {
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
         let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0)
-            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+            .filter(|pe| l_alglib::pord_perm_canonical_preserve_ord(&pord, &pe)), &hh);
 
         if jj[0] == var {
             if l_alglib::l_alg_test_init_vector_with_positions(&pord, &fixed_vec, &var).is_ok() {
@@ -375,7 +375,7 @@ fn main_2_1() {
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
         let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0)
-            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+            .filter(|pe| l_alglib::pord_perm_canonical_preserve_ord(&pord, &pe)), &hh);
 
         if jj[0] == var {
             if l_alglib::l_alg_test_init_vector_with_positions(&pord, &fixed_vec, &var).is_ok() {
@@ -560,7 +560,7 @@ fn main_3_1() {
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
         let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| (pe[0]==0 && pe[1]==1 || pe[0]==1 && pe[1]==0) && pe[5]==5)
-            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+            .filter(|pe| l_alglib::pord_perm_canonical_preserve_ord(&pord, &pe)), &hh);
 
         if jj[0] == var {
             if l_alglib::l_alg_test_init_vector_with_positions(&pord, &fixed_vec, &var).is_ok() {
@@ -702,7 +702,7 @@ fn main_4_1() {
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
         let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0)
-            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+            .filter(|pe| l_alglib::pord_perm_canonical_preserve_ord(&pord, &pe)), &hh);
 
         if jj[0] == var {
             if l_alglib::l_alg_test_init_vector_with_positions(&pord, &fixed_vec, &var).is_ok() {
@@ -840,7 +840,7 @@ fn main_5_1() {
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
         let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0)
-            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+            .filter(|pe| l_alglib::pord_perm_canonical_preserve_ord(&pord, &pe)), &hh);
 
         if jj[0] == var {
             if l_alglib::l_alg_test_init_vector_with_positions(&pord, &fixed_vec, &var).is_ok() {
@@ -980,7 +980,7 @@ fn main_17_1() {
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
         let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0 && pe[3] == 3)
-            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+            .filter(|pe| l_alglib::pord_perm_canonical_preserve_ord(&pord, &pe)), &hh);
 
         if jj[0] == var {
             if l_alglib::l_alg_test_init_vector_with_positions(&pord, &fixed_vec, &var).is_ok() {
@@ -1088,7 +1088,7 @@ fn main_338_1() {
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
         let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0 && pe[1] == 1)
-            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+            .filter(|pe| l_alglib::pord_perm_canonical_preserve_ord(&pord, &pe)), &hh);
 
         if jj[0] == var {
             if l_alglib::l_alg_test_init_vector(&pord, &var).is_ok() {
@@ -1182,7 +1182,7 @@ fn main_357_1() {
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
         let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0 && pe[1] == 1)
-            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+            .filter(|pe| l_alglib::pord_perm_canonical_preserve_ord(&pord, &pe)), &hh);
 
         if jj[0] == var {
             if l_alglib::l_alg_test_init_vector(&pord, &var).is_ok() {
@@ -1277,7 +1277,7 @@ fn main_362_1() {
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
         let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0 && pe[1] == 1)
-            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+            .filter(|pe| l_alglib::pord_perm_canonical_preserve_ord(&pord, &pe)), &hh);
 
         if jj[0] == var {
             if l_alglib::l_alg_test_init_vector(&pord, &var).is_ok() {
@@ -1374,7 +1374,7 @@ fn main_369_1() {
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
         let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0 && pe[1] == 1 && pe[6] == 6)
-            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+            .filter(|pe| l_alglib::pord_perm_canonical_preserve_ord(&pord, &pe)), &hh);
 
         if jj[0] == var {
             num_cls+=1;
@@ -1470,7 +1470,7 @@ fn main_369_1() {
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
         let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0 && pe[1] == 1 && pe[4]==4 && (pe[5] == 5 && pe[6]==6 || pe[5]==6 && pe[6]==5))
-            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+            .filter(|pe| l_alglib::pord_perm_canonical_preserve_ord(&pord, &pe)), &hh);
 
         if jj[0] == var {
             if l_alglib::l_alg_test_init_vector(&pord, &var).is_ok() {
@@ -1582,7 +1582,7 @@ fn main_369_1() {
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
         let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0 && pe[1] == 1 && pe[5] == 5 && pe[6]==6)
-            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+            .filter(|pe| l_alglib::pord_perm_canonical_preserve_ord(&pord, &pe)), &hh);
 
         if jj[0] == var {
             if l_alglib::l_alg_test_init_vector(&pord, &var).is_ok() {
@@ -1692,7 +1692,7 @@ fn main_376_1() {
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
         let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0 && pe[1] == 1 && pe[5] == 5 && pe[6]==6)
-            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+            .filter(|pe| l_alglib::pord_perm_canonical_preserve_ord(&pord, &pe)), &hh);
 
         if jj[0] == var {
             num_cls+=1;
@@ -1787,7 +1787,7 @@ fn main_6_1() {
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
         let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0 && pe[4] == 4 && (pe[5]==5 && pe[6]==6 || pe[5]==6 && pe[6]==5))
-            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+            .filter(|pe| l_alglib::pord_perm_canonical_preserve_ord(&pord, &pe)), &hh);
 
         if jj[0] == var {
             num_cls+=1;
@@ -1861,7 +1861,7 @@ fn main_10_1() {
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
         let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0 && pe[6]==6 && (pe[4]==4 && pe[5]==5 || pe[4]==5 && pe[5]==4))
-            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+            .filter(|pe| l_alglib::pord_perm_canonical_preserve_ord(&pord, &pe)), &hh);
 
         if jj[0] == var {
             num_cls+=1;
@@ -2647,7 +2647,7 @@ vec![5,6,6,5]
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
         let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0 && pe[1]==1 && pe[4]==4)
-            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+            .filter(|pe| l_alglib::pord_perm_canonical_preserve_ord(&pord, &pe)), &hh);
 
         // println!("jj: {:?}", jj[0]);
         if jj[0][0..4] == fixed_vec && jj[0][4..9] == var {
@@ -2725,7 +2725,7 @@ vec![5,6,6,5]
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
         let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0 && pe[1]==1 && pe[4]==4)
-            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+            .filter(|pe| l_alglib::pord_perm_canonical_preserve_ord(&pord, &pe)), &hh);
 
         if jj[0] == var {
             num_cls+=1;
@@ -2802,7 +2802,7 @@ fn main_408_2() {
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
         let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[0]==0 && pe[1]==1 && pe[4]==4)
-            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+            .filter(|pe| l_alglib::pord_perm_canonical_preserve_ord(&pord, &pe)), &hh);
 
         if jj[0] == var {
             num_cls+=1;
@@ -2873,7 +2873,7 @@ fn main1728() {
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
         let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[1]==1)
-            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+            .filter(|pe| l_alglib::pord_perm_canonical_preserve_ord(&pord, &pe)), &hh);
 
         if jj[0] == var {
             num_cls+=1;
@@ -2999,7 +2999,7 @@ COMMANDS=(
         let pp = (0usize..pord.len()).collect::<Vec<_>>();
         let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(pord.len())
             .filter(|pe| pe[1]==1 && pe[2] ==2 || pe[1]==2 && pe[2] == 1)
-            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+            .filter(|pe| l_alglib::pord_perm_canonical_preserve_ord(&pord, &pe)), &hh);
         // for perm in pp.into_iter().permutations(pord.len())
         //     .filter(|pe| pe[0]==0 && pe[1]==1 && pe[4]==4 && l_alglib::pord_perm_preserve_ord(&pord, &pe)) {
         //     println!("{perm:?}");
@@ -3110,7 +3110,7 @@ done
         hh.insert((0,5), var[4]);
         
         
-        let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(7).filter(|pe| pe[0]==0 && l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+        let jj = l_alglib::perm_iter_get_images(pp.into_iter().permutations(7).filter(|pe| pe[0]==0 && l_alglib::pord_perm_canonical_preserve_ord(&pord, &pe)), &hh);
         
         if jj[0] == var {
             num_cls+=1;

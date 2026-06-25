@@ -318,7 +318,7 @@ fn tst_iso_fun() {
     let pord = vec![vec![1usize, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
     let pp = (0usize..pord.len()).collect::<Vec<_>>();
     let jj = l_alglib::perm_iter_get_images_new2(pp.into_iter().permutations(pord.len())
-            .filter(|pe| l_alglib::pord_perm_preserve_ord(&pord, &pe)), &hh);
+            .filter(|pe| l_alglib::pord_perm_canonical_preserve_ord(&pord, &pe)), &hh);
     eprintln!("{jj}");
 }
 
