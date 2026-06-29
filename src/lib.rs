@@ -1098,6 +1098,105 @@ pub fn l_alg_get_repr(limpl: &[Vec<usize>], b_minimal: bool, b_canonical: bool) 
     limpl_repr
 }
 
+pub fn l_alg_get_repr_with_orig_ord(limpl: &[Vec<usize>], b_minimal: bool) ->Vec<Vec<usize>> {
+    let n = limpl.len();
+    let lalg_unit = limpl[0][0];
+
+    let mut base_perm_vec = Vec::<usize>::new();
+    let mut iso_perm_vec= Vec::<usize>::new();
+    //let mut limpl_repr = Vec::<Vec<usize>>::new();
+
+    let mut limpl_repr = limpl.to_owned();//clone();
+    // eprintln!("{:?}", limpl);
+    for i in 0..n {
+        if i != lalg_unit {
+            base_perm_vec.push(i);
+        }
+        iso_perm_vec.push(i);
+    }
+
+    for perm in base_perm_vec.iter().permutations(n-1) {
+        for j in 0..n-1 {
+            iso_perm_vec[base_perm_vec[j]] = *perm[j];
+        }
+        
+        if !l_alg_perm_preserve_original_ord(limpl, &iso_perm_vec) {
+            continue;
+        }
+    
+        // eprintln!("{perm:?}");
+        // eprintln!("{iso_perm_vec:?}");
+        let limpl_img = l_alg_isomorphic_image(limpl, lalg_unit, &iso_perm_vec).0;
+
+        if b_minimal {
+            if l_alg_cmp_is_strictly_less(&limpl_img, &limpl_repr) {
+                limpl_repr = limpl_img;
+            }
+        }
+        else {
+            if l_alg_cmp_is_strictly_greater(&limpl_img, &limpl_repr) {
+                limpl_repr = limpl_img;
+            }
+        }
+    }
+
+    limpl_repr
+}
+
+pub fn l_alg_get_repr_with_target_ord(limpl: &[Vec<usize>], target_ord: &[Vec<usize>], b_minimal: bool) -> Option<Vec<Vec<usize>>> {
+    let n = limpl.len();
+    let lalg_unit = limpl[0][0];
+
+    let mut base_perm_vec = Vec::<usize>::new();
+    let mut iso_perm_vec= Vec::<usize>::new();
+    //let mut limpl_repr = Vec::<Vec<usize>>::new();
+
+    let mut limpl_repr = Vec::<Vec<usize>>::new(); //limpl.to_owned();//clone();
+    let mut b_found = false; // found first representation with target ord
+    // eprintln!("{:?}", limpl);
+    for i in 0..n {
+        if i != lalg_unit {
+            base_perm_vec.push(i);
+        }
+        iso_perm_vec.push(i);
+    }
+
+    for perm in base_perm_vec.iter().permutations(n-1) {
+        for j in 0..n-1 {
+            iso_perm_vec[base_perm_vec[j]] = *perm[j];
+        }
+        
+        let limpl_img = l_alg_isomorphic_image(limpl, lalg_unit, &iso_perm_vec).0;
+        if l_alg_get_order(&limpl_img) == target_ord {
+            if !b_found {
+                b_found = true;
+                limpl_repr = limpl_img;
+            }
+            else {
+                if b_minimal {
+                    if l_alg_cmp_is_strictly_less(&limpl_img, &limpl_repr) {
+                        limpl_repr = limpl_img;
+                    }
+                }
+                else {
+                    if l_alg_cmp_is_strictly_greater(&limpl_img, &limpl_repr) {
+                        limpl_repr = limpl_img;
+                    }
+                }
+            }
+        }
+
+    }
+
+    if b_found {
+        Some(limpl_repr)
+    }
+    else {
+        None
+    }
+}
+
+
 // canonical preserve e_i < e_j iff i < j
 pub fn l_alg_perm_preserve_ord(limpl: &[Vec<usize>], iso_perm_vec: &[usize]) -> bool {
         let n = limpl.len();
@@ -1112,6 +1211,29 @@ pub fn l_alg_perm_preserve_ord(limpl: &[Vec<usize>], iso_perm_vec: &[usize]) -> 
         }
         true
 }
+
+pub fn l_alg_perm_preserve_original_ord(limpl: &[Vec<usize>], iso_perm_vec: &[usize]) -> bool {
+        let n = limpl.len();
+        let lalg_unit = limpl[0][0];
+
+        for idx1 in 0..n {
+            if idx1 == lalg_unit {
+                continue;
+            }
+
+            for idx2 in 0..n {
+                if idx2 == lalg_unit || idx1 == idx2 {
+                    continue;
+                }                
+                
+                if limpl[idx1][idx2] == lalg_unit && limpl[iso_perm_vec[idx1]][iso_perm_vec[idx2]] != lalg_unit {
+                    return false
+                }
+            }
+        }
+        true
+}
+
 
 // canonical preserve e_i < e_j iff i < j
 pub fn pord_is_canonical(pord: &[Vec<usize>]) -> bool {
