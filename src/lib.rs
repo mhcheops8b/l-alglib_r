@@ -2905,3 +2905,179 @@ pub fn transform_init_vector(n: usize, from_positions: &Vec<(usize,usize)>, to_p
     }
     trf_init_vector
 }
+
+fn all_subsets(yy:&Vec<usize>) -> Vec<Vec<usize>> {
+    let mut res = Vec::<Vec<usize>>::new();
+    
+    for i in 0..1usize<<yy.len() {
+        let mut cs = Vec::<usize>::new();
+        for j in 0..yy.len() {
+            if i & (1<<j) != 0 {
+                cs.push(yy[j]);
+            }
+        }
+        
+        // println!("{}", i);
+        res.push(cs);
+    }
+    res
+}
+
+fn all_subsets_with_minimal_element(sorted_vec:&Vec<usize>) -> Vec<Vec<usize>> {
+    let mut res = Vec::<Vec<usize>>::new();
+    
+    for i in 1..1usize<<sorted_vec.len() {
+        let mut cs = Vec::<usize>::new();
+        if i & 1 == 0 {
+            continue;
+        }
+        for j in 0..sorted_vec.len() {
+            if i & (1<<j) != 0 {
+                cs.push(sorted_vec[j]);
+            }
+        }
+        
+        // println!("{}", i);
+        res.push(cs);
+    }
+    res
+}
+
+fn releq_from_decomp(decomp: &Vec<Vec<usize>>) -> Vec<Vec<usize>>{
+    let n = decomp.iter().flatten().collect::<Vec<_>>().len();
+    let mut res = vec![vec![0usize;n];n];
+
+    for cls in decomp {
+        for e in cls {
+            for f in cls {
+                res[*e][*f] = 1;
+            }
+        }
+    }
+
+    // println!("{:?}", res);
+    res
+}
+
+
+fn gen_decomp(mset: HashSet<usize>) -> Vec<Vec<Vec<usize>>> {
+    let mut part_decomp = Vec::<Vec<usize>>::new();
+    let mut all_decomps = Vec::<Vec<Vec<usize>>>::new();
+    gen_decomp_rec(mset, &mut part_decomp, &mut all_decomps);
+    all_decomps
+}
+
+fn gen_releq2(mset: HashSet<usize>) -> Vec<Vec<Vec<usize>>> {
+    let mut part_decomp = Vec::<Vec<usize>>::new();
+    let mut all_decomps = Vec::<Vec<Vec<usize>>>::new();
+    gen_decomp_rec(mset, &mut part_decomp, &mut all_decomps);
+    let mut all_releq = Vec::<Vec<Vec<usize>>>::new();
+    for decomp in all_decomps {
+        all_releq.push(releq_from_decomp(&decomp));
+    }
+    all_releq
+}
+
+fn gen_releq(mset: HashSet<usize>) -> Vec<Vec<Vec<usize>>> {
+    gen_decomp(mset).iter().map(|dec| releq_from_decomp(dec)).collect()
+}
+
+
+fn gen_decomp_rec(mset: HashSet<usize>, part_decomp: &mut Vec<Vec<usize>>, all_decomps: &mut Vec<Vec<Vec<usize>>>) {
+    // println!("MSET = {:?}", mset);
+
+    let mut tmpvec: Vec<usize> = mset.clone().into_iter().collect();//::<Vec<_>>(); //.sort();
+    tmpvec.sort();
+
+    if tmpvec.len() == 0 {
+        // println!("decomp: {:?}", part_decomp);
+        let releq = releq_from_decomp(&part_decomp);
+        // println!("rel_eq: {:?}", releq);
+        // all_decomps.push(releq);
+        all_decomps.push(part_decomp.clone());
+    }
+    else {
+        for t in all_subsets_with_minimal_element(&tmpvec) {
+            // println!("TT: {:?}", t);
+            let mut tt=mset.clone();
+            for e in &t {
+                tt.remove(&e);
+            }
+            // println!("Aft-rem TT: {:?}", tt);
+
+            let mut remvec:Vec<usize> = tt.into_iter().collect();
+            remvec.sort();
+            let jj:HashSet<usize> = HashSet::from_iter(remvec.into_iter());
+            // println!("JJ: {:?}", jj);
+            part_decomp.push(t);
+            gen_decomp_rec(jj, part_decomp, all_decomps);
+            part_decomp.pop();
+        }
+    }
+    // println!("{:?}", tmpvec);
+    // for i in 
+    
+}
+
+fn is_decomp_congruence(decomp: &Vec<Vec<usize>>, binop: &Vec<Vec<usize>>) -> bool {
+    let n = decomp.iter().flatten().collect::<Vec<_>>().len();
+    let mut cls_map = vec![0usize;n];
+
+    for (cls_idx, cls) in decomp.iter().enumerate() {
+        for e in cls {
+            cls_map[*e] = cls_idx;
+        }
+    }
+
+    // println!("DBG(cls_map): {:?}", cls_map);
+
+    let cls_n = decomp.len();
+    for cls_i in 0..cls_n {
+        for cls_j in 0..cls_n {
+            let mut cls_idxs = HashSet::<usize>::new();
+            for e in decomp[cls_i].iter() {
+                for f in decomp[cls_j].iter() {
+                    cls_idxs.insert(cls_map[binop[*e][*f]]);
+                }
+            }
+            if cls_idxs.len() != 1 {
+                // eprintln!("Problem cls_{cls_i} = {:?} and cls_{cls_j} = {:?} : outcomes belong to classes {:?}", decomp[cls_i], decomp[cls_j], cls_idxs);
+                return false;
+            }
+        }
+    }
+    
+    true
+}
+
+fn is_releq_congruence(releq: &Vec<Vec<usize>>, binop: &Vec<Vec<usize>>) -> bool {
+    let n = releq.len();
+
+    for i in 0..n {
+        for j in 0..n {
+            for k in 0..n {
+                if releq[i][j] == 1 && 
+                   (releq[binop[i][k]][binop[j][k]] == 0 || releq[binop[k][i]][binop[k][j]] == 0) {
+                    return false;
+                   }
+
+            }
+        }
+    }
+    true
+}
+
+// use itertools::Itertools;
+
+// fn subsets<T: Clone>(items: Vec<T>) -> Vec<Vec<T>> {
+//     (0..=items.len())
+//         .map(|count| items.clone().into_iter().combinations(count))
+//         .flatten()
+//         .collect()
+// }
+
+// fn main() {
+//     // for example ...
+//     let it = subsets(vec![12, 24, 36]);
+//     println!("{:?}", it);
+// }

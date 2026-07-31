@@ -105,6 +105,11 @@ name = "get_repr"
 path = "src/get_repr.rs"
 
 [[bin]]
+name = "get_repr_preserve_ord"
+path = "src/get_repr_preserve_ord.rs"
+
+
+[[bin]]
 name = "extract_pord"
 path = "src/extract_pord.rs"
 
