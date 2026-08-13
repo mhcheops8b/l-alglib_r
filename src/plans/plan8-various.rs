@@ -262,27 +262,27 @@ fn gen_plans_new(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize
     eprintln!("Finished.");
 }
 
-fn gen_plans_new2(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize,usize)>, init_vector: &Vec<usize>) {
-    let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(pord.len());
-    let mut positions = Vec::<(usize,usize)>::new();
+// fn gen_plans_new2(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize,usize)>, init_vector: &Vec<usize>) {
+//     let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(pord.len());
+//     let mut positions = Vec::<(usize,usize)>::new();
 
-    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1);
-    l_alglib::l_alg_init_get_positions_old(&pord, &mut positions);
+//     l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1);
+//     l_alglib::l_alg_init_get_positions_old(&pord, &mut positions);
     
-    for i in 0..init_vector.len() {
-        if l_alglib::l_alg_test_init_value(fixed_vec[i].0, fixed_vec[i].1, init_vector[i], &lalg_limpl) {
-            lalg_limpl[fixed_vec[i].0][fixed_vec[i].1] = init_vector[i];
-        }
-        else {
-            return;
-        }
-    }
+//     for i in 0..init_vector.len() {
+//         if l_alglib::l_alg_test_init_value(fixed_vec[i].0, fixed_vec[i].1, init_vector[i], &lalg_limpl) {
+//             lalg_limpl[fixed_vec[i].0][fixed_vec[i].1] = init_vector[i];
+//         }
+//         else {
+//             return;
+//         }
+//     }
     
-    let mut num_iter =0usize;
-    l_alglib::get_plan_fixed_rec_new2(init_vector.len(), &mut num_iter, pord.len(), &pord, num_pord, fixed_vec,&positions, &mut lalg_limpl, &l_alglib::OutputType::List);
-    // print_vec(&mut std::io::stderr(), &get_iter(fixed_vec.len(), &fixed_vec, &lalg_limpl));
-    eprintln!("Finished.");
-}
+//     let mut num_iter =0usize;
+//     l_alglib::get_plan_fixed_rec_new2(init_vector.len(), &mut num_iter, pord.len(), &pord, num_pord, fixed_vec,&positions, &mut lalg_limpl, &l_alglib::OutputType::List);
+//     // print_vec(&mut std::io::stderr(), &get_iter(fixed_vec.len(), &fixed_vec, &lalg_limpl));
+//     eprintln!("Finished.");
+// }
 
 fn gen_plans_main(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize,usize)>, fixed_predicate: fn(&[usize])->bool) {
 
@@ -304,15 +304,15 @@ fn gen_plans_main_new(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(
     gen_plans_new(&pord, num_pord, &fixed_vec, fixed_predicate, &from_vec);
 }
 
-fn gen_plans_main_new2(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize,usize)>) {
+// fn gen_plans_main_new2(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize,usize)>) {
 
-    let mut from_vec = Vec::<usize>::new();
-    if std::env::args().len() == 2 {
-        from_vec = std::env::args().nth(1).unwrap().split(",").map(|v| v.trim().parse::<usize>().unwrap()).collect();
-    }
+//     let mut from_vec = Vec::<usize>::new();
+//     if std::env::args().len() == 2 {
+//         from_vec = std::env::args().nth(1).unwrap().split(",").map(|v| v.trim().parse::<usize>().unwrap()).collect();
+//     }
 
-    gen_plans_new2(&pord, num_pord, &fixed_vec, &from_vec);
-}
+//     gen_plans_new2(&pord, num_pord, &fixed_vec, &from_vec);
+// }
 
 //  1: 
 //  2: 
@@ -381,7 +381,7 @@ fn main_1_1() {
 fn main_1_1_new2() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
-    gen_plans_main_new2(
+    l_alglib::gen_plans_main_new2(
         // 
         &vec![vec![1, 0, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]],
         //
@@ -394,7 +394,7 @@ fn main_1_1_new2() {
 fn main_1_2_new2() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
-    gen_plans_main_new2(
+    l_alglib::gen_plans_main_new2(
         // 
         &vec![vec![1, 0, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]],
         //
@@ -407,7 +407,7 @@ fn main_1_2_new2() {
 fn main_1_3_new2() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
-    gen_plans_main_new2(
+    l_alglib::gen_plans_main_new2(
         // 
         &vec![vec![1, 0, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]],
         //
@@ -479,7 +479,7 @@ fn main_2_1_new() {
 fn main_2_1_new2() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
-    gen_plans_main_new2(
+    l_alglib::gen_plans_main_new2(
         // 
         &vec![vec![1, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]],
         //
@@ -512,7 +512,7 @@ fn main_2_2_new() {
 fn main_2_2_new2() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
-    gen_plans_main_new2(
+    l_alglib::gen_plans_main_new2(
         // 
         &vec![vec![1, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]],
         //
@@ -564,7 +564,7 @@ fn main_3_1() {
 fn main_3_1_new2() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
-    gen_plans_main_new2(
+    l_alglib::gen_plans_main_new2(
         // 
         &vec![vec![1, 0, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]],
         //
@@ -597,7 +597,7 @@ fn main_3_2() {
 fn main_3_2_new2() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
-    gen_plans_main_new2(
+    l_alglib::gen_plans_main_new2(
         // 
         &vec![vec![1, 0, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]],
         //
@@ -1393,7 +1393,7 @@ fn main_84_1() {
 fn main_84_1_new2() {
     // rel_get_cover_rel(&vec![vec![1, 0, 1, 0, 0, 1, 1, 1], vec![0, 1, 1, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
-    gen_plans_main_new2(
+    l_alglib::gen_plans_main_new2(
         // 
         &vec![vec![1, 0, 1, 0, 0, 1, 1, 1], vec![0, 1, 1, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]],
         //
@@ -3617,7 +3617,7 @@ fn main_1967_1() {
 fn main_1877_1_new2() {
     // rel_get_cover_rel(&vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
-    gen_plans_main_new2(
+    l_alglib::gen_plans_main_new2(
         // 
         &vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]],
         //
@@ -3630,7 +3630,7 @@ fn main_1877_1_new2() {
 fn main_1877_2_new2() {
     // rel_get_cover_rel(&vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
-    gen_plans_main_new2(
+    l_alglib::gen_plans_main_new2(
         // 
         &vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]],
         //
@@ -3643,7 +3643,7 @@ fn main_1877_2_new2() {
 fn main_1881_1_new2() {
     // rel_get_cover_rel(&vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 0, 0, 0, 1], vec![0, 0, 1, 1, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
-    gen_plans_main_new2(
+    l_alglib::gen_plans_main_new2(
         // 
         &vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 0, 0, 0, 1], vec![0, 0, 1, 1, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]],
         //
@@ -3672,7 +3672,7 @@ fn main_1983_1() {
 fn main_1983_1_new2() {
     // rel_get_cover_rel(&vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 1, 1, 1, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
-    gen_plans_main_new2(
+    l_alglib::gen_plans_main_new2(
         // 
         &vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 1, 1, 1, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]],
         //
@@ -3772,7 +3772,7 @@ fn main_1_2() {
 fn main_1999_1_new2() {
     // rel_get_cover_rel(&vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 1, 1, 1, 1], vec![0, 0, 1, 1, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
-    gen_plans_main_new2(
+    l_alglib::gen_plans_main_new2(
         // 
         &vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 1, 1, 1, 1], vec![0, 0, 1, 1, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]],
         //
@@ -3785,7 +3785,7 @@ fn main_1999_1_new2() {
 fn main_2015_1_new2() {    
     // rel_get_cover_rel(&vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 1, 1, 1, 1], vec![0, 0, 1, 1, 1, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
-    gen_plans_main_new2(
+    l_alglib::gen_plans_main_new2(
         // 
         &vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 1, 1, 1, 1], vec![0, 0, 1, 1, 1, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]],
         //
@@ -3798,7 +3798,7 @@ fn main_2015_1_new2() {
 fn main_2019_1_new2() {
     // rel_get_cover_rel(&vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 1, 1, 1, 1], vec![0, 0, 1, 1, 1, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
-    gen_plans_main_new2(
+    l_alglib::gen_plans_main_new2(
         // 
         &vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 1, 1, 1, 1], vec![0, 0, 1, 1, 1, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]],
         //
@@ -3811,7 +3811,7 @@ fn main_2019_1_new2() {
 fn main_2043_1_new2() {
     // rel_get_cover_rel(&vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 1, 1, 1, 1], vec![0, 0, 1, 1, 1, 1, 1, 1], vec![0, 0, 0, 1, 1, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
-    gen_plans_main_new2(
+    l_alglib::gen_plans_main_new2(
         // 
         &vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 1, 1, 1, 1], vec![0, 0, 1, 1, 1, 1, 1, 1], vec![0, 0, 0, 1, 1, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]],
         //
@@ -3824,7 +3824,7 @@ fn main_2043_1_new2() {
 fn main_2044_1_new2() {
     // rel_get_cover_rel(&vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 1, 1, 1, 1], vec![0, 0, 1, 1, 1, 1, 1, 1], vec![0, 0, 0, 1, 1, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
-    gen_plans_main_new2(
+    l_alglib::gen_plans_main_new2(
         // 
         &vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 1, 1, 1, 1], vec![0, 0, 1, 1, 1, 1, 1, 1], vec![0, 0, 0, 1, 1, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]],
         //
@@ -3837,7 +3837,7 @@ fn main_2044_1_new2() {
 fn main_2045_1_new2() {
     // rel_get_cover_rel(&vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 1, 1, 1, 1], vec![0, 0, 1, 1, 1, 1, 1, 1], vec![0, 0, 0, 1, 1, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
-    gen_plans_main_new2(
+    l_alglib::gen_plans_main_new2(
         // 
         &vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 1, 1, 1, 1], vec![0, 0, 1, 1, 1, 1, 1, 1], vec![0, 0, 0, 1, 1, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]],
         //

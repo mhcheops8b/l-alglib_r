@@ -130,6 +130,11 @@ name = "plan8-1728_1"
 path = "src/plans/plan8-1728_1.rs"
 
 [[bin]]
+name = "plan7-various"
+path = "src/plans/plan7-various.rs"
+
+
+[[bin]]
 name = "plan8-various"
 path = "src/plans/plan8-various.rs"
 

@@ -3067,6 +3067,38 @@ fn is_releq_congruence(releq: &Vec<Vec<usize>>, binop: &Vec<Vec<usize>>) -> bool
     true
 }
 
+pub fn gen_plans_new2(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize,usize)>, init_vector: &Vec<usize>) {
+    let mut lalg_limpl = l_alg_alloc_limpl(pord.len());
+    let mut positions = Vec::<(usize,usize)>::new();
+
+    l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1);
+    l_alg_init_get_positions_old(&pord, &mut positions);
+    
+    for i in 0..init_vector.len() {
+        if l_alg_test_init_value(fixed_vec[i].0, fixed_vec[i].1, init_vector[i], &lalg_limpl) {
+            lalg_limpl[fixed_vec[i].0][fixed_vec[i].1] = init_vector[i];
+        }
+        else {
+            return;
+        }
+    }
+    
+    let mut num_iter =0usize;
+    get_plan_fixed_rec_new2(init_vector.len(), &mut num_iter, pord.len(), &pord, num_pord, fixed_vec,&positions, &mut lalg_limpl, &OutputType::List);
+    // print_vec(&mut std::io::stderr(), &get_iter(fixed_vec.len(), &fixed_vec, &lalg_limpl));
+    eprintln!("Finished.");
+}
+
+pub fn gen_plans_main_new2(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize,usize)>) {
+
+    let mut from_vec = Vec::<usize>::new();
+    if std::env::args().len() == 2 {
+        from_vec = std::env::args().nth(1).unwrap().split(",").map(|v| v.trim().parse::<usize>().unwrap()).collect();
+    }
+
+    gen_plans_new2(&pord, num_pord, &fixed_vec, &from_vec);
+}
+
 // use itertools::Itertools;
 
 // fn subsets<T: Clone>(items: Vec<T>) -> Vec<Vec<T>> {
