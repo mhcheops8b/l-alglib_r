@@ -3099,6 +3099,42 @@ pub fn gen_plans_main_new2(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &
     gen_plans_new2(&pord, num_pord, &fixed_vec, &from_vec);
 }
 
+pub fn rel_get_cover_rel(pord: &Vec<Vec<usize>>)  {
+    let n = pord.len();
+
+    for i in 0..n {
+        let mut b_first = true;
+        for j in 0..n {
+            if b_first {
+                b_first = false;
+            }
+            else {
+                print!(", ");
+            }
+            if pord[i][j]==1 {
+                let mut b_found = false;
+                for k in 0..n {
+                    if k!=i && k!=j && pord[i][k] ==1 && pord[k][j]==1 {
+                        b_found = true;
+                        break;
+                    }
+                }
+                if b_found {
+                    print!("0");
+                }
+                else {
+                    print!("1")
+                } 
+            }
+            else {
+                print!("0")
+            }
+        }
+        println!();
+    }
+}
+
+
 // use itertools::Itertools;
 
 // fn subsets<T: Clone>(items: Vec<T>) -> Vec<Vec<T>> {

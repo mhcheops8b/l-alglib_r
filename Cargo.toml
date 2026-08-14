@@ -114,6 +114,10 @@ name = "extract_pord"
 path = "src/extract_pord.rs"
 
 [[bin]]
+name = "merge_lalg_results"
+path = "src/merge_lalg_results.rs"
+
+[[bin]]
 name = "plan8-1_2"
 path = "src/plans/plan8-1_2.rs"
 
