@@ -19,6 +19,9 @@ path = "src/gen_from_ord_file.rs"
 name = "gen_from_ord_file_new_pos"
 path = "src/gen_from_ord_file_new_pos.rs"
 
+[[bin]]
+name = "transform_plans_to_new_pos"
+path = "src/transform_plans_to_new_pos.rs"
 
 [[bin]]
 name = "gen_from_ord_cmd_new_pos"
@@ -132,6 +135,10 @@ path = "src/plans/plan8-1_4.rs"
 [[bin]]
 name = "plan8-1728_1"
 path = "src/plans/plan8-1728_1.rs"
+
+[[bin]]
+name = "plan6-various"
+path = "src/plans/plan6-various.rs"
 
 [[bin]]
 name = "plan7-various"
