@@ -3187,12 +3187,14 @@ pub fn gen_plans_new2(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(
 
 pub fn gen_plans_main_new2(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize,usize)>) {
 
+    let ts = Instant::now();
     let mut from_vec = Vec::<usize>::new();
     if std::env::args().len() == 2 {
         from_vec = std::env::args().nth(1).unwrap().split(",").map(|v| v.trim().parse::<usize>().unwrap()).collect();
     }
 
     gen_plans_new2(&pord, num_pord, &fixed_vec, &from_vec);
+    eprintln!("Time elapsed: {:.4}", ts.elapsed().as_secs_f32());
 }
 
 pub fn rel_get_cover_rel(pord: &Vec<Vec<usize>>)  {
