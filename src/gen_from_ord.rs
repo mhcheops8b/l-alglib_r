@@ -2,7 +2,7 @@ use std::{collections::HashSet, io::BufRead};
 use itertools::{Itertools};
 // use l_alglib::l_alg_init_limpl;
 use std::fs::File;
-use bzip2::read::{BzDecoder};
+// use bzip2::read::{BzDecoder};
 use std::io::{BufReader};
 use std::time::Instant;
 
@@ -174,192 +174,192 @@ fn main() {
         }
     }
     
-    return ;
+    // return ;
     
     
     
-    let mut ord_count = 0usize;
-    let n = 6;
-    let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
-
-    let mut qords = Vec::<Vec<Vec<usize>>>::new();
-
-    // let mut qord = l_alglib::l_alg_alloc_limpl(n+1);
-    // for i in 0..=n {
-    //     for j in 0..=n{
-    //         if i<=j {
-    //             qord[i][j] = 1;
-    //         }
-    //     }
-    // }
-    // qords.push(qord);
-
-    for qord in qords {
-        if l_alglib::qord_is_antisymmetric(&qord) {
-            ord_count+=1;
-            // if ord_count != 1 {
-            //     continue;
-            // }
-
-            // eprintln!("HHEHE");
-            // get order n+1 with n as maximal element
-            let mut qord_n1 = l_alglib::l_alg_alloc_limpl(n+1);
-            for i in 0.. n {
-                for j in 0..n {
-                    qord_n1[i][j] = qord[i][j];
-                }
-            }
-            for i in 0..(n+1) {
-                qord_n1[i][n] = 1;
-            }
-
-            println!("{qord_n1:?}");
-        }
-    }
-
-    return;
-
-
-    // let file = BufReader::new(File::open("./hh6_1.txt").expect("Cannot open file"));
-
-    // for line in file.lines() {
-    //     let yy = parse_vector(&line.unwrap());
-    //     //println!("{yy:?}");
-    //     println!("{:?}", l_alglib::l_alg_get_repr(&yy, false));
-    //     //println!("  -> {:?}", l_alglib::l_alg_get_repr(&yy, false));
-    //     // let mut parsed_vector = Vec::<Vec<usize>>::new();
-    //     // for t in line.unwrap().split("[") {
-    //     //     if t=="" {
-    //     //         continue;
-    //     //     }
-    //     //     let mut tt = String::from(t);
-            
-    //     //     let gg = tt.find("], ");
-    //     //     if gg.is_some() {
-    //     //         let pos = gg.unwrap();
-    //     //         tt.remove(pos);
-    //     //         tt.remove(pos);
-    //     //         tt.remove(pos);
-    //     //     }
-    //     //     let gg = tt.find("]]");
-    //     //     if gg.is_some() {
-    //     //         let pos = gg.unwrap();
-    //     //         tt.remove(pos);
-    //     //         tt.remove(pos);
-    //     //     }
-    //     //     let vv = tt.split(", ").map(|v| {//println!("v = {v:?}"); 
-    //     //     v.trim().parse::<usize>().unwrap()}).collect::<Vec<_>>();
-    //     //     // println!("{vv:?}");
-    //     //     parsed_vector.push(vv);
-
-    //     //     //tt.remove_matches("]]");
-    //     //     //println!("{tt:?}");
-    //     // }
-    //     // println!("{parsed_vector:?}");
-    //     // break;
-    // }
-
-    // return;
-
-
-    // let limp = vec![vec![5usize, 5, 0, 3, 0, 5], vec![0, 5, 2, 3, 4, 5], vec![0, 1, 5, 3, 0, 5], vec![0, 1, 2, 5, 4, 5], vec![0, 1, 0, 3, 5, 5], vec![0, 1, 2, 3, 4, 5]];
-
-    // eprintln!("{:?}", limp);
-    // eprintln!("{:?}", l_alglib::l_alg_get_repr(&limp, true));
-    // eprintln!("{:?}", l_alglib::l_alg_get_repr(&limp, false));
-
-    // eprintln!("--");
-    // let limp2 = vec![vec![5usize, 0, 0, 3, 5, 5], vec![0, 5, 0, 3, 4, 5], vec![0, 0, 5, 3, 4, 5], vec![0, 1, 2, 5, 4, 5], vec![0, 1, 2, 3, 5, 5], vec![0, 1, 2, 3, 4, 5]];
-    // eprintln!("{:?}", limp2);
-    // eprintln!("{:?}", l_alglib::l_alg_get_repr(&limp2, true));
-    // eprintln!("{:?}", l_alglib::l_alg_get_repr(&limp2, false));
-    // eprintln!("--");
-    // let limp2 = vec![vec![5usize, 5, 2, 0, 0, 5], vec![0, 5, 2, 3, 4, 5], vec![0, 1, 5, 3, 4, 5], vec![0, 1, 2, 5, 0, 5], vec![0, 1, 2, 0, 5, 5], vec![0, 1, 2, 3, 4, 5]];
-    // eprintln!("{:?}", limp2);
-    // eprintln!("{:?}", l_alglib::l_alg_get_repr(&limp2, true));
-    // eprintln!("{:?}", l_alglib::l_alg_get_repr(&limp2, false));
-    
-    // return;
-
-    let file = BufReader::new(File::open("c:/users/mhycko/documents/rust/serde_test/all_qords6.pickle.bz2").expect("Cannot open file"));
-    let mut bz_decoder = BzDecoder::new(file);
-    let qords:Vec<Vec<Vec<usize>>> = serde_pickle::from_reader(&mut bz_decoder, Default::default()).unwrap();
-    println!("{}", qords.len());
-    let mut ord_count = 0usize;
-    let n = 6;
-    let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
+    // let mut ord_count = 0usize;
+    // let n = 6;
+    // let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
 
     // let mut qords = Vec::<Vec<Vec<usize>>>::new();
 
-    // let mut qord = l_alglib::l_alg_alloc_limpl(n+1);
-    // for i in 0..=n {
-    //     for j in 0..=n{
-    //         if i<=j {
-    //             qord[i][j] = 1;
+    // // let mut qord = l_alglib::l_alg_alloc_limpl(n+1);
+    // // for i in 0..=n {
+    // //     for j in 0..=n{
+    // //         if i<=j {
+    // //             qord[i][j] = 1;
+    // //         }
+    // //     }
+    // // }
+    // // qords.push(qord);
+
+    // for qord in qords {
+    //     if l_alglib::qord_is_antisymmetric(&qord) {
+    //         ord_count+=1;
+    //         // if ord_count != 1 {
+    //         //     continue;
+    //         // }
+
+    //         // eprintln!("HHEHE");
+    //         // get order n+1 with n as maximal element
+    //         let mut qord_n1 = l_alglib::l_alg_alloc_limpl(n+1);
+    //         for i in 0.. n {
+    //             for j in 0..n {
+    //                 qord_n1[i][j] = qord[i][j];
+    //             }
     //         }
+    //         for i in 0..(n+1) {
+    //             qord_n1[i][n] = 1;
+    //         }
+
+    //         println!("{qord_n1:?}");
     //     }
     // }
-    // qords.push(qord);
 
-    for qord in qords {
-        if l_alglib::qord_is_antisymmetric(&qord) {
-            ord_count+=1;
-            if ord_count != 1 {
-                continue;
-            }
+    // return;
 
-            // eprintln!("HHEHE");
-            // get order n+1 with n as maximal element
-            let mut qord_n1 = l_alglib::l_alg_alloc_limpl(n+1);
-            for i in 0.. n {
-                for j in 0..n {
-                    qord_n1[i][j] = qord[i][j];
-                }
-            }
-            for i in 0..(n+1) {
-                qord_n1[i][n] = 1;
-            }
 
-            eprintln!("{qord_n1:?}");
+    // // let file = BufReader::new(File::open("./hh6_1.txt").expect("Cannot open file"));
+
+    // // for line in file.lines() {
+    // //     let yy = parse_vector(&line.unwrap());
+    // //     //println!("{yy:?}");
+    // //     println!("{:?}", l_alglib::l_alg_get_repr(&yy, false));
+    // //     //println!("  -> {:?}", l_alglib::l_alg_get_repr(&yy, false));
+    // //     // let mut parsed_vector = Vec::<Vec<usize>>::new();
+    // //     // for t in line.unwrap().split("[") {
+    // //     //     if t=="" {
+    // //     //         continue;
+    // //     //     }
+    // //     //     let mut tt = String::from(t);
             
-            
+    // //     //     let gg = tt.find("], ");
+    // //     //     if gg.is_some() {
+    // //     //         let pos = gg.unwrap();
+    // //     //         tt.remove(pos);
+    // //     //         tt.remove(pos);
+    // //     //         tt.remove(pos);
+    // //     //     }
+    // //     //     let gg = tt.find("]]");
+    // //     //     if gg.is_some() {
+    // //     //         let pos = gg.unwrap();
+    // //     //         tt.remove(pos);
+    // //     //         tt.remove(pos);
+    // //     //     }
+    // //     //     let vv = tt.split(", ").map(|v| {//println!("v = {v:?}"); 
+    // //     //     v.trim().parse::<usize>().unwrap()}).collect::<Vec<_>>();
+    // //     //     // println!("{vv:?}");
+    // //     //     parsed_vector.push(vv);
 
-            let mut falg = l_alglib::l_alg_alloc_limpl(n+1);
-            let mut positions = Vec::<(usize,usize)>::new();
-            
+    // //     //     //tt.remove_matches("]]");
+    // //     //     //println!("{tt:?}");
+    // //     // }
+    // //     // println!("{parsed_vector:?}");
+    // //     // break;
+    // // }
 
-            l_alglib::l_alg_init_from_ord(&mut falg, &qord_n1, n-1);
-            l_alglib::l_alg_init_get_positions_old(&qord_n1, &mut positions);
+    // // return;
 
-            //falg[0][1] = 4;
-            //falg[0][2] = 4;
-            //falg[0][3] = 0;
-            //positions.remove(0);
-            //positions.remove(0);
-            //positions.remove(0);
 
-            // eprintln!("{:?}", positions);
+    // // let limp = vec![vec![5usize, 5, 0, 3, 0, 5], vec![0, 5, 2, 3, 4, 5], vec![0, 1, 5, 3, 0, 5], vec![0, 1, 2, 5, 4, 5], vec![0, 1, 0, 3, 5, 5], vec![0, 1, 2, 3, 4, 5]];
 
-            // println!("{falg:?}");
+    // // eprintln!("{:?}", limp);
+    // // eprintln!("{:?}", l_alglib::l_alg_get_repr(&limp, true));
+    // // eprintln!("{:?}", l_alglib::l_alg_get_repr(&limp, false));
 
-            // return;
-            eprintln!("{positions:?}");
-            let mut num_tested = 0usize;
-            let mut num_models = 0usize;
-            l_alglib::gen_all_lalgs_rec(0, &positions, &mut falg, n, &mut lalgs, &mut num_tested, &mut num_models, 10_000_000);
+    // // eprintln!("--");
+    // // let limp2 = vec![vec![5usize, 0, 0, 3, 5, 5], vec![0, 5, 0, 3, 4, 5], vec![0, 0, 5, 3, 4, 5], vec![0, 1, 2, 5, 4, 5], vec![0, 1, 2, 3, 5, 5], vec![0, 1, 2, 3, 4, 5]];
+    // // eprintln!("{:?}", limp2);
+    // // eprintln!("{:?}", l_alglib::l_alg_get_repr(&limp2, true));
+    // // eprintln!("{:?}", l_alglib::l_alg_get_repr(&limp2, false));
+    // // eprintln!("--");
+    // // let limp2 = vec![vec![5usize, 5, 2, 0, 0, 5], vec![0, 5, 2, 3, 4, 5], vec![0, 1, 5, 3, 4, 5], vec![0, 1, 2, 5, 0, 5], vec![0, 1, 2, 0, 5, 5], vec![0, 1, 2, 3, 4, 5]];
+    // // eprintln!("{:?}", limp2);
+    // // eprintln!("{:?}", l_alglib::l_alg_get_repr(&limp2, true));
+    // // eprintln!("{:?}", l_alglib::l_alg_get_repr(&limp2, false));
+    
+    // // return;
 
-            eprintln!("{}", lalgs.len());
-        }
-
-    }
-    eprintln!("{ord_count}");
-
-    for falg in lalgs {
-        println!("{falg:?}");
-    }
-
+    // let file = BufReader::new(File::open("c:/users/mhycko/documents/rust/serde_test/all_qords6.pickle.bz2").expect("Cannot open file"));
+    // let mut bz_decoder = BzDecoder::new(file);
+    // let qords:Vec<Vec<Vec<usize>>> = serde_pickle::from_reader(&mut bz_decoder, Default::default()).unwrap();
     // println!("{}", qords.len());
-    // println!("{:?}", qords[0]);
+    // let mut ord_count = 0usize;
+    // let n = 6;
+    // let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
+
+    // // let mut qords = Vec::<Vec<Vec<usize>>>::new();
+
+    // // let mut qord = l_alglib::l_alg_alloc_limpl(n+1);
+    // // for i in 0..=n {
+    // //     for j in 0..=n{
+    // //         if i<=j {
+    // //             qord[i][j] = 1;
+    // //         }
+    // //     }
+    // // }
+    // // qords.push(qord);
+
+    // for qord in qords {
+    //     if l_alglib::qord_is_antisymmetric(&qord) {
+    //         ord_count+=1;
+    //         if ord_count != 1 {
+    //             continue;
+    //         }
+
+    //         // eprintln!("HHEHE");
+    //         // get order n+1 with n as maximal element
+    //         let mut qord_n1 = l_alglib::l_alg_alloc_limpl(n+1);
+    //         for i in 0.. n {
+    //             for j in 0..n {
+    //                 qord_n1[i][j] = qord[i][j];
+    //             }
+    //         }
+    //         for i in 0..(n+1) {
+    //             qord_n1[i][n] = 1;
+    //         }
+
+    //         eprintln!("{qord_n1:?}");
+            
+            
+
+    //         let mut falg = l_alglib::l_alg_alloc_limpl(n+1);
+    //         let mut positions = Vec::<(usize,usize)>::new();
+            
+
+    //         l_alglib::l_alg_init_from_ord(&mut falg, &qord_n1, n-1);
+    //         l_alglib::l_alg_init_get_positions_old(&qord_n1, &mut positions);
+
+    //         //falg[0][1] = 4;
+    //         //falg[0][2] = 4;
+    //         //falg[0][3] = 0;
+    //         //positions.remove(0);
+    //         //positions.remove(0);
+    //         //positions.remove(0);
+
+    //         // eprintln!("{:?}", positions);
+
+    //         // println!("{falg:?}");
+
+    //         // return;
+    //         eprintln!("{positions:?}");
+    //         let mut num_tested = 0usize;
+    //         let mut num_models = 0usize;
+    //         l_alglib::gen_all_lalgs_rec(0, &positions, &mut falg, n, &mut lalgs, &mut num_tested, &mut num_models, 10_000_000);
+
+    //         eprintln!("{}", lalgs.len());
+    //     }
+
+    // }
+    // eprintln!("{ord_count}");
+
+    // for falg in lalgs {
+    //     println!("{falg:?}");
+    // }
+
+    // // println!("{}", qords.len());
+    // // println!("{:?}", qords[0]);
 
 
 }

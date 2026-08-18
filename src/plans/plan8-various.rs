@@ -1,4 +1,3 @@
-use std::time::{Instant};
 use itertools::{Itertools};
 
 
@@ -218,6 +217,7 @@ fn main() {
     // main_2045_1_new2();
 }
 
+#[allow(dead_code)]
 fn gen_plans(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize,usize)>, fixed_predicate: fn(&[usize])->bool, init_vector: &Vec<usize>) {
     let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(pord.len());
     let mut positions = Vec::<(usize,usize)>::new();
@@ -240,6 +240,7 @@ fn gen_plans(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize,usi
     eprintln!("Finished.");
 }
 
+#[allow(dead_code)]
 fn gen_plans_new(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize,usize)>, fixed_predicate: fn(&[usize])->bool, init_vector: &Vec<usize>) {
     let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(pord.len());
     let mut positions = Vec::<(usize,usize)>::new();
@@ -284,6 +285,7 @@ fn gen_plans_new(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize
 //     eprintln!("Finished.");
 // }
 
+#[allow(dead_code)]
 fn gen_plans_main(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize,usize)>, fixed_predicate: fn(&[usize])->bool) {
 
     let mut from_vec = Vec::<usize>::new();
@@ -294,6 +296,7 @@ fn gen_plans_main(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usiz
     gen_plans(&pord, num_pord, &fixed_vec, fixed_predicate, &from_vec);
 }
 
+#[allow(dead_code)]
 fn gen_plans_main_new(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize,usize)>, fixed_predicate: fn(&[usize])->bool) {
 
     let mut from_vec = Vec::<usize>::new();
@@ -321,6 +324,7 @@ fn gen_plans_main_new(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(
 //  5: 
 //  6: 
 
+#[allow(dead_code)]
 fn tst_iso_fun() {
     let mut hh = std::collections::HashMap::<(usize,usize),usize>::new();
     // hh.insert((0,1),0);
@@ -360,9 +364,10 @@ fn tst_iso_fun() {
     eprintln!("{jj}");
 }
 
+#[allow(dead_code)]
 fn main_1_1() {
-    rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
-    return;
+    // l_alglib::rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
+    // return;
     gen_plans_main(
         // 
         &vec![vec![1, 0, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]],
@@ -373,11 +378,10 @@ fn main_1_1() {
         // 
         |pe| 
             pe[0]==0 && pe[6]==6
-            
-
     )
 }
 
+#[allow(dead_code)]
 fn main_1_1_new2() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -391,6 +395,7 @@ fn main_1_1_new2() {
     )
 }
 
+#[allow(dead_code)]
 fn main_1_2_new2() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -404,6 +409,7 @@ fn main_1_2_new2() {
     )
 }
 
+#[allow(dead_code)]
 fn main_1_3_new2() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -417,8 +423,7 @@ fn main_1_3_new2() {
     )
 }
 
-
-
+#[allow(dead_code)]
 fn main_2_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -437,6 +442,7 @@ fn main_2_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_2_2() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -456,6 +462,7 @@ fn main_2_2() {
     )
 }
 
+#[allow(dead_code)]
 fn main_2_1_new() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -467,7 +474,7 @@ fn main_2_1_new() {
         // 
         &vec![(1,0), (1,2), (1,3), (1,4), (1,5)],
         // 
-        |pe| 
+        |_pe| 
             true
             // std::cmp::min(pe[0],pe[1])==0 && std::cmp::max(pe[0],pe[1])==1
             // && pe[6]==6
@@ -476,6 +483,7 @@ fn main_2_1_new() {
     )
 }
 
+#[allow(dead_code)]
 fn main_2_1_new2() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -489,6 +497,7 @@ fn main_2_1_new2() {
     )
 }
 
+#[allow(dead_code)]
 fn main_2_2_new() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -500,7 +509,7 @@ fn main_2_2_new() {
         // 
         &vec![(0,1), (0,2), (0,3), (0,4), (0,5), (1,0), (1,2), (1,3), (1,4), (1,5)],
         // 
-        |pe| 
+        |_pe| 
             true
             // std::cmp::min(pe[0],pe[1])==0 && std::cmp::max(pe[0],pe[1])==1
             // && pe[6]==6
@@ -509,6 +518,7 @@ fn main_2_2_new() {
     )
 }
 
+#[allow(dead_code)]
 fn main_2_2_new2() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -522,7 +532,7 @@ fn main_2_2_new2() {
     )
 }
 
-
+#[allow(dead_code)]
 fn main_2_3() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -543,6 +553,7 @@ fn main_2_3() {
     )
 }
 
+#[allow(dead_code)]
 fn main_3_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -561,6 +572,7 @@ fn main_3_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_3_1_new2() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -574,7 +586,7 @@ fn main_3_1_new2() {
     )
 }
 
-
+#[allow(dead_code)]
 fn main_3_2() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -594,6 +606,7 @@ fn main_3_2() {
     )
 }
 
+#[allow(dead_code)]
 fn main_3_2_new2() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -607,7 +620,7 @@ fn main_3_2_new2() {
     )
 }
 
-
+#[allow(dead_code)]
 fn main_4_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 1, 1, 1], vec![0, 1, 0, 0, 0, 1, 1, 1], vec![0, 0, 1, 0, 0, 1, 1, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -626,6 +639,7 @@ fn main_4_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_5_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 0, 1, 1, 1], vec![0, 1, 0, 0, 0, 1, 1, 1], vec![0, 0, 1, 0, 0, 1, 1, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -643,7 +657,7 @@ fn main_5_1() {
     )
 }
 
-
+#[allow(dead_code)]
 fn main_6_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 1, 0, 0, 1], vec![0, 1, 0, 0, 1, 0, 0, 1], vec![0, 0, 1, 0, 1, 0, 0, 1], vec![0, 0, 0, 1, 1, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -664,6 +678,7 @@ fn main_6_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_7_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 1, 0, 1, 1], vec![0, 1, 0, 0, 1, 0, 1, 1], vec![0, 0, 1, 0, 1, 0, 1, 1], vec![0, 0, 0, 1, 1, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -684,6 +699,7 @@ fn main_7_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_8_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 1, 0, 1, 1], vec![0, 1, 0, 0, 1, 0, 1, 1], vec![0, 0, 1, 0, 1, 0, 1, 1], vec![0, 0, 0, 1, 1, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -704,6 +720,7 @@ fn main_8_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_9_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 1, 0, 1, 1], vec![0, 1, 0, 0, 1, 0, 1, 1], vec![0, 0, 1, 0, 1, 0, 1, 1], vec![0, 0, 0, 1, 1, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -724,6 +741,7 @@ fn main_9_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_10_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 1, 1, 0, 1], vec![0, 1, 0, 0, 1, 1, 0, 1], vec![0, 0, 1, 0, 1, 1, 0, 1], vec![0, 0, 0, 1, 1, 1, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -744,7 +762,7 @@ fn main_10_1() {
     )
 }
 
-
+#[allow(dead_code)]
 fn main_11_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 1, 1, 0, 1], vec![0, 1, 0, 0, 1, 1, 0, 1], vec![0, 0, 1, 0, 1, 1, 0, 1], vec![0, 0, 0, 1, 1, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -758,13 +776,11 @@ fn main_11_1() {
         // 
         |pe| 
             pe[0]==0 && pe[4]==4 && pe[5]==5 && pe[6]==6
-            && std::cmp::min(pe[1],std::cmp::min(pe[2],pe[3])) == 1 && std::cmp::max(pe[1],std::cmp::max(pe[2],pe[3]))==3
-            
-            
-            
+            && std::cmp::min(pe[1],std::cmp::min(pe[2],pe[3])) == 1 && std::cmp::max(pe[1],std::cmp::max(pe[2],pe[3]))==3            
     )
 }
 
+#[allow(dead_code)]
 fn main_12_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 1, 1, 1, 1], vec![0, 1, 0, 0, 1, 1, 1, 1], vec![0, 0, 1, 0, 1, 1, 1, 1], vec![0, 0, 0, 1, 1, 1, 1, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -785,7 +801,7 @@ fn main_12_1() {
     )
 }
 
-
+#[allow(dead_code)]
 fn main_13_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 1, 1, 1, 1], vec![0, 1, 0, 0, 1, 1, 1, 1], vec![0, 0, 1, 0, 1, 1, 1, 1], vec![0, 0, 0, 1, 1, 1, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -801,12 +817,10 @@ fn main_13_1() {
             pe[0]==0 && pe[6]==6 
             && std::cmp::min(pe[1],std::cmp::min(pe[2],pe[3])) == 1 && std::cmp::max(pe[1],std::cmp::max(pe[2],pe[3]))==3
             && std::cmp::min(pe[4],pe[5])==4 && std::cmp::max(pe[4],pe[5])==5
-            
-            
     )
 }
 
-
+#[allow(dead_code)]
 fn main_14_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 1, 1, 1, 1], vec![0, 1, 0, 0, 1, 1, 1, 1], vec![0, 0, 1, 0, 1, 1, 1, 1], vec![0, 0, 0, 1, 1, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -821,13 +835,10 @@ fn main_14_1() {
         |pe| 
             pe[0]==0 && pe[4]==4 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[1],std::cmp::min(pe[2],pe[3])) == 1 && std::cmp::max(pe[1],std::cmp::max(pe[2],pe[3]))==3
-            
-            
-            
     )
 }
 
-
+#[allow(dead_code)]
 fn main_15_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 1, 1, 1, 1], vec![0, 1, 0, 0, 1, 1, 1, 1], vec![0, 0, 1, 0, 1, 1, 1, 1], vec![0, 0, 0, 1, 1, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -843,11 +854,10 @@ fn main_15_1() {
             pe[0]==0 && pe[4]==4
             && std::cmp::min(pe[1],std::cmp::min(pe[2],pe[3])) == 1 && std::cmp::max(pe[1],std::cmp::max(pe[2],pe[3]))==3
             && std::cmp::min(pe[5],pe[6])==5 && std::cmp::max(pe[5],pe[6])==6
-            
-            
     )
 }
 
+#[allow(dead_code)]
 fn main_16_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 0, 1, 1, 1, 1], vec![0, 1, 0, 0, 1, 1, 1, 1], vec![0, 0, 1, 0, 1, 1, 1, 1], vec![0, 0, 0, 1, 1, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -862,14 +872,10 @@ fn main_16_1() {
         |pe| 
             pe[0]==0 && pe[3]==3 
             && std::cmp::min(pe[1],std::cmp::min(pe[2],pe[3])) == 1 && std::cmp::max(pe[1],std::cmp::max(pe[2],pe[3]))==3
-            
-            
-            
     )
 }
 
-
-
+#[allow(dead_code)]
 fn main_17_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 1, 0, 0, 0, 1], vec![0, 1, 0, 1, 0, 0, 0, 1], vec![0, 0, 1, 1, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -885,12 +891,10 @@ fn main_17_1() {
             pe[0]==0 && pe[3]==3
             && std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2])==2
             && std::cmp::min(pe[4],std::cmp::min(pe[5],pe[6])) == 4 && std::cmp::max(pe[4],std::cmp::max(pe[5],pe[6]))==6
-            
-            
     )
 }
 
-
+#[allow(dead_code)]
 fn main_18_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 1, 0, 0, 1, 1], vec![0, 1, 0, 1, 0, 0, 0, 1], vec![0, 0, 1, 1, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -906,12 +910,10 @@ fn main_18_1() {
             pe[0]==0 && pe[3]==3 && pe[6]==6
             && std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2])==2
             && std::cmp::min(pe[4],pe[5]) == 4 && std::cmp::max(pe[4],pe[5])==5
-            
-            
     )
 }
 
-
+#[allow(dead_code)]
 fn main_19_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 1, 0, 0, 1, 1], vec![0, 1, 0, 1, 0, 0, 1, 1], vec![0, 0, 1, 1, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -931,6 +933,7 @@ fn main_19_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_20_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 1, 0, 0, 1, 1], vec![0, 1, 0, 1, 0, 0, 1, 1], vec![0, 0, 1, 1, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -946,11 +949,10 @@ fn main_20_1() {
             pe[0]==0 && pe[3]==3 && pe[6]==6
             && std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2])==2
             && std::cmp::min(pe[4],pe[5]) == 4 && std::cmp::max(pe[4],pe[5])==5
-            
-            
     )
 }
 
+#[allow(dead_code)]
 fn main_21_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 1, 0, 0, 1, 1], vec![0, 1, 0, 1, 0, 0, 1, 1], vec![0, 0, 1, 1, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -966,11 +968,10 @@ fn main_21_1() {
             pe[0]==0 && pe[3]==3 && pe[6]==6
             && std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2])==2
             && std::cmp::min(pe[4],pe[5]) == 4 && std::cmp::max(pe[4],pe[5])==5
-            
-            
     )
 }
 
+#[allow(dead_code)]
 fn main_22_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 1, 0, 1, 0, 1], vec![0, 1, 0, 1, 0, 1, 0, 1], vec![0, 0, 1, 1, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -985,12 +986,10 @@ fn main_22_1() {
         |pe| 
             pe[0]==0 && pe[3]==3 && pe[4]==4 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2])==2
-            
-            
     )
 }
 
-
+#[allow(dead_code)]
 fn main_23_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 1, 0, 1, 0, 1], vec![0, 1, 0, 1, 0, 1, 0, 1], vec![0, 0, 1, 1, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1005,11 +1004,10 @@ fn main_23_1() {
         |pe| 
             pe[0]==0 && pe[3]==3 && pe[4]==4 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2])==2
-            
-            
     )
 }
 
+#[allow(dead_code)]
 fn main_24_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 1, 0, 1, 0, 1], vec![0, 1, 0, 1, 0, 1, 0, 1], vec![0, 0, 1, 1, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1024,11 +1022,10 @@ fn main_24_1() {
         |pe| 
             pe[0]==0 && pe[3]==3 && pe[4]==4 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2])==2
-            
-            
     )
 }
 
+#[allow(dead_code)]
 fn main_35_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 1, 1, 0, 0, 1], vec![0, 1, 0, 1, 1, 0, 0, 1], vec![0, 0, 1, 1, 1, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1044,11 +1041,11 @@ fn main_35_1() {
             pe[0]==0 
             && std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2])==2
             && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4])==4
-            && std::cmp::min(pe[5],pe[6]) == 5 && std::cmp::max(pe[5],pe[6])==6
-            
+            && std::cmp::min(pe[5],pe[6]) == 5 && std::cmp::max(pe[5],pe[6])==6            
     )
 }
 
+#[allow(dead_code)]
 fn main_50_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 0, 1, 1, 1, 1, 1], vec![0, 1, 0, 1, 1, 1, 1, 1], vec![0, 0, 1, 1, 1, 1, 1, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1062,12 +1059,11 @@ fn main_50_1() {
         // 
         |pe| 
             pe[0]==0 
-            && std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2])==2
-            
+            && std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2])==2           
     )
 }
 
-
+#[allow(dead_code)]
 fn main_66_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 1, 0, 0, 0, 0, 1], vec![0, 1, 1, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1080,11 +1076,11 @@ fn main_66_1() {
         &vec![(0,1), (0,3), (0,4), (0,5), (0,6), (1,0)],
         // 
         |pe| 
-            pe[0]==0 && pe[1]==1 && pe[2]==2 
-            
+            pe[0]==0 && pe[1]==1 && pe[2]==2             
     )
 }
 
+#[allow(dead_code)]
 fn main_67_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 1, 0, 0, 0, 0, 1], vec![0, 1, 1, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1099,10 +1095,10 @@ fn main_67_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[6]==6
             && std::cmp::min(std::cmp::min(pe[3],pe[4]),pe[5])==3 && std::cmp::max(std::cmp::max(pe[3],pe[4]),pe[5])==5
-            
     )
 }
 
+#[allow(dead_code)]
 fn main_68_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 1, 0, 0, 0, 0, 1], vec![0, 1, 1, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1116,11 +1112,11 @@ fn main_68_1() {
         // 
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[5]==5 && pe[6]==6
-            && std::cmp::min(pe[3],pe[4])==3 && std::cmp::max(pe[3],pe[4])==4
-            
+            && std::cmp::min(pe[3],pe[4])==3 && std::cmp::max(pe[3],pe[4])==4            
     )
 }
 
+#[allow(dead_code)]
 fn main_69_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 1, 0, 0, 0, 1, 1], vec![0, 1, 1, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1135,11 +1131,10 @@ fn main_69_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[6]==6
             && std::cmp::min(std::cmp::min(pe[3],pe[4]),pe[5])==3 && std::cmp::max(std::cmp::max(pe[3],pe[4]),pe[5])==5
-            
     )
 }
 
-
+#[allow(dead_code)]
 fn main_70_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 1, 0, 0, 0, 1, 1], vec![0, 1, 1, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1154,11 +1149,10 @@ fn main_70_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[6]==6
             && std::cmp::min(std::cmp::min(pe[3],pe[4]),pe[5])==3 && std::cmp::max(std::cmp::max(pe[3],pe[4]),pe[5])==5
-            
     )
 }
 
-
+#[allow(dead_code)]
 fn main_71_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 1, 0, 0, 0, 1, 1], vec![0, 1, 1, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1173,10 +1167,10 @@ fn main_71_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[6]==6
             && std::cmp::min(std::cmp::min(pe[3],pe[4]),pe[5])==3 && std::cmp::max(std::cmp::max(pe[3],pe[4]),pe[5])==5
-            
     )
 }
 
+#[allow(dead_code)]
 fn main_72_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 1, 0, 0, 0, 1, 1], vec![0, 1, 1, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1191,10 +1185,10 @@ fn main_72_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[3],pe[4])==3 && std::cmp::max(pe[3],pe[4])==4
-            
     )
 }
 
+#[allow(dead_code)]            
 fn main_73_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 1, 0, 0, 1, 0, 1], vec![0, 1, 1, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1209,11 +1203,10 @@ fn main_73_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[3],pe[4])==3 && std::cmp::max(pe[3],pe[4])==4
-            
     )
 }
 
-
+#[allow(dead_code)]
 fn main_74_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 1, 0, 0, 1, 0, 1], vec![0, 1, 1, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1228,10 +1221,10 @@ fn main_74_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[3],pe[4])==3 && std::cmp::max(pe[3],pe[4])==4
-            
     )
 }
 
+#[allow(dead_code)]
 fn main_75_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 1, 0, 0, 1, 0, 1], vec![0, 1, 1, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1246,10 +1239,10 @@ fn main_75_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[3],pe[4])==3 && std::cmp::max(pe[3],pe[4])==4
-            
     )
 }
 
+#[allow(dead_code)]
 fn main_76_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 1, 0, 0, 1, 0, 1], vec![0, 1, 1, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1263,11 +1256,11 @@ fn main_76_1() {
         // 
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[5]==5 && pe[6]==6
-            && std::cmp::min(pe[3],pe[4])==3 && std::cmp::max(pe[3],pe[4])==4
-            
+            && std::cmp::min(pe[3],pe[4])==3 && std::cmp::max(pe[3],pe[4])==4    
     )
 }
 
+#[allow(dead_code)]
 fn main_77_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 1, 0, 0, 1, 0, 1], vec![0, 1, 1, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1282,10 +1275,10 @@ fn main_77_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[3],pe[4])==3 && std::cmp::max(pe[3],pe[4])==4
-            
     )
 }
 
+#[allow(dead_code)]
 fn main_78_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 1, 0, 0, 1, 0, 1], vec![0, 1, 1, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1300,10 +1293,10 @@ fn main_78_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[3],pe[4])==3 && std::cmp::max(pe[3],pe[4])==4
-            
     )
 }
 
+#[allow(dead_code)]
 fn main_79_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 1, 0, 0, 1, 1, 1], vec![0, 1, 1, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1322,6 +1315,7 @@ fn main_79_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_80_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 1, 0, 0, 1, 1, 1], vec![0, 1, 1, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1339,6 +1333,7 @@ fn main_80_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_81_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 1, 0, 0, 1, 1, 1], vec![0, 1, 1, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1356,6 +1351,7 @@ fn main_81_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_83_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 1, 0, 0, 1, 1, 1], vec![0, 1, 1, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1373,6 +1369,7 @@ fn main_83_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_84_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 1, 0, 0, 1, 1, 1], vec![0, 1, 1, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1390,6 +1387,7 @@ fn main_84_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_84_1_new2() {
     // rel_get_cover_rel(&vec![vec![1, 0, 1, 0, 0, 1, 1, 1], vec![0, 1, 1, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1403,7 +1401,7 @@ fn main_84_1_new2() {
     )
 }
 
-
+#[allow(dead_code)]
 fn main_85_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 1, 0, 0, 1, 1, 1], vec![0, 1, 1, 0, 0, 1, 1, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1419,12 +1417,10 @@ fn main_85_1() {
             pe[0]==0 && pe[1]==1 && pe[2]==2 
             && std::cmp::min(pe[3],pe[4])==3 && std::cmp::max(pe[3],pe[4])==4
             && std::cmp::min(pe[5],pe[6])==5 && std::cmp::max(pe[5],pe[6])==6
-
-
-            
     )
 }
 
+#[allow(dead_code)]
 fn main_88_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 1, 0, 0, 1, 1, 1], vec![0, 1, 1, 0, 0, 1, 1, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1439,12 +1435,10 @@ fn main_88_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[3],pe[4])==3 && std::cmp::max(pe[3],pe[4])==4
-
-
-            
     )
 }
 
+#[allow(dead_code)]
 fn main_89_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 1, 0, 0, 1, 1, 1], vec![0, 1, 1, 0, 0, 1, 1, 1], vec![0, 0, 1, 0, 0, 1, 1, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1460,11 +1454,10 @@ fn main_89_1() {
             pe[0]==0 && pe[1]==1 && pe[2]==2 
             && std::cmp::min(pe[3],pe[4])==3 && std::cmp::max(pe[3],pe[4])==4
             && std::cmp::min(pe[5],pe[6])==5 && std::cmp::max(pe[5],pe[6])==6
-
-            
     )
 }
 
+#[allow(dead_code)]
 fn main_275_1() {
     // rel_get_cover_rel(&vec![vec![1, 0, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 1, 1, 1, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1477,13 +1470,11 @@ fn main_275_1() {
         &vec![(0,1), (1,0), (2,0), (3,0), (4,0), (5,0), (6,0)],
         // 
         |pe| 
-            pe[0]==0 && pe[1]==1 
-            
+            pe[0]==0 && pe[1]==1
     )
 }
 
-
-
+#[allow(dead_code)]
 fn main_338_1() {
     // rel_get_cover_rel(&vec![vec![1, 1, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1496,12 +1487,11 @@ fn main_338_1() {
         &vec![(0,2), (0,3), (0,4), (0,5), (0,6), (1,0)],
         // TODO
         |pe| 
-            pe[0]==0 && pe[1]==1 
-            
+            pe[0]==0 && pe[1]==1
     )
 }
 
-
+#[allow(dead_code)]
 fn main_339_1() {
     // rel_get_cover_rel(&vec![vec![1, 1, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1516,11 +1506,10 @@ fn main_339_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[6]==6
             && std::cmp::min(pe[2], std::cmp::min(pe[3], std::cmp::min(pe[4],pe[5]))) == 2 && std::cmp::max(pe[2], std::cmp::max(pe[3], std::cmp::max(pe[4],pe[5]))) == 5
-            
     )
 }
 
-
+#[allow(dead_code)]
 fn main_340_1() {
     // rel_get_cover_rel(&vec![vec![1, 1, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1535,10 +1524,10 @@ fn main_340_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[2], std::cmp::min(pe[3],pe[4])) == 2 && std::cmp::max(pe[2], std::cmp::max(pe[3],pe[4])) == 4
-            
     )
 }
 
+#[allow(dead_code)]
 fn main_341_1() {
     // rel_get_cover_rel(&vec![vec![1, 1, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 1, 1, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1557,7 +1546,7 @@ fn main_341_1() {
     )
 }
 
-
+#[allow(dead_code)]
 fn main_342_1() {
     // rel_get_cover_rel(&vec![vec![1, 1, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 1, 1, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1572,11 +1561,10 @@ fn main_342_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[2], std::cmp::min(pe[3],pe[4])) == 2 && std::cmp::max(pe[2], std::cmp::max(pe[3],pe[4])) == 4
-            
     )
 }
 
-
+#[allow(dead_code)]
 fn main_343_1() {
     // rel_get_cover_rel(&vec![vec![1, 1, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 1, 0, 0, 1], vec![0, 0, 0, 1, 1, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1592,12 +1580,10 @@ fn main_343_1() {
             pe[0]==0 && pe[1]==1 && pe[4]==4
             && std::cmp::min(pe[2],pe[3])==2 && std::cmp::max(pe[2],pe[3])==3
             && std::cmp::min(pe[5],pe[6])==5 && std::cmp::max(pe[5],pe[6])==6
-            
     )
 }
 
-
-
+#[allow(dead_code)]
 fn main_354_1() {
     // rel_get_cover_rel(&vec![vec![1, 1, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 1, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1612,11 +1598,10 @@ fn main_354_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[3]==3
             && std::cmp::min(pe[4], std::cmp::min(pe[5],pe[6])) == 4 && std::cmp::max(pe[4], std::cmp::max(pe[5],pe[6])) == 6
-            
     )
 }
 
-
+#[allow(dead_code)]
 fn main_355_1() {
     // rel_get_cover_rel(&vec![vec![1, 1, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 1, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1631,12 +1616,10 @@ fn main_355_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[3]==3 && pe[6]==6
             && std::cmp::min(pe[4],pe[5])==4 && std::cmp::max(pe[4],pe[5])==5
-            
     )
 }
 
-
-
+#[allow(dead_code)]
 fn main_356_1() {
     // rel_get_cover_rel(&vec![vec![1, 1, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 1, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1651,12 +1634,11 @@ fn main_356_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[6]==6
             && (   pe[2]==2 && pe[4]==4 && pe[3]==3 && pe[5]==5
-                || pe[2]==4 && pe[4]==2 && pe[3]==5 && pe[5]==3) 
-            
+                || pe[2]==4 && pe[4]==2 && pe[3]==5 && pe[5]==3)
     )
 }
 
-
+#[allow(dead_code)]
 fn main_357_1() {
     // rel_get_cover_rel(&vec![vec![1, 1, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1671,11 +1653,10 @@ fn main_357_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[6]==6
             && std::cmp::min(pe[2], std::cmp::min(pe[3], std::cmp::min(pe[4],pe[5]))) == 2 && std::cmp::max(pe[2], std::cmp::max(pe[3], std::cmp::max(pe[4],pe[5]))) == 5
-            
     )
 }
 
-
+#[allow(dead_code)]
 fn main_358_1() {
     // rel_get_cover_rel(&vec![vec![1, 1, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 1, 1, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1690,11 +1671,10 @@ fn main_358_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[2], std::cmp::min(pe[3],pe[4])) == 2 && std::cmp::max(pe[2], std::cmp::max(pe[3],pe[4])) == 4
-            
     )
 }
 
-
+#[allow(dead_code)]
 fn main_362_1() {
     // rel_get_cover_rel(&vec![vec![1, 1, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1709,12 +1689,10 @@ fn main_362_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 &&  pe[6]==6
             && std::cmp::min(pe[2], std::cmp::min(pe[3], std::cmp::min(pe[4],pe[5]))) == 2 && std::cmp::max(pe[2], std::cmp::max(pe[3], std::cmp::max(pe[4],pe[5]))) == 5
-            
     )
 }
 
-
-
+#[allow(dead_code)]
 fn main_363_1() {
     // rel_get_cover_rel(&vec![vec![1, 1, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 1, 1, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1730,11 +1708,10 @@ fn main_363_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[2], std::cmp::min(pe[3],pe[4])) == 2 && std::cmp::max(pe[2], std::cmp::max(pe[3],pe[4])) == 4
-            
     )
 }
 
-
+#[allow(dead_code)]
 fn main_367_1() {
     // rel_get_cover_rel(&vec![vec![1, 1, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 1, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1749,12 +1726,10 @@ fn main_367_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[3]==3 && pe[6]==6
             && std::cmp::min(pe[4],pe[5]) == 4 && std::cmp::max(pe[4],pe[5]) == 5
-
-            
     )
 }
 
-
+#[allow(dead_code)]
 fn main_368_1() {
     // rel_get_cover_rel(&vec![vec![1, 1, 0, 0, 0, 0, 1, 1], vec![0, 1, 0, 0, 0, 0, 1, 1], vec![0, 0, 1, 1, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1770,14 +1745,10 @@ fn main_368_1() {
             pe[0]==0 && pe[1]==1 && pe[6]==6
             && (   pe[2]==2 && pe[4]==4 && pe[3]==3 && pe[5]==5
                 || pe[2]==4 && pe[4]==2 && pe[3]==5 && pe[5]==3)
-            
-            
-            
-            
     )
 }
 
-
+#[allow(dead_code)]
 fn main_369_1() {
     // rel_get_cover_rel(&vec![vec![1, 1, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1792,10 +1763,10 @@ fn main_369_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[2], std::cmp::min(pe[3],pe[4])) == 2 && std::cmp::max(pe[2], std::cmp::max(pe[3],pe[4])) == 4
-            
     )
 }
 
+#[allow(dead_code)]
 fn main_370_1() {
     // rel_get_cover_rel(&vec![vec![1, 1, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 1, 1, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1810,11 +1781,10 @@ fn main_370_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[3],pe[4])==3 && std::cmp::max(pe[3],pe[4])==4
-            
     )
 }
 
-
+#[allow(dead_code)]
 fn main_371_1() {
     // rel_get_cover_rel(&vec![vec![1, 1, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 1, 1, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1829,11 +1799,10 @@ fn main_371_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[4]==4 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[2],pe[3])==2 && std::cmp::max(pe[2],pe[3])==3
-            
     )
 }
 
-
+#[allow(dead_code)]
 fn main_372_1() {
     // rel_get_cover_rel(&vec![vec![1, 1, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 1, 1, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1848,11 +1817,10 @@ fn main_372_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[2], std::cmp::min(pe[3],pe[4])) == 2 && std::cmp::max(pe[2], std::cmp::max(pe[3],pe[4])) == 4
-            
     )
 }
 
-
+#[allow(dead_code)]
 fn main_376_1() {
     // rel_get_cover_rel(&vec![vec![1, 1, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1867,12 +1835,10 @@ fn main_376_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[2], std::cmp::min(pe[3],pe[4])) == 2 && std::cmp::max(pe[2], std::cmp::max(pe[3],pe[4])) == 4
-            
     )
 }
 
-
-
+#[allow(dead_code)]
 fn main_377_1() {
     // rel_get_cover_rel(&vec![vec![1, 1, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 1, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1887,12 +1853,11 @@ fn main_377_1() {
         // 
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[5]==5 && pe[6]==6
-            && std::cmp::min(pe[3],pe[4])==3 && std::cmp::max(pe[3],pe[4])==4 
-            
+            && std::cmp::min(pe[3],pe[4])==3 && std::cmp::max(pe[3],pe[4])==4
     )
 }
 
-
+#[allow(dead_code)]
 fn main_378_1() {
     // rel_get_cover_rel(&vec![vec![1, 1, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 1, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1908,12 +1873,11 @@ fn main_378_1() {
         // 
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[4]==4 && pe[5]==5 && pe[6]==6
-            && std::cmp::min(pe[2],pe[3])==2 && std::cmp::max(pe[2],pe[3])==3 
-            
+            && std::cmp::min(pe[2],pe[3])==2 && std::cmp::max(pe[2],pe[3])==3
     )
 }
 
-
+#[allow(dead_code)]
 fn main_379_1() {
     // rel_get_cover_rel(&vec![vec![1, 1, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 1, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1932,8 +1896,7 @@ fn main_379_1() {
     )
 }
 
-
-
+#[allow(dead_code)]
 fn main_383_1() {
     // rel_get_cover_rel(&vec![vec![1, 1, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 1, 0, 1], vec![0, 0, 1, 1, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1949,12 +1912,11 @@ fn main_383_1() {
         |pe| 
             pe[4]==4 && pe[5]==5 && pe[6]==6
             && (   pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[3]==3 
-                || pe[0]==2 && pe[1]==3 && pe[2]==0 && pe[3]==1)  
-            
+                || pe[0]==2 && pe[1]==3 && pe[2]==0 && pe[3]==1)
     )
 }
 
-
+#[allow(dead_code)]
 fn main_384_1() {
     // rel_get_cover_rel(&vec![vec![1, 1, 0, 0, 0, 1, 0, 1], vec![0, 1, 0, 0, 0, 1, 0, 1], vec![0, 0, 1, 1, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1973,7 +1935,7 @@ fn main_384_1() {
     )
 }
 
-
+#[allow(dead_code)]
 fn main_385_1() {
     // rel_get_cover_rel(&vec![vec![1, 1, 0, 0, 0, 1, 1, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 1, 1, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -1989,46 +1951,10 @@ fn main_385_1() {
             pe[0]==0 && pe[1]==1 
             && std::cmp::min(pe[2], std::cmp::min(pe[3],pe[4])) == 2 && std::cmp::max(pe[2], std::cmp::max(pe[3],pe[4])) == 4
             && std::cmp::min(pe[5],pe[6]) == 5 && std::cmp::max(pe[5],pe[6]) == 6
-            
     )
 }
 
-fn rel_get_cover_rel(pord: &Vec<Vec<usize>>)  {
-    let n = pord.len();
-
-    for i in 0..n {
-        let mut b_first = true;
-        for j in 0..n {
-            if b_first {
-                b_first = false;
-            }
-            else {
-                print!(", ");
-            }
-            if pord[i][j]==1 {
-                let mut b_found = false;
-                for k in 0..n {
-                    if k!=i && k!=j && pord[i][k] ==1 && pord[k][j]==1 {
-                        b_found = true;
-                        break;
-                    }
-                }
-                if b_found {
-                    print!("0");
-                }
-                else {
-                    print!("1")
-                } 
-            }
-            else {
-                print!("0")
-            }
-        }
-        println!();
-    }
-}
-
-
+#[allow(dead_code)]
 fn main_386_1() {
     // rel_get_cover_rel(&vec![vec![1, 1, 0, 0, 0, 1, 1, 1], vec![0, 1, 0, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 1, 1, 1], vec![0, 0, 0, 1, 0, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -2043,11 +1969,10 @@ fn main_386_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[2], std::cmp::min(pe[3],pe[4])) == 2 && std::cmp::max(pe[2], std::cmp::max(pe[3],pe[4])) == 4
-            
     )
 }
 
-
+#[allow(dead_code)]
 fn main_389_1() {
     gen_plans_main(
         // 
@@ -2060,10 +1985,10 @@ fn main_389_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[2], std::cmp::min(pe[3],pe[4])) == 2 && std::cmp::max(pe[2], std::cmp::max(pe[3],pe[4])) == 4
-            
     )
 }
 
+#[allow(dead_code)]
 fn main_391_1() {
     gen_plans_main(
         // 
@@ -2076,11 +2001,10 @@ fn main_391_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[2], std::cmp::min(pe[3],pe[4])) == 2 && std::cmp::max(pe[2], std::cmp::max(pe[3],pe[4])) == 4
-            
     )
 }
 
-
+#[allow(dead_code)]
 fn main_393_1() {
     gen_plans_main(
         // 
@@ -2097,6 +2021,7 @@ fn main_393_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_394_1() {
     gen_plans_main(
         // 
@@ -2112,6 +2037,7 @@ fn main_394_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_397_1() {
     gen_plans_main(
         // 
@@ -2129,6 +2055,7 @@ fn main_397_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_398_1() {
     gen_plans_main(
         // 
@@ -2145,6 +2072,7 @@ fn main_398_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_408_1() {
     gen_plans_main(
         // 
@@ -2161,7 +2089,7 @@ fn main_408_1() {
     )
 }
 
-
+#[allow(dead_code)]
 fn main_409_1() {
     gen_plans_main(
         // 
@@ -2177,7 +2105,7 @@ fn main_409_1() {
     )
 }
 
-
+#[allow(dead_code)]
 fn main_410_1() {
     gen_plans_main(
         // 
@@ -2192,8 +2120,7 @@ fn main_410_1() {
     )
 }
 
-
-
+#[allow(dead_code)]
 fn main_411_1() {
     gen_plans_main(
         // 
@@ -2209,7 +2136,7 @@ fn main_411_1() {
     )
 }
 
-
+#[allow(dead_code)]
 fn main_430_1() {
     gen_plans_main(
         // 
@@ -2224,6 +2151,7 @@ fn main_430_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_431_1() {
     gen_plans_main(
         // 
@@ -2239,6 +2167,7 @@ fn main_431_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_435_1() {
     gen_plans_main(
         // 
@@ -2253,6 +2182,7 @@ fn main_435_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_436_1() {
     gen_plans_main(
         // 
@@ -2268,6 +2198,7 @@ fn main_436_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_437_1() {
     gen_plans_main(
         // 
@@ -2283,7 +2214,7 @@ fn main_437_1() {
     )
 }
 
-
+#[allow(dead_code)]
 fn main_493_1() {
     gen_plans_main(
         // 
@@ -2299,6 +2230,7 @@ fn main_493_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_495_1() {
     gen_plans_main(
         // 
@@ -2314,6 +2246,7 @@ fn main_495_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_502_1() {
     gen_plans_main(
         // 
@@ -2329,6 +2262,7 @@ fn main_502_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_503_1() {
     gen_plans_main(
         // 
@@ -2344,6 +2278,7 @@ fn main_503_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_513_1() {
     gen_plans_main(
         // 
@@ -2359,6 +2294,7 @@ fn main_513_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_515_1() {
     gen_plans_main(
         // 
@@ -2374,6 +2310,7 @@ fn main_515_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_517_1() {
     gen_plans_main(
         // 
@@ -2389,6 +2326,7 @@ fn main_517_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_521_1() {
     gen_plans_main(
         //
@@ -2404,6 +2342,7 @@ fn main_521_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_523_1() {
     gen_plans_main(
         // 
@@ -2419,6 +2358,7 @@ fn main_523_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_888_1() {
     gen_plans_main(
         // 
@@ -2434,7 +2374,7 @@ fn main_888_1() {
     )
 }
 
-
+#[allow(dead_code)]
 fn main_889_1() {
     gen_plans_main(
         // 
@@ -2451,7 +2391,7 @@ fn main_889_1() {
     )
 }
 
-
+#[allow(dead_code)]
 fn main_891_1() {
     gen_plans_main(
         // 
@@ -2469,7 +2409,7 @@ fn main_891_1() {
     )
 }
 
-
+#[allow(dead_code)]
 fn main_892_1() {
     gen_plans_main(
         // 
@@ -2486,7 +2426,7 @@ fn main_892_1() {
     )
 }
 
-
+#[allow(dead_code)]
 fn main_893_1() {
     gen_plans_main(
         // 
@@ -2503,7 +2443,7 @@ fn main_893_1() {
     )
 }
 
-
+#[allow(dead_code)]
 fn main_894_1() {
     gen_plans_main(
         // 
@@ -2522,7 +2462,7 @@ fn main_894_1() {
     )
 }
 
-
+#[allow(dead_code)]
 fn main_895_1() {
     gen_plans_main(
         // 
@@ -2535,11 +2475,10 @@ fn main_895_1() {
         |pe| 
             pe[0]==0 && pe[3]==3 && pe[4]==4 && pe[5]==5 && pe[6]==6 
             && std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2]) == 2
-            
-            
     )
 }
 
+#[allow(dead_code)]
 fn main_896_1() {
     gen_plans_main(
         // 
@@ -2552,11 +2491,10 @@ fn main_896_1() {
         |pe| 
             pe[0]==0 && pe[3]==3 && pe[4]==4 && pe[5]==5 && pe[6]==6 
             && std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2]) == 2
-            
-            
     )
 }
 
+#[allow(dead_code)]
 fn main_897_1() {
     gen_plans_main(
         // 
@@ -2570,10 +2508,10 @@ fn main_897_1() {
             pe[0]==0 && pe[3]==3 && pe[6]==6 
             && std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2]) == 2
             && std::cmp::min(pe[4],pe[5]) == 4 && std::cmp::max(pe[4],pe[5]) == 5
-            
     )
 }
 
+#[allow(dead_code)]
 fn main_898v2_1() {
     gen_plans_main(
         // 
@@ -2589,6 +2527,7 @@ fn main_898v2_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_898_1() {
     gen_plans_main(
         // 
@@ -2605,7 +2544,7 @@ fn main_898_1() {
 }
 
 
-
+#[allow(dead_code)]
 fn main_899_1() {
     gen_plans_main(
         // 
@@ -2621,7 +2560,7 @@ fn main_899_1() {
     )
 }
 
-
+#[allow(dead_code)]
 fn main_909_1() {
     gen_plans_main(
         // 
@@ -2634,14 +2573,11 @@ fn main_909_1() {
         |pe| 
             pe[0]==0 && pe[6]==6
             && std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2]) == 2
-            && std::cmp::min(std::cmp::min(pe[3],pe[4]),pe[5]) == 3 && std::cmp::max(std::cmp::max(pe[3],pe[4]),pe[5]) == 5 
-            
-            
-
+            && std::cmp::min(std::cmp::min(pe[3],pe[4]),pe[5]) == 3 && std::cmp::max(std::cmp::max(pe[3],pe[4]),pe[5]) == 5
     )
 }
 
-
+#[allow(dead_code)]
 fn main_910_1() {
     gen_plans_main(
         // 
@@ -2655,11 +2591,10 @@ fn main_910_1() {
             pe[0]==0 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2]) == 2
             && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4
-
     )
 }
 
-
+#[allow(dead_code)]
 fn main_912_1() {
     gen_plans_main(
         // 
@@ -2671,14 +2606,11 @@ fn main_912_1() {
         //  
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[6]==6
-            && std::cmp::min(std::cmp::min(pe[3],pe[4]),pe[5]) == 3 && std::cmp::max(std::cmp::max(pe[3],pe[4]),pe[5]) == 5 
-            
-            
-
+            && std::cmp::min(std::cmp::min(pe[3],pe[4]),pe[5]) == 3 && std::cmp::max(std::cmp::max(pe[3],pe[4]),pe[5]) == 5
     )
 }
 
-
+#[allow(dead_code)]
 fn main_913_1() {
     gen_plans_main(
         // 
@@ -2690,10 +2622,10 @@ fn main_913_1() {
         //  
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[3]==3 && pe[4]==4 && pe[5]==5 && pe[6]==6
-            
     )
 }
 
+#[allow(dead_code)]
 fn main_915_1() {
     gen_plans_main(
         // 
@@ -2706,13 +2638,11 @@ fn main_915_1() {
         |pe| 
             pe[0]==0 && pe[6]==6
             && std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2]) == 2
-            && std::cmp::min(std::cmp::min(pe[3],pe[4]),pe[5]) == 3 && std::cmp::max(std::cmp::max(pe[3],pe[4]),pe[5]) == 5 
-            
-            
-
+            && std::cmp::min(std::cmp::min(pe[3],pe[4]),pe[5]) == 3 && std::cmp::max(std::cmp::max(pe[3],pe[4]),pe[5]) == 5
     )
 }
 
+#[allow(dead_code)]
 fn main_916_1() {
     gen_plans_main(
         // [[1, 1, 1, 0, 0, 0, 1, 1], [0, 1, 0, 0, 0, 0, 1, 1], [0, 0, 1, 0, 0, 0, 1, 1], [0, 0, 0, 1, 0, 1, 1, 1], [0, 0, 0, 0, 1, 1, 1, 1], [0, 0, 0, 0, 0, 1, 1, 1], [0, 0, 0, 0, 0, 0, 1, 1], [0, 0, 0, 0, 0, 0, 0, 1]]
@@ -2726,14 +2656,10 @@ fn main_916_1() {
             pe[0]==0 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2]) == 2
             && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4
-            
-            
-            
-
     )
 }
 
-
+#[allow(dead_code)]
 fn main_919_1() {
     gen_plans_main(
         // 
@@ -2745,13 +2671,11 @@ fn main_919_1() {
         //  
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[6]==6
-            && std::cmp::min(std::cmp::min(pe[3],pe[4]),pe[5]) == 3 && std::cmp::max(std::cmp::max(pe[3],pe[4]),pe[5]) == 5 
-            
-            
-
+            && std::cmp::min(std::cmp::min(pe[3],pe[4]),pe[5]) == 3 && std::cmp::max(std::cmp::max(pe[3],pe[4]),pe[5]) == 5
     )
 }
 
+#[allow(dead_code)]
 fn main_922_1() {
     gen_plans_main(
         // 
@@ -2763,13 +2687,11 @@ fn main_922_1() {
         //  
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[6]==6
-            && std::cmp::min(std::cmp::min(pe[3],pe[4]),pe[5]) == 3 && std::cmp::max(std::cmp::max(pe[3],pe[4]),pe[5]) == 5 
-            
-            
-
+            && std::cmp::min(std::cmp::min(pe[3],pe[4]),pe[5]) == 3 && std::cmp::max(std::cmp::max(pe[3],pe[4]),pe[5]) == 5
     )
 }
 
+#[allow(dead_code)]
 fn main_925_1() {
     gen_plans_main(
         // 
@@ -2781,13 +2703,11 @@ fn main_925_1() {
         //  
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[6]==6
-            && std::cmp::min(std::cmp::min(pe[3],pe[4]),pe[5]) == 3 && std::cmp::max(std::cmp::max(pe[3],pe[4]),pe[5]) == 5 
-            
-            
-
+            && std::cmp::min(std::cmp::min(pe[3],pe[4]),pe[5]) == 3 && std::cmp::max(std::cmp::max(pe[3],pe[4]),pe[5]) == 5
     )
 }
 
+#[allow(dead_code)]
 fn main_939_1() {
     gen_plans_main(
         // 
@@ -2800,14 +2720,11 @@ fn main_939_1() {
         |pe| 
             pe[0]==0 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2]) == 2 
-            && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4 
-            
-            
-
+            && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4
     )
 }
 
-
+#[allow(dead_code)]
 fn main_940_1() {
     gen_plans_main(
         // 
@@ -2819,14 +2736,11 @@ fn main_940_1() {
         //  
         |pe| 
             pe[0]==0 && pe[3]==3 && pe[4]==4 && pe[5]==5 && pe[6]==6
-            && std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2]) == 2 
-            
-            
-            
-
+            && std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2]) == 2
     )
 }
 
+#[allow(dead_code)]
 fn main_941_1() {
     gen_plans_main(
         // 
@@ -2839,13 +2753,11 @@ fn main_941_1() {
         |pe| 
             pe[0]==0 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2]) == 2 
-            && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4 
-            
-            
-
+            && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4
     )
 }
 
+#[allow(dead_code)]
 fn main_962_1() {
     gen_plans_main(
         // 
@@ -2858,13 +2770,11 @@ fn main_962_1() {
         |pe| 
             pe[0]==0 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2]) == 2 
-            && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4 
-            
-            
-
+            && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4
     )
 }
 
+#[allow(dead_code)]
 fn main_965_1() {
     gen_plans_main(
         // 
@@ -2876,13 +2786,11 @@ fn main_965_1() {
         //  
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[5]==5 && pe[6]==6
-            && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4 
-            
-            
-
+            && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4
     )
 }
 
+#[allow(dead_code)]
 fn main_967_1() {
     gen_plans_main(
         // 
@@ -2895,13 +2803,11 @@ fn main_967_1() {
         |pe| 
             pe[0]==0 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2]) == 2 
-            && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4 
-            
-            
-
+            && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4
     )
 }
 
+#[allow(dead_code)]
 fn main_969_1() {
     gen_plans_main(
         // 
@@ -2913,13 +2819,11 @@ fn main_969_1() {
         //  
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[5]==5 && pe[6]==6
-            && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4 
-            
-            
-
+            && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4
     )
 }
 
+#[allow(dead_code)]
 fn main_971_1() {
     gen_plans_main(
         // 
@@ -2931,13 +2835,11 @@ fn main_971_1() {
         //
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[5]==5 && pe[6]==6
-            && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4 
-            
-            
-
+            && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4
     )
 }
 
+#[allow(dead_code)]
 fn main_973_1() {
     gen_plans_main(
         // 
@@ -2950,14 +2852,11 @@ fn main_973_1() {
         |pe| 
             pe[0]==0 && pe[5]==5 && pe[6]==6
             && std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2]) == 2 
-            && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4 
-            
-            
-
+            && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4
     )
 }
 
-
+#[allow(dead_code)]
 fn main_975_1() {
     gen_plans_main(
         // 
@@ -2970,12 +2869,11 @@ fn main_975_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 
             && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4 
-            && std::cmp::min(pe[5],pe[6]) == 5 && std::cmp::max(pe[5],pe[6]) == 6 
-            
-
+            && std::cmp::min(pe[5],pe[6]) == 5 && std::cmp::max(pe[5],pe[6]) == 6
     )
 }
 
+#[allow(dead_code)]
 fn main_976_1() {
     gen_plans_main(
         // 
@@ -2987,12 +2885,11 @@ fn main_976_1() {
         //
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[5]==5 && pe[6]==6
-            && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4 
-            
-
+            && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4
     )
 }
 
+#[allow(dead_code)]
 fn main_979_1() {
     gen_plans_main(
         // 
@@ -3004,12 +2901,11 @@ fn main_979_1() {
         //
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[5]==5 && pe[6]==6
-            && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4 
-            
-
+            && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4
     )
 }
 
+#[allow(dead_code)]
 fn main_981_1() {
     gen_plans_main(
         // 
@@ -3021,12 +2917,11 @@ fn main_981_1() {
         //
         |pe| 
             pe[0]==0 && pe[1]==1 && pe[2]==2 && pe[5]==5 && pe[6]==6
-            && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4 
-            
-
+            && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4
     )
 }
 
+#[allow(dead_code)]
 fn main_983_1() {
     gen_plans_main(
         // 
@@ -3039,12 +2934,11 @@ fn main_983_1() {
         |pe| 
             pe[1]==1 
             && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4 
-            && std::cmp::min(pe[5],pe[6]) == 5 && std::cmp::max(pe[5],pe[6]) == 6 
-
+            && std::cmp::min(pe[5],pe[6]) == 5 && std::cmp::max(pe[5],pe[6]) == 6
     )
 }
 
-
+#[allow(dead_code)]
 fn main_984_1() {
     gen_plans_main(
         //
@@ -3057,11 +2951,11 @@ fn main_984_1() {
         |pe| 
             pe[0]==0 
             && std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2]) == 2 
-            && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4 
-
+            && std::cmp::min(pe[3],pe[4]) == 3 && std::cmp::max(pe[3],pe[4]) == 4
     )
 }
 
+#[allow(dead_code)]
 fn main_1295_1() {
     gen_plans_main(
         //
@@ -3074,11 +2968,11 @@ fn main_1295_1() {
         |pe| 
             pe[0]==0 && pe[1]==1 
             && std::cmp::min(pe[2],pe[3]) == 2 && std::cmp::max(pe[2],pe[3]) == 3 
-            && std::cmp::min(std::cmp::min(pe[4],pe[5]), pe[6]) == 4 && std::cmp::max(std::cmp::max(pe[4],pe[5]),pe[6]) == 6 
-
+            && std::cmp::min(std::cmp::min(pe[4],pe[5]), pe[6]) == 4 && std::cmp::max(std::cmp::max(pe[4],pe[5]),pe[6]) == 6
     )
 }
 
+#[allow(dead_code)]
 fn main_1296_1() {
     gen_plans_main(
         //
@@ -3090,11 +2984,11 @@ fn main_1296_1() {
         //
         |pe| 
             pe[1]==1 && std::cmp::min(pe[2],pe[3]) == 2 && std::cmp::max(pe[2],pe[3]) == 3 
-            && std::cmp::min(pe[4],pe[5]) == 4 && std::cmp::max(pe[4],pe[5]) == 5 
-
+            && std::cmp::min(pe[4],pe[5]) == 4 && std::cmp::max(pe[4],pe[5]) == 5
     )
 }
 
+#[allow(dead_code)]
 fn main_1320_1() {
     gen_plans_main(
         //
@@ -3106,11 +3000,11 @@ fn main_1320_1() {
         //
         |pe| 
             pe[1]==1 && std::cmp::min(pe[2],pe[3]) == 2 && std::cmp::max(pe[2],pe[3]) == 3 
-            && std::cmp::min(pe[4],pe[5]) == 4 && std::cmp::max(pe[4],pe[5]) == 5 
-
+            && std::cmp::min(pe[4],pe[5]) == 4 && std::cmp::max(pe[4],pe[5]) == 5
     )
 }
 
+#[allow(dead_code)]
 fn main_1322_1() {
     gen_plans_main(
         //
@@ -3122,12 +3016,12 @@ fn main_1322_1() {
         //
         |pe| 
             std::cmp::min(pe[2],pe[3]) == 2 && std::cmp::max(pe[2],pe[3]) == 3 
-            && std::cmp::min(pe[4],pe[5]) == 4 && std::cmp::max(pe[4],pe[5]) == 5 
-
+            && std::cmp::min(pe[4],pe[5]) == 4 && std::cmp::max(pe[4],pe[5]) == 5
     )
 }
 
 //verzia 1
+#[allow(dead_code)]
 fn main_1324_1() {
     gen_plans_main(
         //
@@ -3139,12 +3033,12 @@ fn main_1324_1() {
         //
         |pe| pe[3]==3
             && std::cmp::min(pe[1],pe[2]) == 1 && std::cmp::max(pe[1],pe[2]) == 2 
-            && std::cmp::min(pe[4],pe[5]) == 4 && std::cmp::max(pe[4],pe[5]) == 5 
-
+            && std::cmp::min(pe[4],pe[5]) == 4 && std::cmp::max(pe[4],pe[5]) == 5
     )
 }
 
 //verzia 2
+#[allow(dead_code)]
 fn main_1324_1_v2() {
     gen_plans_main(
         //
@@ -3156,11 +3050,11 @@ fn main_1324_1_v2() {
         //
         |pe| pe[1]==1
             && pe[2]==2 && pe[3]==3
-            && std::cmp::min(pe[4],pe[5]) == 4 && std::cmp::max(pe[4],pe[5]) == 5 
-
+            && std::cmp::min(pe[4],pe[5]) == 4 && std::cmp::max(pe[4],pe[5]) == 5
     )
 }
 
+#[allow(dead_code)]
 fn main_1326_1() {
     gen_plans_main(
         //
@@ -3172,11 +3066,11 @@ fn main_1326_1() {
         //
         |pe| pe[0]==0 && pe[1] == 1 
             && std::cmp::min(pe[2],pe[3])==2 && std::cmp::max(pe[2],pe[3])==3 
-            && std::cmp::min(pe[4],pe[5])==4 && std::cmp::max(pe[4],pe[5])==5 
-
+            && std::cmp::min(pe[4],pe[5])==4 && std::cmp::max(pe[4],pe[5])==5
     )
 }
 
+#[allow(dead_code)]
 fn main_1532_1() {
     gen_plans_main(
         //
@@ -3186,11 +3080,11 @@ fn main_1532_1() {
         //
         &vec![(0,5), (0,6), (1,0), (1,2), (1,3), (1,4), (1,5), (1,6)],
         //
-        |pe| pe[0]==0 && pe[1] == 1 && std::cmp::min(pe[5],pe[6])==5 && std::cmp::max(pe[5],pe[6])==6 
-
+        |pe| pe[0]==0 && pe[1] == 1 && std::cmp::min(pe[5],pe[6])==5 && std::cmp::max(pe[5],pe[6])==6
     )
 }
 
+#[allow(dead_code)]
 fn main_1533_1() {
     gen_plans_main(
         //
@@ -3200,12 +3094,11 @@ fn main_1533_1() {
         //
         &vec![(0,5), (0,6), (1,0), (1,2), (1,3), (1,4), (1,5), (1,6)],
         //
-        |pe| pe[0]==0 && pe[1] == 1 && pe[5]==5 && pe[6]==6 
-
+        |pe| pe[0]==0 && pe[1] == 1 && pe[5]==5 && pe[6]==6
     )
 }
 
-
+#[allow(dead_code)]
 fn main_1564_1() {
     gen_plans_main(
         //
@@ -3215,11 +3108,11 @@ fn main_1564_1() {
         //
         &vec![(0,5), (1,0), (1,2), (1,3), (1,4), (1,5),(1,6)],
         //
-        |pe| pe[0]==0 && pe[1] == 1 && pe[5]==5 && pe[6]==6 
-
+        |pe| pe[0]==0 && pe[1] == 1 && pe[5]==5 && pe[6]==6
     )
 }
 
+#[allow(dead_code)]
 fn main_1565_1() {
     gen_plans_main(
         //
@@ -3229,11 +3122,11 @@ fn main_1565_1() {
         //
         &vec![(0,5), (1,0), (1,2), (1,3), (1,4), (1,5)],
         //
-        |pe| pe[0]==0 && pe[1] == 1 && pe[5]==5 && pe[6]==6 
-
+        |pe| pe[0]==0 && pe[1] == 1 && pe[5]==5 && pe[6]==6
     )
 }
 
+#[allow(dead_code)]
 fn main_1566_1() {
     gen_plans_main(
         //
@@ -3243,12 +3136,11 @@ fn main_1566_1() {
         //
         &vec![(0,5), (1,0), (1,2), (1,3), (1,4), (1,5)],
         //
-        |pe| pe[0]==0 && pe[1] == 1 && pe[5]==5 && std::cmp::min(pe[3],pe[4]) ==3 && std::cmp::max(pe[3],pe[4]) ==4 
-
+        |pe| pe[0]==0 && pe[1] == 1 && pe[5]==5 && std::cmp::min(pe[3],pe[4]) ==3 && std::cmp::max(pe[3],pe[4]) ==4
     )
 }
 
-
+#[allow(dead_code)]
 fn main_1567_1() {
     gen_plans_main(
         //
@@ -3262,6 +3154,7 @@ fn main_1567_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_1568_1() {
     gen_plans_main(
         //
@@ -3275,6 +3168,7 @@ fn main_1568_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_1665_1() {
     gen_plans_main(
         //
@@ -3288,6 +3182,7 @@ fn main_1665_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_1681_1() {
     // 
     let num_pord = 1681;
@@ -3326,6 +3221,7 @@ fn main_1681_1() {
     gen_plans(&pord, num_pord, &fixed_vec, fix_pred, &from_vec);
 }
 
+#[allow(dead_code)]
 fn main_1728_1() {
     gen_plans_main(
         //
@@ -3339,6 +3235,7 @@ fn main_1728_1() {
     )
 }
 
+#[allow(dead_code)]
 fn main_1728_2() {
     gen_plans_main(
         //
@@ -3390,6 +3287,7 @@ fn main_1728_2() {
 //     gen_plans(&pord, num_pord, &fixed_vec, fix_pred, &from_vec);
 // }
 
+#[allow(dead_code)]
 fn main_1729_1() {
     // 
     let num_pord = 1729;
@@ -3426,6 +3324,7 @@ fn main_1729_1() {
     gen_plans(&pord, num_pord, &fixed_vec, fix_pred, &from_vec);
 }
 
+#[allow(dead_code)]
 fn main_1730_1() {
     // 
     let num_pord = 1730;
@@ -3462,6 +3361,7 @@ fn main_1730_1() {
     gen_plans(&pord, num_pord, &fixed_vec, fix_pred, &from_vec);
 }
 
+#[allow(dead_code)]
 fn main_1731_1() {
     // 
     let num_pord = 1731;
@@ -3500,7 +3400,7 @@ fn main_1731_1() {
 }
 
 
-
+#[allow(dead_code)]
 fn main_1732_1() {
     // 
     let num_pord = 1732;
@@ -3537,6 +3437,7 @@ fn main_1732_1() {
     gen_plans(&pord, num_pord, &fixed_vec, fix_pred, &from_vec);
 }
 
+#[allow(dead_code)]
 fn main_1799_1() {
     gen_plans_main(
         //
@@ -3548,11 +3449,10 @@ fn main_1799_1() {
         //
         |pe| std::cmp::min(pe[3],pe[5]) == 3 && std::cmp::max(pe[3],pe[5]) == 5
                 && std::cmp::min(pe[4],pe[6]) == 4 && std::cmp::max(pe[4],pe[6]) == 6
-            
-            
     )
 }
 
+#[allow(dead_code)]
 fn main_1800_1() {
     gen_plans_main(
         //
@@ -3563,12 +3463,10 @@ fn main_1800_1() {
         &vec![(1,0), (1,3), (1,4), (1,5), (2,0), (2,1), (2,3), (2,4), (2,5)],
         //
         |pe| std::cmp::min(std::cmp::min(pe[3],pe[4]), pe[5]) == 3 && std::cmp::max(std::cmp::max(pe[3],pe[4]),pe[5]) == 5
-                
-            
-            
     )
 }
 
+#[allow(dead_code)]
 fn main_1879_1() {
     gen_plans_main(
         //
@@ -3579,11 +3477,10 @@ fn main_1879_1() {
         &vec![(1,0), (1,4), (1,5), (1,6)],
         //
         |pe| pe[4]==4 && pe[5]==5 && pe[6]==6 && std::cmp::min(pe[2],pe[3]) == 2 && std::cmp::max(pe[2],pe[3]) == 3
-            
-            
     )
 }
 
+#[allow(dead_code)]
 fn main_1890_1() {
     gen_plans_main(
         //
@@ -3595,10 +3492,10 @@ fn main_1890_1() {
         //
         |pe| std::cmp::min(pe[2],pe[3]) == 2 && std::cmp::max(pe[2],pe[3]) == 3
             && std::cmp::min(pe[4],pe[5]) == 4 && std::cmp::max(pe[4],pe[5]) == 5
-            
     )
 }
 
+#[allow(dead_code)]
 fn main_1967_1() {
     gen_plans_main(
         //
@@ -3610,10 +3507,10 @@ fn main_1967_1() {
         //
         |pe| pe[2]==2 && pe[6]==6
             && std::cmp::min(std::cmp::min(pe[3],pe[4]),pe[5]) == 3 && std::cmp::max(std::cmp::max(pe[3],pe[4]),pe[5]) == 5
-            
     )
 }
 
+#[allow(dead_code)]
 fn main_1877_1_new2() {
     // rel_get_cover_rel(&vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -3627,6 +3524,7 @@ fn main_1877_1_new2() {
     )
 }
 
+#[allow(dead_code)]
 fn main_1877_2_new2() {
     // rel_get_cover_rel(&vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -3640,6 +3538,7 @@ fn main_1877_2_new2() {
     )
 }
 
+#[allow(dead_code)]
 fn main_1881_1_new2() {
     // rel_get_cover_rel(&vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 0, 0, 0, 1], vec![0, 0, 1, 1, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -3654,7 +3553,7 @@ fn main_1881_1_new2() {
 }
 // 
 
-
+#[allow(dead_code)]
 fn main_1983_1() {
     gen_plans_main(
         //
@@ -3665,10 +3564,10 @@ fn main_1983_1() {
         &vec![(1,0), (2,0), (2,1), (2,3), (2,4), (2,5), (2,6)],
         //
         |pe| pe[2]==2
-            
     )
 }
 
+#[allow(dead_code)]
 fn main_1983_1_new2() {
     // rel_get_cover_rel(&vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 1, 1, 1, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -3682,6 +3581,7 @@ fn main_1983_1_new2() {
     )
 }
 
+#[allow(dead_code)]
 fn main_1999_1() {
     gen_plans_main(
         //
@@ -3696,7 +3596,7 @@ fn main_1999_1() {
     )
 }
 
-
+#[allow(dead_code)]
 fn main_1_2() {
     // 1
     let num_pord = 1;
@@ -3769,6 +3669,7 @@ fn main_1_2() {
 //     }
 // }
 
+#[allow(dead_code)]
 fn main_1999_1_new2() {
     // rel_get_cover_rel(&vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 1, 1, 1, 1], vec![0, 0, 1, 1, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -3782,6 +3683,7 @@ fn main_1999_1_new2() {
     )
 }
 
+#[allow(dead_code)]
 fn main_2015_1_new2() {    
     // rel_get_cover_rel(&vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 1, 1, 1, 1], vec![0, 0, 1, 1, 1, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -3795,6 +3697,7 @@ fn main_2015_1_new2() {
     )
 }
 
+#[allow(dead_code)]
 fn main_2019_1_new2() {
     // rel_get_cover_rel(&vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 1, 1, 1, 1], vec![0, 0, 1, 1, 1, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -3808,6 +3711,7 @@ fn main_2019_1_new2() {
     )
 }
 
+#[allow(dead_code)]
 fn main_2043_1_new2() {
     // rel_get_cover_rel(&vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 1, 1, 1, 1], vec![0, 0, 1, 1, 1, 1, 1, 1], vec![0, 0, 0, 1, 1, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -3821,6 +3725,7 @@ fn main_2043_1_new2() {
     )
 }
 
+#[allow(dead_code)]
 fn main_2044_1_new2() {
     // rel_get_cover_rel(&vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 1, 1, 1, 1], vec![0, 0, 1, 1, 1, 1, 1, 1], vec![0, 0, 0, 1, 1, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;
@@ -3834,6 +3739,7 @@ fn main_2044_1_new2() {
     )
 }
 
+#[allow(dead_code)]
 fn main_2045_1_new2() {
     // rel_get_cover_rel(&vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 1, 1, 1, 1], vec![0, 0, 1, 1, 1, 1, 1, 1], vec![0, 0, 0, 1, 1, 1, 1, 1], vec![0, 0, 0, 0, 1, 1, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]]);
     // return;

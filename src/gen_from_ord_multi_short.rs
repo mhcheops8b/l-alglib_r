@@ -38,14 +38,9 @@ fn main() {
             eprintln!("Order: {pord:?}");
             let ts: Instant = Instant::now();
             for line in task_file.lines() {
-                // let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(n);
-                // let mut positions = Vec::<(usize,usize)>::new();
-
-
-                let mut init_vector = Vec::<usize>::new();
                 let line_str = line.unwrap();
                 eprintln!("Init vector (str): {}", line_str);
-                init_vector = line_str.split(",").map(|v| v.trim().parse().unwrap()).collect();
+                let init_vector = line_str.split(",").map(|v| v.trim().parse().unwrap()).collect();
                 eprintln!("Init vector (int): {:?}", init_vector);
     
                 l_alglib::l_alg_gen_from_ord_short_iter(&pord, &init_vector, &mut lalgs, true, true);

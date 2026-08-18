@@ -26,7 +26,6 @@ fn main() {
         let cur_line = line.unwrap();
         cur_line_no += 1;
         
-
         if cur_line_no == pord_num {
             let ts = Instant::now();
             let task_file = BufReader::new(File::open(&task_file_path).expect("Cannot open file"));
@@ -54,7 +53,7 @@ fn main() {
                     }
                     print!("{e}");
                 }
-                println!();//println!("{:?}", trf_init_vector);
+                println!();//cprintln!("{:?}", trf_init_vector);
              
             }
         }
