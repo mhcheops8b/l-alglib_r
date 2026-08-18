@@ -1,6 +1,7 @@
 fn main() {
     // test_code1();
-    main_6_01_1_new2();
+    test_code2();
+    // main_6_01_1_new2();
     // main_6_02_1_new2();
     // main_6_03_1_new2();
     // main_6_17_1_new2();
@@ -9,6 +10,68 @@ fn main() {
     // main_6_21_1_new2();
     // main_6_48_1_new2();
 }
+
+
+#[derive(Debug)]
+pub struct Lalg1d {
+    n: usize,
+    lalg_op: Vec<usize>,
+}
+
+impl Lalg1d {
+    pub fn lalg1d_init(n:usize) -> Lalg1d {
+        let mut tmp_arr = Vec::<usize>::with_capacity(n*n);
+        tmp_arr.resize(n*n, n + 1);
+        Lalg1d {
+            n: n,
+            lalg_op: tmp_arr,
+        }
+    }
+
+    pub fn lalg1d_load_from_ord(&mut self, pord_1d: &[usize]) {        
+        for i in 0 .. self.n {
+            for j in 0 .. self.n {
+                if i != j {
+                    if pord_1d[i * self.n + j] == 1 {
+                        self.lalg_op[i * self.n + j] = self.n - 1;
+                    }
+                    else {
+                        self.lalg_op[i * self.n + j] = self.n + 1;
+                    }
+                }
+            }
+        }
+
+        for i in 0 .. self.n {
+            self.lalg_op[i * self.n + i] = self.n - 1;
+            self.lalg_op[(self.n-1) * self.n + i] = i;
+            self.lalg_op[i * self.n + self.n - 1] = self.n - 1;
+        }
+    }
+
+    pub fn lalg1d_init_from_ord(n:usize, pord_1d: &[usize]) -> Lalg1d {        
+        let mut res_alg = Lalg1d::lalg1d_init(n);
+        for i in 0 .. n {
+            for j in 0 .. n {
+                if i != j {
+                    if pord_1d[i * n + j] == 1 {
+                        res_alg.lalg_op[i * n + j] = n - 1;
+                    }
+                }
+            }
+        }
+
+        for i in 0 .. n {
+            res_alg.lalg_op[i * n + i] = n - 1;
+            res_alg.lalg_op[(n-1) * n + i] = i;
+            res_alg.lalg_op[i * n + n - 1] = n - 1;
+        }
+        res_alg
+    }
+}
+
+
+
 
 #[allow(dead_code)]
 fn test_code1() {
@@ -24,6 +87,21 @@ fn test_code1() {
     }
     eprintln!("{arr:?}");
 }
+
+#[allow(dead_code)]
+fn test_code2() {
+    let mut lalg = Lalg1d::lalg1d_init(4);
+
+    println!("{:?}", lalg);
+
+    lalg.lalg1d_load_from_ord(&[1,1,1,1,0,1,1,1,0,0,1,1,0,0,0,1]);
+    println!("{:?}", lalg);
+
+    lalg.lalg1d_load_from_ord(&[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]);
+    println!("{:?}", lalg);
+
+}
+
 
 #[allow(dead_code)]
 fn main_6_01_1_new2() {

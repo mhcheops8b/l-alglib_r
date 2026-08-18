@@ -1,7 +1,5 @@
-use std::{collections::HashSet, io::BufRead};
 use std::fs::File;
-use std::io::{BufReader};
-use std::time::Instant;
+use std::io::{BufRead, BufReader};
 
 fn main() {
     
@@ -27,9 +25,8 @@ fn main() {
         cur_line_no += 1;
         
         if cur_line_no == pord_num {
-            let ts = Instant::now();
             let task_file = BufReader::new(File::open(&task_file_path).expect("Cannot open file"));
-            let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
+            // let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
             let pord = serde_json::from_str::<Vec<Vec<usize>>>(&cur_line).unwrap();
 
             eprintln!("Order: {pord:?}");
@@ -41,7 +38,7 @@ fn main() {
 
 
             for line in task_file.lines() {
-                let mut init_vector = line.unwrap().split(",").map(|v| v.trim().parse().unwrap()).collect();    
+                let init_vector = line.unwrap().split(",").map(|v| v.trim().parse().unwrap()).collect();    
                 let trf_init_vector = l_alglib::transform_init_vector(pord.len(), &positions_old, &positions, &init_vector);
                 let mut b_first=true;
                 for e in trf_init_vector {

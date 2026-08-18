@@ -1,8 +1,9 @@
-use std::{collections::HashSet};
-use std::time::Instant;
+// use std::{collections::HashSet};
+// use std::time::Instant;
 use std::fmt::Write;
 
 // x -> x = 1
+#[allow(dead_code)]
 fn lalg_l1(lalg: &Vec<Vec<usize>>) -> bool {
     let n = lalg.len();
 
@@ -15,6 +16,7 @@ fn lalg_l1(lalg: &Vec<Vec<usize>>) -> bool {
 }
 
 // x -> 1 = 1
+#[allow(dead_code)]
 fn lalg_l2(lalg: &Vec<Vec<usize>>) -> bool {
     let n = lalg.len();
 
@@ -27,6 +29,7 @@ fn lalg_l2(lalg: &Vec<Vec<usize>>) -> bool {
 }
 
 // 1 -> x = x
+#[allow(dead_code)]
 fn lalg_l3(lalg: &Vec<Vec<usize>>) -> bool {
     let n = lalg.len();
 
@@ -39,6 +42,7 @@ fn lalg_l3(lalg: &Vec<Vec<usize>>) -> bool {
 }
 
 // (x -> y) -> (x -> z) = (y -> x) -> (y -> z)
+#[allow(dead_code)]
 fn lalg_l4(lalg: &Vec<Vec<usize>>) -> bool {
     let n = lalg.len();
 
@@ -55,6 +59,7 @@ fn lalg_l4(lalg: &Vec<Vec<usize>>) -> bool {
 }
 
 // (x -> y) = 1 && (y -> x) = 1 ==> x = y
+#[allow(dead_code)]
 fn lalg_l5(lalg: &Vec<Vec<usize>>) -> bool {
     let n = lalg.len();
 
@@ -69,6 +74,7 @@ fn lalg_l5(lalg: &Vec<Vec<usize>>) -> bool {
 }
 
 // x -> (y -> x) = y -> (x -> y)
+#[allow(dead_code)]
 fn lalg_self_similar(lalg: &Vec<Vec<usize>>)  -> Result<bool, String> {
     let n = lalg.len();
     let mut outerr_str = String::new();
@@ -97,6 +103,7 @@ fn lalg_self_similar(lalg: &Vec<Vec<usize>>)  -> Result<bool, String> {
 }
 
 // (x -> y) -> y = (y -> x) -> x
+#[allow(dead_code)]
 fn lalg_commutative(lalg: &Vec<Vec<usize>>)  -> Result<bool, String> {
     let n = lalg.len();
     let mut outerr_str = String::new();
@@ -125,6 +132,7 @@ fn lalg_commutative(lalg: &Vec<Vec<usize>>)  -> Result<bool, String> {
 }
 
 // x -> (y -> z) = (x -> y) -> (x -> z)
+#[allow(dead_code)]
 fn lalg_self_distributive(lalg: &Vec<Vec<usize>>)  -> Result<bool, String> {
     let n = lalg.len();
     let mut outerr_str = String::new();
@@ -155,6 +163,7 @@ fn lalg_self_distributive(lalg: &Vec<Vec<usize>>)  -> Result<bool, String> {
 }
 
 // x -> (y -> z) = y -> (x -> z)
+#[allow(dead_code)]
 fn lalg_cl_algebra(lalg: &Vec<Vec<usize>>)  -> Result<bool, String> {
     let n = lalg.len();
     let mut outerr_str = String::new();
@@ -185,6 +194,7 @@ fn lalg_cl_algebra(lalg: &Vec<Vec<usize>>)  -> Result<bool, String> {
 }
 
 // x <= a -> x
+#[allow(dead_code)]
 fn lalg_kl_algebra(lalg: &Vec<Vec<usize>>)  -> Result<bool, String> {
     let n = lalg.len();
     let mut outerr_str = String::new();
@@ -232,7 +242,7 @@ fn main() {
         Err(err) => {eprintln!("Error parsing json (pord): {err:?}"); return;}
     };
     
-    let n = lalg.len();
+    // let n = lalg.len();
     
     eprintln!("Input L-algebra: {:?}", lalg);
     println!("L1: {}", lalg_l1(&lalg));
