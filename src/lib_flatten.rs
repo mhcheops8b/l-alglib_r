@@ -1260,47 +1260,140 @@ pub fn gen_all_lalgs_from_ord_rec(
     }
 }
 
-pub fn l_alg_gen_from_ord(
-    pord: &[usize],
-    n: usize,
-    unit_elem: usize,
-    status_output_limit: usize,
-) -> HashSet<Vec<usize>> {
+// pub fn l_alg_gen_from_ord(
+//     pord: &[usize],
+//     n: usize,
+//     unit_elem: usize,
+//     status_output_limit: usize,
+// ) -> HashSet<Vec<usize>> {
+//     let mut num_tested = 0usize;
+//     let mut num_models = 0usize;
+//     let mut limpl = vec![n + 1; n * n];
+//     let mut positions = Vec::<(usize, usize)>::new();
+//     let mut res = HashSet::<Vec<usize>>::new();
+
+//     // Initialize implication table from the input order
+//     l_alg_init_from_ord(&mut limpl, n, pord, unit_elem);
+//     l_alg_init_get_positions_new(pord, &mut positions, n);
+
+//     let start_time = Instant::now();
+
+//     gen_all_lalgs_from_ord_rec(
+//         0,
+//         &positions,
+//         &mut limpl,
+//         n,
+//         unit_elem,
+//         &mut res,
+//         &mut num_tested,
+//         &mut num_models,
+//         status_output_limit,
+//     );
+
+//     let duration = start_time.elapsed();
+
+//     eprintln!(
+//         "Time elapsed: {:?}, num tested: {}, num models: {}, num repr models: {}",
+//         duration,
+//         num_tested,
+//         num_models,
+//         res.len()
+//     );
+
+//     res
+// }
+
+// manual transformation
+pub fn l_alg_gen_from_ord(pord: &[usize], n: usize, init_vector: &Vec<usize>, lalgs: &mut HashSet<Vec<usize>>, b_test: bool, b_print: bool, status_output_limit: usize) {
+
+    if b_print {
+        eprintln!("Order: {pord:?}");
+    }
+
+    let mut lalg_limpl = l_alg_alloc_limpl(n);
+    let mut positions = Vec::<(usize,usize)>::new();
+                
+    l_alg_init_from_ord(&mut lalg_limpl, n, &pord, n-1);
+    l_alg_init_get_positions_old(pord, &mut positions, n);
+
+    // apply init_vector
+    let mut b_first = true;
+    for i in 0usize..std::cmp::min(positions.len(), init_vector.len()) {
+        if b_print {
+            if b_first {
+                b_first = false;
+            } 
+            else {
+                eprint!(", ");
+            }
+        }
+        let (x, y) = positions[i];
+        let e = init_vector[i];
+        if b_print {
+            eprint!("({},{}) = {} ", x, y, e);
+        }
+        if b_test {
+            if e == n+1 {
+                if b_print {
+                    eprint!("(skipping)");
+                }
+                continue;
+            }
+            if e == n-1 {
+                if b_print {
+                    eprint!("(Element at ({}, {}) cannot be equal to unit ({}).)",x,y,n-1);
+                }
+                return;
+            }
+
+            // self-similar property: x -> (y -> x) = y -> (x -> y)    
+            // if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
+            //     if b_print {
+            //         eprint!("(Element at ({}, {}) needs to be greater than {} since {} <= {}.)",x,y,y,y,x);
+            //     }
+            //     return;
+            // }
+
+            for t in 0..y {
+                if lalg_limpl[idx(t, y, n)] == n-1 
+                   && lalg_limpl[idx(x,t,n)] != n+1 
+                   && lalg_limpl[idx(lalg_limpl[idx(x,t,n)],e, n)] != n-1 {
+                    if b_print {
+                        eprint!("(Element e={} at (x={}, y={}) needs to larger than {} since t={} <= y => x->t <= x->y.)", e, x, y, lalg_limpl[idx(x,t,n)], t);
+                    }
+                    return;
+                }
+            }
+        }
+
+        lalg_limpl[idx(x,y,n)] = e;
+        if b_test {
+            if !l_alg_test_ax4_partial(&lalg_limpl, n,  true) {
+                //eprintln!("Partial ax4 is not satisfied");
+                return;
+            }
+        }
+    }
+    eprintln!();    
+    for i in (0usize..std::cmp::min(positions.len(), init_vector.len())).rev() {
+        if init_vector[i] != n+1 {
+            positions.remove(i); 
+        }
+    }
+    if b_print {
+        eprintln!("Positions: {positions:?}");
+        eprintln!("Init limpl: {lalg_limpl:?}");
+    }
+        // return;
+    let time_start = Instant::now();
     let mut num_tested = 0usize;
     let mut num_models = 0usize;
-    let mut limpl = vec![n + 1; n * n];
-    let mut positions = Vec::<(usize, usize)>::new();
-    let mut res = HashSet::<Vec<usize>>::new();
+    gen_all_lalgs_rec(0, &positions, &mut lalg_limpl, n, n-1, lalgs, &mut num_tested, &mut num_models, status_output_limit);
 
-    // Initialize implication table from the input order
-    l_alg_init_from_ord(&mut limpl, n, pord, unit_elem);
-    l_alg_init_get_positions_new(pord, &mut positions, n);
-
-    let start_time = Instant::now();
-
-    gen_all_lalgs_from_ord_rec(
-        0,
-        &positions,
-        &mut limpl,
-        n,
-        unit_elem,
-        &mut res,
-        &mut num_tested,
-        &mut num_models,
-        status_output_limit,
-    );
-
-    let duration = start_time.elapsed();
-
-    eprintln!(
-        "Time elapsed: {:?}, num tested: {}, num models: {}, num repr models: {}",
-        duration,
-        num_tested,
-        num_models,
-        res.len()
-    );
-
-    res
+    eprintln!("Computation time: {:.4} s", time_start.elapsed().as_secs_f32());
+    eprintln!("Number recursive calls: {}", num_tested);
+    eprintln!("Number of all models: {}", num_models);
+    eprintln!("Number of representative models {}", lalgs.len());
 }
 
 pub fn l_alg_gen_from_ord_new(
