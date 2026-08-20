@@ -1,6 +1,7 @@
 fn main() {
     // test_code1();
-    test_code2();
+    // test_code2();
+    test_code3();
     // main_6_01_1_new2();
     // main_6_02_1_new2();
     // main_6_03_1_new2();
@@ -11,11 +12,12 @@ fn main() {
     // main_6_48_1_new2();
 }
 
-
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Lalg1d {
     n: usize,
     lalg_op: Vec<usize>,
+    unit: usize,
+    _unfilled: usize,
 }
 
 impl Lalg1d {
@@ -25,6 +27,8 @@ impl Lalg1d {
         Lalg1d {
             n: n,
             lalg_op: tmp_arr,
+            unit: n - 1,
+            _unfilled: n + 1
         }
     }
 
@@ -68,6 +72,121 @@ impl Lalg1d {
         }
         res_alg
     }
+
+    pub fn lalg1d_ax1(&self) -> bool {
+        for x in 0..self.n {
+            if self.lalg_op[x * self.n + x] != self.unit {
+                return false;
+            }
+        }
+        true
+    }
+
+    pub fn lalg1d_ax2(&self) -> bool {
+        for x in 0..self.n {
+            if self.lalg_op[x * self.n + self.unit] != self.unit {
+                return false;
+            }
+        }
+        true
+    }
+
+    pub fn lalg1d_ax3(&self) -> bool {
+        for x in 0..self.n {
+            if self.lalg_op[self.unit * self.n + x] != x {
+                return false;
+            }
+        }
+        true
+    }
+
+    pub fn lalg1d_ax4(&self, bprint: bool) -> bool {
+        for x in 0..self.n {
+            for y in 0..self.n {
+                let v_xy = self.lalg_op[x * self.n + y];
+                let v_yx = self.lalg_op[y * self.n + x];
+                for z in 0..self.n {
+                    if self.lalg_op[v_xy * self.n + self.lalg_op[x * self.n + z]] != 
+                       self.lalg_op[v_yx * self.n + self.lalg_op[y * self.n + z]] {
+                        if bprint {
+                            eprintln!("  Problem: x = {}, y = {}, z = {}", x, y, z);
+                        }
+                        return false;
+                    }
+                }
+            }
+        }
+        true
+    }
+
+    pub fn lalg1d_ax5(&self) -> bool {
+        for x in 0..self.n {
+            for y in 0..self.n {
+                if x != y && self.lalg_op[x * self.n + y] == self.unit && self.lalg_op[y * self.n + x] == self.unit {
+                    return false;
+                }
+            }
+        }
+        true
+    }
+
+    pub fn lalg1d_is_l_algebra(&self, bprint: bool) -> bool {
+        self.lalg1d_ax1() &&
+        self.lalg1d_ax2() &&
+        self.lalg1d_ax3() &&
+        self.lalg1d_ax4(bprint) &&
+        self.lalg1d_ax5()
+    }
+
+// pub fn l_alg_has_kl_property_old(limpl: &[usize], n: usize, unit: usize) -> bool {
+//     for x in 0..n {
+//         for a in 0..n {
+//             if limpl[x * n + limpl[a * n + x]] != unit {
+//                 eprintln!("Problem: x = {}, a = {}", x, a);
+//                 return false;
+//             }
+//         }
+//     }
+//     true
+// }
+
+// pub fn l_alg_has_kl_property(limpl: &[usize], n: usize, unit: usize) -> Result<bool,String> {
+//     for x in 0..n {
+//         for a in 0..n {
+//             if limpl[x * n + limpl[a * n + x]] != unit {
+//                 let err = format!("KL - Problem: x = {}, a = {}", x, a);
+//                 return Err(err);
+//             }
+//         }
+//     }
+//     Ok(true)
+// }
+
+// pub fn l_alg_is_commutative_l_algebra(limpl: &[usize], n: usize) -> Result<bool,String> {
+//     for x in 0..n {
+//         for y in 0..n {
+//             if limpl[limpl[x * n + y] * n + y] != limpl[limpl[y * n + x] * n + x] {
+//                 let err = format!("Comm - Problem: x = {}, y = {}", x, y);
+//                 return Err(err)
+//             }
+//         }
+//     }
+//     Ok(true)
+// }
+
+// pub fn l_alg_is_cl_algebra(limpl: &[usize], n: usize) -> Result<bool,String> {
+//     for x in 0..n {
+//         for y in 0..n {
+//             for z in 0..n {
+//                 if limpl[x * n + limpl[y * n + z]] != limpl[y * n + limpl[x * n + z]] {
+//                     let err = format!("CL - Problem: x = {}, y = {}, z = {}", x, y, z);
+//                     return Err(err)
+//                 }
+//             }
+//         }
+//     }
+//     Ok(true)
+// }
 }
 
 
@@ -101,6 +220,16 @@ fn test_code2() {
     println!("{:?}", lalg);
 
 }
+
+#[allow(dead_code)]
+fn test_code3() {
+    let lalg = vec![0,1,2,3,4,5];
+
+    let slice = &lalg[0..3];
+    println!("{}", slice.len());
+    assert_eq!(slice, &[0,1,2]);
+}
+
 
 
 #[allow(dead_code)]

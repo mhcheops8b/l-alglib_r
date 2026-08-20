@@ -20,6 +20,10 @@ name = "gen_from_ord_file_new_pos"
 path = "src/gen_from_ord_file_new_pos.rs"
 
 [[bin]]
+name = "flatten_gen_from_ord_file_new_pos"
+path = "src/flatten_gen_from_ord_file_new_pos.rs"
+
+[[bin]]
 name = "transform_plans_to_new_pos"
 path = "src/transform_plans_to_new_pos.rs"
 
@@ -68,8 +72,13 @@ name = "gen_from_ord_file_multi"
 path = "src/gen_from_ord_file_multi.rs"
 
 [[bin]]
+name = "flatten_gen_from_ord_file_multi_new_pos"
+path = "src/flatten_gen_from_ord_file_multi_new_pos.rs"
+
+[[bin]]
 name = "gen_from_ord_file_multi_new_pos"
 path = "src/gen_from_ord_file_multi_new_pos.rs"
+
 
 [[bin]]
 name = "gen_from_ord_multi_short"

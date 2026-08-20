@@ -2,7 +2,6 @@ use std::fs::File;
 use std::io::{BufRead, BufReader};
 
 fn main() {
-    
     let args_len = std::env::args().len();
 
     if args_len < 4 {

@@ -43,7 +43,6 @@ fn main() {
         
         if cur_line_no == pord_num {
 
-            let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
             let pord = serde_json::from_str::<Vec<Vec<usize>>>(&cur_line).unwrap();
             
             eprintln!("Order: {pord:?}");
@@ -62,8 +61,11 @@ fn main() {
                 eprintln!("Transformed init vector (int): {:?}", trf_init_vector);
                 init_vector = trf_init_vector;
             }
+            let n = pord.len();
+            let flatten_pord = pord.into_iter().flatten().collect::<Vec<_>>();
 
-            l_alglib::l_alg_gen_from_ord_new(&pord, &init_vector, &mut lalgs, true, true, 10_000_000);
+            let mut lalgs_flatten = HashSet::<Vec<usize>>::new();
+            l_alglib::lib_flatten::l_alg_gen_from_ord_new(&flatten_pord, &init_vector, &mut lalgs_flatten, true, true, 10_000_000, n);
         }
     }    
 }

@@ -1,3 +1,5 @@
+pub mod lib_flatten;
+
 use std::collections::{HashSet, HashMap};
 use std::time::{Instant, Duration};
 use itertools::{Itertools};
@@ -913,6 +915,7 @@ pub fn positions_process_pair(order: &[Vec<usize>], already_processed: &mut Hash
         }
     }
 }
+
 pub fn positions_process_triple(order: &[Vec<usize>], already_processed: &mut HashSet<(usize,usize)>, unfilled_positions: &mut Vec<(usize,usize)>, i: usize, j:usize, k:usize) {
     positions_process_pair(order, already_processed, unfilled_positions, i, j);
     positions_process_pair(order, already_processed, unfilled_positions, i, k);

@@ -35,16 +35,19 @@ fn main() {
         if cur_line_no == pord_num {
             let ts = Instant::now();
             let task_file = BufReader::new(File::open(&task_file_path).expect("Cannot open file"));
-            let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
+            // let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
+            let mut lalgs_flatten = HashSet::<Vec<usize>>::new();
             let pord = serde_json::from_str::<Vec<Vec<usize>>>(&cur_line).unwrap();
-
+            let lalg_size = pord.len();
+            
             eprintln!("Order: {pord:?}");
             let mut positions = Vec::<(usize,usize)>::new();
             let mut positions_old = Vec::<(usize,usize)>::new();
                 
             l_alglib::l_alg_init_get_positions_old(&pord, &mut positions_old); 
             l_alglib::l_alg_init_get_positions_new(&pord, &mut positions);
-
+            
+            let flatten_pord = pord.into_iter().flatten().collect::<Vec<_>>();
 
             for line in task_file.lines() {
                 let line_str = line.unwrap();
@@ -56,12 +59,12 @@ fn main() {
                     // eprintln!("Positions_old: {positions_old:?}");
                     // eprintln!("Positions_new: {positions:?}");
 
-                    let trf_init_vector = l_alglib::transform_init_vector(pord.len(), &positions_old, &positions, &init_vector);
+                    let trf_init_vector = l_alglib::transform_init_vector(lalg_size, &positions_old, &positions, &init_vector);
                     eprintln!("Transformed init vector (int): {:?}", trf_init_vector);
                     init_vector = trf_init_vector;
                 }
 
-                l_alglib::l_alg_gen_from_ord_new(&pord, &init_vector, &mut lalgs, true, false, 10_000_000);
+                l_alglib::lib_flatten::l_alg_gen_from_ord_new(&flatten_pord, &init_vector, &mut lalgs_flatten, true, false, 10_000_000, lalg_size);
             }
             eprintln!("===\nTotal Computational Time: {:.4} s", ts.elapsed().as_secs_f32());
         }
