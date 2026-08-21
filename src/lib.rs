@@ -230,7 +230,7 @@ pub fn l_alg_get_all_filters(limpl: &[Vec<usize>], unit: usize) {
 }
 
 // unit = m-1!
-pub fn l_alg_test_ax4_partial_xy(limpl: &[Vec<usize>], x: usize, y: usize, b_print: bool) -> bool {
+pub fn l_alg_test_ax4_partial_xy(limpl: &[Vec<usize>], x: usize, y: usize, _b_print: bool) -> bool {
     let m = limpl.len();
 
     if limpl[y][x] != m+1 {
@@ -1802,7 +1802,6 @@ pub fn l_alg_gen_from_ord_new_with_positions(pord: &Vec<Vec<usize>>, cur_positio
     eprintln!("Number of representative models {}", lalgs.len());
 }
 
-
 pub fn l_alg_gen_from_ord_short_iter(pord: &Vec<Vec<usize>>, init_vector: &Vec<usize>, lalgs: &mut HashSet<Vec<Vec<usize>>>, b_test: bool, b_print: bool) {
 
     let n = pord.len();
@@ -2445,7 +2444,11 @@ pub fn perm_hashset_get_images(perms_set: &HashSet::<Vec<usize>>, fun: &HashMap:
      hs_v
  }
 
- pub fn perm_iter_get_images(perms_set: impl Iterator<Item=Vec<usize>>, fun: &HashMap::<(usize,usize), usize>) -> Vec<Vec<usize>> {
+ pub fn perm_iter_get_images(
+    perms_set: impl Iterator<Item=Vec<usize>>, 
+    fun: &HashMap::<(usize,usize), usize>
+) -> Vec<Vec<usize>> 
+{
 
     let mut keys_sorted = fun.keys().collect::<Vec<_>>();
     keys_sorted.sort();
@@ -2852,8 +2855,6 @@ pub fn get_plan_fixed_rec_new2(lev:usize, num_iter: &mut usize, n: usize, pord: 
     }
 }
 
-
-
 pub fn get_plan_continue_rec(from_vec: &mut Vec<usize>, iter_cnt: &mut usize, time_ts: &mut Instant, lev:usize, n: usize, pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize,usize)>, positions: &Vec<(usize,usize)>, filter_fun: fn(&[usize])->bool, cur_lalg: &mut Vec<Vec<usize>>, out_type: &OutputType) {
     *iter_cnt +=1;
 
@@ -3005,6 +3006,7 @@ pub fn transform_init_vector(n: usize, from_positions: &Vec<(usize,usize)>, to_p
     trf_init_vector
 }
 
+// yy.len() < 64
 fn all_subsets(yy:&Vec<usize>) -> Vec<Vec<usize>> {
     let mut res = Vec::<Vec<usize>>::new();
     

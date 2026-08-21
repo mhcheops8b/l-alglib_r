@@ -210,6 +210,7 @@ pub fn l_alg_get_all_filters(limpl: &[usize], n: usize, unit: usize) {
     }
 }
 
+// unit = m-1!
 pub fn l_alg_test_ax4_partial_xy(limpl: &[usize], m: usize, x: usize, y: usize, _b_print: bool) -> bool {
     if limpl[idx(y, x, m)] != m + 1 {
         for z in 0..m - 1 {
@@ -812,7 +813,99 @@ pub fn gen_all_lalgs_rec(
     }
 }
 
-pub fn gen_all_lalgs_rec_short_iter(
+const SHORT_STOP_ITER_COUNT:usize = 250_000_000;
+
+pub fn gen_all_lalgs_rec_short_iter(b_stop: &mut bool, index:usize, positions:&[(usize,usize)], limpl: &mut [usize], lalg_size:usize, unit:usize, res:&mut HashSet<Vec<usize>>, num_tested: &mut usize, num_models: &mut usize) {
+    if *b_stop {
+        return;
+    }
+    let positions_size = positions.len();
+    //eprintln!("FHFH: {index} / {n}");
+    *num_tested+=1;
+    if *num_tested % 10_000_000 == 1 {
+        eprintln!("Cur_progress: {limpl:?}");    
+    }
+    if *num_tested == SHORT_STOP_ITER_COUNT {
+        *b_stop = true;
+        return;
+    }
+    if index >= positions_size {
+        //eprintln!("FHFH: {index} / {n}");
+        //eprintln!("{limpl:?}");
+        // *num_tested+=1;
+        // if true || *num_tested % 1000 == 1 {
+        //     eprintln!("Cur_progress: {limpl:?}");
+        //     // eprintln!("{:?}", l_alg_get_repr(limpl, true));
+        // }
+        if l_alg_is_l_algebra(limpl, lalg_size, unit, false) {
+            *num_models +=1;
+            // println!("{:?}", l_alg_get_repr(limpl, true));
+            // eprintln!("== {:?}", limpl);
+            // eprintln!("-> {:?}", l_alg_get_repr(limpl, true));
+            // *num_tested+=1;
+            // if *num_tested % 1000 == 1 {
+            //     eprintln!("Cur_progress: {limpl:?}");
+            //     // eprintln!("{:?}", l_alg_get_repr(limpl, true));
+            // }
+            let l_alg_repr = l_alg_get_repr(limpl, lalg_size, true, true);
+            if res.insert(l_alg_repr.clone()) {
+                println!("{:?}", l_alg_repr);
+            }
+            // if l_alg_is_repr(limpl, true) {
+            //     println!("{limpl:?}");
+            //     // std::io::stdout().flush().unwrap();
+            //     res.insert(limpl.clone());
+            // }
+            // if res.len() % 1000 == 0 {
+            //     eprintln!("{limpl:?}");
+            // }
+            
+            // let ll = l_alg_get_repr(&limpl, true);
+            // if !res.contains(&ll) {
+            //     // eprintln!("{ll:?}");
+            //     res.insert(ll);//limpl.clone());
+            // }
+        }
+
+    }
+    else {
+        let (x,y) = positions[index];
+        // let o_v = limpl[x][y];
+        for e in 0.. lalg_size {
+            if e == unit {
+                continue;
+            }
+
+            // self-similar property: x -> (y -> x) = y -> (x -> y)
+            // if limpl[y][x] == unit && limpl[y][e] != unit {
+            //     continue;
+            // }
+
+            let mut b_found = false;
+            for t in 0..y {
+                if limpl[idx(t,y,lalg_size)] == unit && limpl[idx(limpl[idx(x, t, lalg_size)], e, lalg_size)] != unit {
+                    b_found = true;
+                    break;
+                }
+            }
+            if b_found {
+                continue;
+            }
+            limpl[idx(x, y, lalg_size)] = e;
+
+            if !l_alg_test_ax4_partial_xy(limpl, lalg_size, x, y, false) {
+            // if !l_alg_test_ax4_partial(limpl, false) {
+                limpl[idx(x,y, lalg_size)] = lalg_size+1;
+                continue;
+            }
+            
+            gen_all_lalgs_rec_short_iter(b_stop, index+1, positions, limpl, lalg_size, unit, res, num_tested, num_models);
+        }
+        limpl[idx(x, y, lalg_size)] = lalg_size+1; //unfilled element
+    }
+}
+
+pub fn botched_gen_all_lalgs_rec_short_iter(
 index: usize,
 positions: &[(usize, usize)],
 limpl: &mut [usize],
@@ -866,7 +959,7 @@ status_output_limit: usize,
                 continue;
             }
 
-            gen_all_lalgs_rec_short_iter(
+            botched_gen_all_lalgs_rec_short_iter(
                 index + 1,
                 positions,
                 limpl,
@@ -884,7 +977,7 @@ status_output_limit: usize,
     }
 }
 
-const SHORT_STOP_ITER_COUNT:usize = 250_000_000;
+// const SHORT_STOP_ITER_COUNT:usize = 250_000_000;
 
 pub fn l_alg_gen_all_short_iter(n: usize, status_output_limit: usize) -> HashSet<Vec<usize>> {
     let mut num_tested = 0usize;
@@ -906,7 +999,7 @@ pub fn l_alg_gen_all_short_iter(n: usize, status_output_limit: usize) -> HashSet
 
     let start_time = Instant::now();
 
-    gen_all_lalgs_rec_short_iter(
+    botched_gen_all_lalgs_rec_short_iter(
         0,
         &positions,
         &mut limpl,
@@ -1643,6 +1736,105 @@ pub fn gen_lalgs_from_pord_rec_with_positions(
 }
 
 pub fn l_alg_gen_from_ord_new_with_positions(
+    pord: &[usize], 
+    lalg_size: usize, 
+    cur_positions: &Vec<(usize,usize)>, 
+    init_vector: &[usize], 
+    lalgs: &mut HashSet<Vec<usize>>, 
+    b_test: bool, 
+    b_print: bool, 
+    status_output_limit: usize
+) {
+    if b_print {
+        eprintln!("Order: {pord:?}");
+    }
+
+    let mut lalg_limpl = l_alg_alloc_limpl(lalg_size);
+    let mut positions = cur_positions.clone();
+                
+    l_alg_init_from_ord(&mut lalg_limpl, lalg_size, &pord, lalg_size-1);
+    // l_alg_init_get_positions_new(pord, &mut positions);
+
+    // apply init_vector
+    let mut b_first = true;
+    for i in 0usize..std::cmp::min(positions.len(), init_vector.len()) {
+        if b_print {
+            if b_first {
+                b_first = false;
+            } 
+            else {
+                eprint!(", ");
+            }
+        }
+        let (x, y) = positions[i];
+        let e = init_vector[i];
+        if b_print {
+            eprint!("({},{}) = {} ", x, y, e);
+        }
+        if b_test {
+            if e == lalg_size+1 {
+                if b_print {
+                    eprint!("(skipping)");
+                }
+                continue;
+            }
+            if e == lalg_size-1 {
+                if b_print {
+                    eprintln!("(Element at ({}, {}) cannot be equal to unit ({}).)",x,y,lalg_size-1);
+                }
+                return;
+            }
+
+            // self-similar property: x -> (y -> x) = y -> (x -> y)    
+            // if lalg_limpl[y][x] == n-1 && lalg_limpl[y][e] != n-1 {
+            //     if b_print {
+            //         eprint!("(Element at ({}, {}) needs to be greater than {} since {} <= {}.)",x,y,y,y,x);
+            //     }
+            //     return;
+            // }
+
+            for t in 0..y {
+                if lalg_limpl[idx(t, y, lalg_size)] == lalg_size-1 && lalg_limpl[idx(x, t, lalg_size)] != lalg_size+1 && lalg_limpl[idx(lalg_limpl[idx(x, t, lalg_size)], e, lalg_size)] != lalg_size-1 {
+                    if b_print {
+                        eprintln!("(Element e={} at (x={}, y={}) needs to larger than {} since t={} <= y => x->t <= x->y.)", e, x, y, lalg_limpl[idx(x, t, lalg_size)], t);
+                    }
+                    return;
+                }
+            }
+        }
+
+        lalg_limpl[idx(x, y, lalg_size)] = e;
+        if b_test {
+            if !l_alg_test_ax4_partial(&lalg_limpl, lalg_size, true) {
+                //eprintln!("Partial ax4 is not satisfied");
+                return;
+            }
+        }
+    }
+    eprintln!();    
+    for i in (0usize..std::cmp::min(positions.len(), init_vector.len())).rev() {
+        if init_vector[i] != lalg_size+1 {
+            positions.remove(i); 
+        }
+    }
+    if b_print {
+        eprintln!("Positions: {positions:?}");
+        eprintln!("Init limpl: {lalg_limpl:?}");
+    }
+        // return;
+    let time_start = Instant::now();
+    let mut num_tested = 0usize;
+    let mut num_models = 0usize;
+    gen_all_lalgs_rec(0, &positions, &mut lalg_limpl, lalg_size, lalg_size-1, lalgs, &mut num_tested, &mut num_models, status_output_limit);
+
+    eprintln!("Computation time: {:.4} s", time_start.elapsed().as_secs_f32());
+    eprintln!("Number recursive calls: {}", num_tested);
+    eprintln!("Number of all models: {}", num_models);
+    eprintln!("Number of representative models {}", lalgs.len());
+}
+
+
+pub fn botched_l_alg_gen_from_ord_new_with_positions(
     pord: &[usize],
     positions: &[(usize, usize)],
     n: usize,
@@ -1757,6 +1949,103 @@ pub fn gen_lalgs_from_pord_short_iter_rec(
 }
 
 pub fn l_alg_gen_from_ord_short_iter(
+    pord: &[usize],
+    lalg_size: usize, 
+    init_vector: &Vec<usize>, 
+    lalgs: &mut HashSet<Vec<usize>>, 
+    b_test: bool, 
+    b_print: bool
+) {
+    // let mut lalgs = HashSet::<Vec<Vec<usize>>>::new();
+    // let pord = serde_json::from_str::<Vec<Vec<usize>>>(&cur_line).unwrap();
+    
+    if b_print {
+        eprintln!("Order: {pord:?}");
+    }
+
+    let mut lalg_limpl = l_alg_alloc_limpl(lalg_size);
+    let mut positions = Vec::<(usize,usize)>::new();
+                
+    l_alg_init_from_ord(&mut lalg_limpl, lalg_size, &pord, lalg_size-1);
+    l_alg_init_get_positions_old(pord, &mut positions, lalg_size);
+    
+    // apply init_vector
+    let mut b_first = true;
+    for i in 0usize..std::cmp::min(positions.len(), init_vector.len()) {
+        if b_print {
+            if b_first {
+                b_first = false;
+            } 
+            else {
+                eprint!(", ");
+            }
+        }
+        let (x, y) = positions[i];
+        let e = init_vector[i];
+        if b_print {
+            eprint!("({},{}) = {} ", x, y, e);
+        }
+        if b_test {
+            if e == lalg_size+1 {
+                if b_print {
+                    eprint!("(skipping)");
+                }
+                continue;
+            }
+            if e == lalg_size-1 {
+                if b_print {
+                    eprint!("(Element at ({}, {}) cannot be equal to unit ({}).)",x,y,lalg_size-1);
+                }
+                return;
+            }
+
+            for t in 0..y {
+                if lalg_limpl[idx(t, y, lalg_size)] == lalg_size-1 && lalg_limpl[idx(x, t, lalg_size)] != lalg_size+1 && lalg_limpl[idx(lalg_limpl[idx(x, t, lalg_size)], e, lalg_size)] != lalg_size-1 {
+                    if b_print {
+                        eprint!("(Element e={} at (x={}, y={}) needs to larger than {} since t={} <= y => x->t <= x->y.)", e, x, y, lalg_limpl[idx(x, t, lalg_size)], t);
+                    }
+                    return;
+                }
+            }
+        }
+
+        lalg_limpl[idx(x, y, lalg_size)] = e;
+        if b_test {
+            if !l_alg_test_ax4_partial(&lalg_limpl, lalg_size, true) {
+                //eprintln!("Partial ax4 is not satisfied");
+                return;
+            }
+        }
+    }
+    eprintln!();    
+    for i in (0usize..std::cmp::min(positions.len(), init_vector.len())).rev() {
+        if init_vector[i] != lalg_size+1 {
+            positions.remove(i); 
+        }
+    }
+    if b_print {
+        eprintln!("Positions: {positions:?}");
+        eprintln!("Init limpl: {lalg_limpl:?}");
+    }
+        // return;
+    let time_start = Instant::now();
+    let mut num_tested = 0usize;
+    let mut num_models = 0usize;
+    let mut b_stop = false;
+    gen_all_lalgs_rec_short_iter(&mut b_stop, 0, &positions, &mut lalg_limpl, lalg_size, lalg_size-1, lalgs, &mut num_tested, &mut num_models);
+
+    if b_stop {
+        eprintln!("Skipped computation - {init_vector:?}, more than {SHORT_STOP_ITER_COUNT} iterations (time: {}).", time_start.elapsed().as_secs_f32());
+    }
+    else {
+        eprintln!("Computation time: {:.4} s", time_start.elapsed().as_secs_f32());
+        eprintln!("Number recursive calls: {}", num_tested);
+        eprintln!("Number of all models: {}", num_models);
+        eprintln!("Number of representative models {}", lalgs.len());
+    }
+}
+
+pub fn botched_l_alg_gen_from_ord_short_iter(
     pord: &[usize],
     n: usize,
     unit_elem: usize,
@@ -1881,7 +2170,16 @@ pub fn gen_lalgs_from_pord_short_iter_rec_limit_old(
     false
 }
 
-pub fn l_alg_gen_from_ord_short_iter_limit_old(iter_limit:usize, print_limit: usize, pord: &[usize], lalg_size:usize, init_vector: &[usize], lalgs: &mut HashSet<Vec<usize>>, b_test: bool, b_print: bool) {
+pub fn l_alg_gen_from_ord_short_iter_limit_old(
+    iter_limit:usize, 
+    print_limit: usize, 
+    pord: &[usize], 
+    lalg_size:usize, 
+    init_vector: &[usize], 
+    lalgs: &mut HashSet<Vec<usize>>, 
+    b_test: bool, 
+    b_print: bool
+) {
 
     if b_print {
         eprintln!("Order: {pord:?}");
@@ -2097,7 +2395,16 @@ pub fn gen_lalgs_from_pord_short_iter_rec_limit_new(
     false
 }
 
-pub fn l_alg_gen_from_ord_short_iter_limit_new(iter_limit:usize, print_limit: usize, pord: &[usize], lalg_size:usize, init_vector: &[usize], lalgs: &mut HashSet<Vec<usize>>, b_test: bool, b_print: bool) {
+pub fn l_alg_gen_from_ord_short_iter_limit_new(
+    iter_limit:usize, 
+    print_limit: usize, 
+    pord: &[usize], 
+    lalg_size:usize, 
+    init_vector: &[usize], 
+    lalgs: &mut HashSet<Vec<usize>>, 
+    b_test: bool, 
+    b_print: bool
+) {
 
     if b_print {
         eprintln!("Order: {pord:?}");
@@ -2347,7 +2654,14 @@ pub fn botched_l_alg_gen_from_ord_short_time(
     res
 }
 
-pub fn l_alg_gen_from_ord_short_time(pord: &[usize], n: usize, init_vector: &[usize], lalgs: &mut HashSet<Vec<usize>>, b_test: bool, b_print: bool) {
+pub fn l_alg_gen_from_ord_short_time(
+    pord: &[usize], 
+    n: usize, 
+    init_vector: &[usize], 
+    lalgs: &mut HashSet<Vec<usize>>, 
+    b_test: bool, 
+    b_print: bool
+) {
 
     if b_print {
         eprintln!("Order: {pord:?}");
@@ -2520,7 +2834,15 @@ pub fn gen_lalgs_from_pord_short_time_with_limit_rec_old(
     false
 }
 
-pub fn l_alg_gen_from_ord_short_time_with_limit_old(time_limit: Duration, pord: &[usize], lalg_size:usize, init_vector: &[usize], lalgs: &mut HashSet<Vec<usize>>, b_test: bool, b_print: bool) {
+pub fn l_alg_gen_from_ord_short_time_with_limit_old(
+    time_limit: Duration, 
+    pord: &[usize], 
+    lalg_size:usize, 
+    init_vector: &[usize], 
+    lalgs: &mut HashSet<Vec<usize>>, 
+    b_test: bool, 
+    b_print: bool
+) {
     
     if b_print {
         eprintln!("Order: {pord:?}");
@@ -2736,7 +3058,15 @@ pub fn gen_lalgs_from_pord_short_time_with_limit_rec_new(
     false
 }
 
-pub fn l_alg_gen_from_ord_short_time_with_limit_new(time_limit: Duration, pord: &[usize], lalg_size: usize, init_vector: &[usize], lalgs: &mut HashSet<Vec<usize>>, b_test: bool, b_print: bool) {
+pub fn l_alg_gen_from_ord_short_time_with_limit_new(
+    time_limit: Duration, 
+    pord: &[usize], 
+    lalg_size: usize, 
+    init_vector: &[usize], 
+    lalgs: &mut HashSet<Vec<usize>>, 
+    b_test: bool, 
+    b_print: bool
+) {
    
     if b_print {
         eprintln!("Order: {pord:?}");
@@ -2878,7 +3208,7 @@ pub fn botched_l_alg_gen_from_ord_short_time_with_limit_new(
     res
 }
 
-pub fn hashmap_perm_image(fun: &HashMap::<(usize,usize), usize>, perm: &Vec<usize>) -> HashMap::<(usize,usize), usize> {
+pub fn hashmap_perm_image(fun: &HashMap::<(usize,usize), usize>, perm: &[usize]) -> HashMap::<(usize,usize), usize> {
     let mut res_hm = HashMap::<(usize,usize), usize>::new();
     
 
@@ -2910,6 +3240,33 @@ pub fn perm_hashset_get_images(
 }
 
 pub fn perm_iter_get_images(
+    perms_iter: impl Iterator<Item=Vec<usize>>, 
+    fun: &HashMap::<(usize,usize), usize>
+) -> Vec<Vec<usize>>
+{
+
+    let mut keys_sorted = fun.keys().collect::<Vec<_>>();
+    keys_sorted.sort();
+
+    let mut hs = HashSet::<Vec<usize>>::new();
+    for perm in perms_iter {
+         let hh_img = hashmap_perm_image(fun, &perm);
+        
+         // get vector
+         let mut vv = Vec::<usize>::new();
+         for k in &keys_sorted {
+             vv.push(hh_img[k]);
+         }
+         hs.insert(vv);
+    }
+
+    let mut hs_v = hs.into_iter().collect::<Vec<_>>();
+    hs_v.sort();
+
+    hs_v
+ }
+
+pub fn botched_perm_iter_get_images(
     base_limpl: &[usize],
     perm_iter: itertools::Permutations<std::slice::Iter<'_, usize>>,
     base_perm_vec: &[usize],
@@ -2933,6 +3290,39 @@ pub fn perm_iter_get_images(
 }
 
 pub fn perm_iter_get_images_new(
+    perms_set: impl Iterator<Item=Vec<usize>>, 
+    fun: &HashMap::<(usize,usize), usize>
+) -> Vec<Vec<usize>> 
+{
+
+    let mut keys_sorted = fun.keys().collect::<Vec<_>>();
+    keys_sorted.sort();
+
+    let mut hs = HashSet::<Vec<usize>>::new();
+    for perm in perms_set {
+         let hh_img = hashmap_perm_image(fun, &perm);
+         // get vector
+         let mut vv = Vec::<usize>::new();
+         let mut b_ok = true;
+         for k in &keys_sorted {
+            if !hh_img.contains_key(k) {
+                b_ok = false;
+                break;
+            }
+            vv.push(hh_img[k]);
+         }
+         if b_ok {
+            hs.insert(vv);
+         }
+    }
+
+    let mut hs_v = hs.into_iter().collect::<Vec<_>>();
+    hs_v.sort();
+
+    hs_v
+}
+
+pub fn botched_perm_iter_get_images_new(
     base_limpl: &[usize],
     perm_iter: itertools::Permutations<std::slice::Iter<'_, usize>>,
     base_perm_vec: &[usize],
@@ -2961,6 +3351,49 @@ pub fn perm_iter_get_images_new(
 }
 
 pub fn perm_iter_get_images_new2(
+    perms_set: impl Iterator<Item=Vec<usize>>, 
+    fun: &HashMap::<(usize,usize), usize>
+) -> bool 
+{
+
+    let mut keys_sorted = fun.keys().collect::<Vec<_>>();
+    keys_sorted.sort();
+    let mut fun_vec = Vec::<usize>::new();
+    for k in &keys_sorted {
+        fun_vec.push(fun[k]);
+    }
+
+    // let mut hs = HashSet::<Vec<usize>>::new();
+    let mut res_has_prefix=false;
+    for perm in perms_set {
+         let hh_img = hashmap_perm_image(fun, &perm);
+         // get vector
+         let mut vv = Vec::<usize>::new();
+         let mut b_ok = true;
+         for k in &keys_sorted {
+            if !hh_img.contains_key(k) {
+                b_ok = false;
+                break;
+            }
+            vv.push(hh_img[k]);
+         }
+         if vv.len() == 0 {
+            continue;
+         }
+        
+        let mut idx = 0usize;
+        while idx < vv.len() && vv[idx] == fun[keys_sorted[idx]] {
+            idx+=1;
+        }
+        
+        if idx < vv.len() && vv[idx] < fun[keys_sorted[idx]] {
+            return true;
+        }            
+    }
+    false
+}
+
+pub fn botched_perm_iter_get_images_new2(
     base_limpl: &[usize],
     target_ord: &[usize],
     perm_iter: itertools::Permutations<std::slice::Iter<'_, usize>>,
@@ -3167,7 +3600,7 @@ pub fn l_alg_gen_all_short_time(n: usize, status_output_limit: usize) -> HashSet
     res
 }
 
-pub fn gen_all_lalgs_rec_short_time_with_limit(time_limit: Duration, b_stop: &mut bool, from_time: Instant, index:usize, positions:&Vec<(usize,usize)>, limpl: &mut [usize], lalg_size:usize, unit:usize, res:&mut HashSet<Vec<usize>>, num_tested: &mut usize, num_models: &mut usize) {
+pub fn gen_all_lalgs_rec_short_time_with_limit(time_limit: Duration, b_stop: &mut bool, from_time: Instant, index:usize, positions:&[(usize,usize)], limpl: &mut [usize], lalg_size:usize, unit:usize, res:&mut HashSet<Vec<usize>>, num_tested: &mut usize, num_models: &mut usize) {
     if *b_stop {
         return;
     }
@@ -3366,6 +3799,122 @@ pub enum OutputType {
 }
 
 pub fn get_plan_fixed_rec(
+    lev:usize, 
+    num_iter: &mut usize, 
+    n: usize, 
+    pord: &[usize],
+    lalg_size:usize, 
+    num_pord: usize, 
+    fixed_vec: &[(usize,usize)], 
+    positions: &[(usize,usize)], 
+    filter_fun: fn(&[usize])->bool, 
+    cur_lalg: &mut [usize], 
+    out_type: &OutputType
+) {
+    *num_iter+=1;
+
+    if (*num_iter-1) % 125_000 == 0 {
+        let mut b_first = true;
+        for i in 0..fixed_vec.len() {
+            if b_first {
+                b_first = false;
+            }
+            else {
+                eprint!(",");
+            }
+            eprint!("{}", cur_lalg[idx(fixed_vec[i].0, fixed_vec[i].1, lalg_size)]);
+        }
+        eprintln!();
+    }
+    if lev == fixed_vec.len() {
+        let mut hh = HashMap::<(usize,usize), usize>::new();
+        for (iidx,v) in fixed_vec.iter().enumerate() {
+            hh.insert(fixed_vec[iidx], cur_lalg[idx(fixed_vec[iidx].0, fixed_vec[iidx].1, lalg_size)]);
+        }
+
+        let pp = (0usize..pord.len()).collect::<Vec<_>>();
+        let jj = perm_iter_get_images(pp.into_iter().permutations(pord.len())
+            .filter(|pe| filter_fun(pe))
+            .filter(|pe| pord_perm_canonical_preserve_ord(&pord, lalg_size, &pe[..])).into_iter(), &hh);
+
+        let mut b_ok = true;
+        for (iidx, v) in fixed_vec.iter().enumerate() {
+            if jj[0][iidx] != cur_lalg[idx(fixed_vec[iidx].0, fixed_vec[iidx].1, lalg_size)] {
+                b_ok = false;
+                break;
+            }
+        }
+        if b_ok {
+            match *out_type {
+              OutputType::Script => {  print!("./target/release/gen_from_ord.exe {} ", num_pord);
+                    
+                let mut b_first = true;
+                let mut pos_idx = 0usize;
+                for i in 0..fixed_vec.len() {
+                    if !b_first {
+                        print!(",");
+                    }
+                    else {
+                        b_first = false;
+                    }
+                    
+                    if positions[pos_idx] != fixed_vec[i] {    
+                        while positions[pos_idx] != fixed_vec[i] {
+                            pos_idx+=1;
+                            print!("{},", pord.len()+1);                                
+                        }
+                    }
+                    print!("{}", cur_lalg[idx(fixed_vec[i].0, fixed_vec[i].1, lalg_size)]);
+                    pos_idx+=1;
+                }
+                print!(" 1> rc8sym-{:04}_1/hh8_pord_{:04}-", num_pord, num_pord);
+                for i in 0..fixed_vec.len() {
+                        print!("{}", cur_lalg[idx(fixed_vec[i].0, fixed_vec[i].1, lalg_size)]);
+                }
+                print!(".txt 2> rc8sym-{:04}_1/hh8_pord_{:04}-", num_pord, num_pord);
+                for i in 0..fixed_vec.len() {
+                    print!("{}", cur_lalg[idx(fixed_vec[i].0, fixed_vec[i].1, lalg_size)]);
+                }
+                println!(".log");
+                },
+                OutputType::List => {
+                    let mut b_first = true;
+                    let mut pos_idx = 0usize;
+                    for i in 0..fixed_vec.len() {
+                        if !b_first {
+                            print!(",");
+                        }
+                        else {
+                            b_first = false;
+                        }
+                        
+                        if positions[pos_idx] != fixed_vec[i] {    
+                            while positions[pos_idx] != fixed_vec[i] {
+                                pos_idx+=1;
+                                print!("{},", pord.len()+1);                                
+                            }
+                        }
+                        print!("{}", cur_lalg[idx(fixed_vec[i].0, fixed_vec[i].1, lalg_size)]);
+                        pos_idx+=1;
+                    }
+                    println!();  
+                }
+            }
+        }
+    }
+    else {
+        for i in 0..pord.len()-1 {
+            if l_alg_test_init_value(cur_lalg, lalg_size, lalg_size - 1, fixed_vec[lev].0,  fixed_vec[lev].1, i, false) {
+                cur_lalg[idx(fixed_vec[lev].0, fixed_vec[lev].1, lalg_size)] = i;
+                get_plan_fixed_rec(lev+1, num_iter, n, pord, lalg_size, num_pord, fixed_vec, positions, filter_fun, cur_lalg, out_type);
+                cur_lalg[idx(fixed_vec[lev].0, fixed_vec[lev].1, lalg_size)] = lalg_size+1;
+            }
+        }
+    }
+}
+
+
+pub fn botched_get_plan_fixed_rec(
     limpl: &mut [usize],
     fixed: &mut [bool],
     positions: &[(usize, usize)],
@@ -3385,7 +3934,7 @@ pub fn get_plan_fixed_rec(
     // If already fixed, record value and continue
     if fixed[idx(x, y, n)] {
         plan.push(limpl[idx(x, y, n)]);
-        return get_plan_fixed_rec(limpl, fixed, positions, index + 1, n, unit, plan);
+        return botched_get_plan_fixed_rec(limpl, fixed, positions, index + 1, n, unit, plan);
     }
 
     // Attempt candidates for unassigned cell
@@ -3418,7 +3967,7 @@ pub fn get_plan_fixed_rec(
 
         plan.push(e);
 
-        if get_plan_fixed_rec(limpl, fixed, positions, index + 1, n, unit, plan) {
+        if botched_get_plan_fixed_rec(limpl, fixed, positions, index + 1, n, unit, plan) {
             return true;
         }
 
@@ -3453,7 +4002,7 @@ pub fn get_plan_fixed(
         }
     }
 
-    if get_plan_fixed_rec(
+    if botched_get_plan_fixed_rec(
         &mut limpl,
         &mut fixed,
         positions,
@@ -3469,6 +4018,122 @@ pub fn get_plan_fixed(
 }
 
 pub fn get_plan_fixed_rec_new(
+    lev:usize, 
+    num_iter: &mut usize, 
+    n: usize, 
+    pord: & [usize], 
+    lalg_size: usize, 
+    num_pord: usize, 
+    fixed_vec: &Vec<(usize,usize)>, 
+    positions: &Vec<(usize,usize)>, 
+    filter_fun: fn(&[usize])->bool, 
+    cur_lalg: &mut [usize], 
+    out_type: &OutputType
+) {
+    *num_iter+=1;
+
+    if (*num_iter-1) % 125_000 == 0 {
+        let mut b_first = true;
+        for i in 0..fixed_vec.len() {
+            if b_first {
+                b_first = false;
+            }
+            else {
+                eprint!(",");
+            }
+            eprint!("{}", cur_lalg[idx(fixed_vec[i].0, fixed_vec[i].1, lalg_size)]);
+        }
+        eprintln!();
+    }
+    if lev == fixed_vec.len() {
+        let mut hh = HashMap::<(usize,usize), usize>::new();
+        for (iidx,v) in fixed_vec.iter().enumerate() {
+            hh.insert(fixed_vec[iidx], cur_lalg[idx(fixed_vec[iidx].0, fixed_vec[iidx].1, lalg_size)]);
+        }
+
+        let pp = (0usize..pord.len()).collect::<Vec<_>>();
+        let jj = perm_iter_get_images_new(pp.into_iter().permutations(pord.len())
+            .filter(|pe| filter_fun(pe))
+            .filter(|pe| pord_perm_canonical_preserve_ord(&pord, lalg_size, &pe)), &hh);
+
+        let mut b_ok = true;
+        for (iidx, v) in fixed_vec.iter().enumerate() {
+            if jj[0][iidx] != cur_lalg[idx(fixed_vec[iidx].0, fixed_vec[iidx].1, lalg_size)] {
+                b_ok = false;
+                break;
+            }
+        }
+        if b_ok {
+            match *out_type {
+              OutputType::Script => {  print!("./target/release/gen_from_ord.exe {} ", num_pord);
+                    
+                let mut b_first = true;
+                let mut pos_idx = 0usize;
+                for i in 0..fixed_vec.len() {
+                    if !b_first {
+                        print!(",");
+                    }
+                    else {
+                        b_first = false;
+                    }
+                    
+                    if positions[pos_idx] != fixed_vec[i] {    
+                        while positions[pos_idx] != fixed_vec[i] {
+                            pos_idx+=1;
+                            print!("{},", pord.len()+1);                                
+                        }
+                    }
+                    print!("{}", cur_lalg[idx(fixed_vec[i].0, fixed_vec[i].1, lalg_size)]);
+                    pos_idx+=1;
+                }
+                print!(" 1> rc8sym-{:04}_1/hh8_pord_{:04}-", num_pord, num_pord);
+                for i in 0..fixed_vec.len() {
+                        print!("{}", cur_lalg[idx(fixed_vec[i].0, fixed_vec[i].1, lalg_size)]);
+                }
+                print!(".txt 2> rc8sym-{:04}_1/hh8_pord_{:04}-", num_pord, num_pord);
+                for i in 0..fixed_vec.len() {
+                    print!("{}", cur_lalg[idx(fixed_vec[i].0, fixed_vec[i].1, lalg_size)]);
+                }
+                println!(".log");
+                },
+                OutputType::List => {
+                    let mut b_first = true;
+                    let mut pos_idx = 0usize;
+                    for i in 0..fixed_vec.len() {
+                        if !b_first {
+                            print!(",");
+                        }
+                        else {
+                            b_first = false;
+                        }
+                        
+                        if positions[pos_idx] != fixed_vec[i] {    
+                            while positions[pos_idx] != fixed_vec[i] {
+                                pos_idx+=1;
+                                print!("{},", pord.len()+1);                                
+                            }
+                        }
+                        print!("{}", cur_lalg[idx(fixed_vec[i].0, fixed_vec[i].1, lalg_size)]);
+                        pos_idx+=1;
+                    }
+                    println!();  
+                }
+            }
+        }
+    }
+    else {
+        for i in 0..pord.len()-1 {
+            if l_alg_test_init_value(cur_lalg, lalg_size, lalg_size - 1, fixed_vec[lev].0, fixed_vec[lev].1, i, false) {
+                cur_lalg[idx(fixed_vec[lev].0, fixed_vec[lev].1, lalg_size)] = i;
+                get_plan_fixed_rec_new(lev+1, num_iter, n, pord, lalg_size, num_pord, fixed_vec, positions, filter_fun, cur_lalg, out_type);
+                cur_lalg[idx(fixed_vec[lev].0, fixed_vec[lev].1, lalg_size)] = lalg_size+1;
+            }
+        }
+    }
+}
+
+
+pub fn botched_get_plan_fixed_rec_new(
     limpl: &mut [usize],
     fixed: &mut [bool],
     positions: &[(usize, usize)],
@@ -3488,7 +4153,7 @@ pub fn get_plan_fixed_rec_new(
     // If cell is already assigned / fixed, record it in the plan and proceed
     if fixed[idx(x, y, n)] {
         plan.push(limpl[idx(x, y, n)]);
-        return get_plan_fixed_rec_new(limpl, fixed, positions, index + 1, n, unit, plan);
+        return botched_get_plan_fixed_rec_new(limpl, fixed, positions, index + 1, n, unit, plan);
     }
 
     // Attempt candidates for unassigned cell
@@ -3521,7 +4186,7 @@ pub fn get_plan_fixed_rec_new(
 
         plan.push(e);
 
-        if get_plan_fixed_rec_new(limpl, fixed, positions, index + 1, n, unit, plan) {
+        if botched_get_plan_fixed_rec_new(limpl, fixed, positions, index + 1, n, unit, plan) {
             return true;
         }
 
@@ -3556,7 +4221,7 @@ pub fn get_plan_fixed_new(
         }
     }
 
-    if get_plan_fixed_rec_new(
+    if botched_get_plan_fixed_rec_new(
         &mut limpl,
         &mut fixed,
         positions,
@@ -3572,6 +4237,122 @@ pub fn get_plan_fixed_new(
 }
 
 pub fn get_plan_fixed_rec_new2(
+    lev:usize, 
+    num_iter: &mut usize, 
+    n: usize, 
+    pord: & [usize], 
+    lalg_size:usize, 
+    num_pord: usize, 
+    fixed_vec: & [(usize,usize)], 
+    positions: & [(usize,usize)], 
+    cur_lalg: &mut [usize], 
+    out_type: &OutputType
+) {
+    *num_iter+=1;
+
+    if (*num_iter-1) % 125_000 == 0 {
+        let mut b_first = true;
+        for i in 0..fixed_vec.len() {
+            if b_first {
+                b_first = false;
+            }
+            else {
+                eprint!(",");
+            }
+            eprint!("{}", cur_lalg[idx(fixed_vec[i].0, fixed_vec[i].1, lalg_size)]);
+        }
+        eprintln!();
+    }
+    if lev == fixed_vec.len() {
+        let mut hh = HashMap::<(usize,usize), usize>::new();
+        for (iidx,v) in fixed_vec.iter().enumerate() {
+            hh.insert(fixed_vec[iidx], cur_lalg[idx(fixed_vec[iidx].0, fixed_vec[iidx].1, lalg_size)]);
+        }
+
+        let pp = (0usize..pord.len()).collect::<Vec<_>>();
+        let has_strict_prefix = perm_iter_get_images_new2(pp.into_iter().permutations(pord.len())            
+            .filter(|pe| pord_perm_preserve_ord(&pord, lalg_size, &pe))
+            // .filter(|pe| pord_perm_canonical_preserve_ord(&pord, &pe))
+            , &hh);
+
+        // let mut b_ok = true;
+        // for (idx, v) in fixed_vec.iter().enumerate() {
+        //     if jj[0][idx] != cur_lalg[fixed_vec[idx].0][fixed_vec[idx].1] {
+        //         b_ok = false;
+        //         break;
+        //     }
+        // }
+        if !has_strict_prefix {
+            match *out_type {
+              OutputType::Script => {  print!("./target/release/gen_from_ord.exe {} ", num_pord);
+                    
+                let mut b_first = true;
+                let mut pos_idx = 0usize;
+                for i in 0..fixed_vec.len() {
+                    if !b_first {
+                        print!(",");
+                    }
+                    else {
+                        b_first = false;
+                    }
+                    
+                    if positions[pos_idx] != fixed_vec[i] {    
+                        while positions[pos_idx] != fixed_vec[i] {
+                            pos_idx+=1;
+                            print!("{},", pord.len()+1);                                
+                        }
+                    }
+                    print!("{}", cur_lalg[idx(fixed_vec[i].0, fixed_vec[i].1, lalg_size)]);
+                    pos_idx+=1;
+                }
+                print!(" 1> rc8sym-{:04}_1/hh8_pord_{:04}-", num_pord, num_pord);
+                for i in 0..fixed_vec.len() {
+                        print!("{}", cur_lalg[idx(fixed_vec[i].0, fixed_vec[i].1, lalg_size)]);
+                }
+                print!(".txt 2> rc8sym-{:04}_1/hh8_pord_{:04}-", num_pord, num_pord);
+                for i in 0..fixed_vec.len() {
+                    print!("{}", cur_lalg[idx(fixed_vec[i].0, fixed_vec[i].1, lalg_size)]);
+                }
+                println!(".log");
+                },
+                OutputType::List => {
+                    let mut b_first = true;
+                    let mut pos_idx = 0usize;
+                    for i in 0..fixed_vec.len() {
+                        if !b_first {
+                            print!(",");
+                        }
+                        else {
+                            b_first = false;
+                        }
+                        
+                        if positions[pos_idx] != fixed_vec[i] {    
+                            while positions[pos_idx] != fixed_vec[i] {
+                                pos_idx+=1;
+                                print!("{},", pord.len()+1);                                
+                            }
+                        }
+                        print!("{}", cur_lalg[idx(fixed_vec[i].0, fixed_vec[i].1, lalg_size)]);
+                        pos_idx+=1;
+                    }
+                    println!();  
+                }
+            }
+        }
+    }
+    else {
+        for i in 0..pord.len()-1 {
+            if l_alg_test_init_value(cur_lalg, lalg_size, lalg_size-1, fixed_vec[lev].0, fixed_vec[lev].1, i, false) {
+                cur_lalg[idx(fixed_vec[lev].0, fixed_vec[lev].1, lalg_size)] = i;
+                get_plan_fixed_rec_new2(lev+1, num_iter, n, pord, lalg_size, num_pord, fixed_vec, positions, cur_lalg, out_type);
+                cur_lalg[idx(fixed_vec[lev].0, fixed_vec[lev].1, lalg_size)] = lalg_size+1;
+            }
+        }
+    }
+}
+
+
+pub fn botched_get_plan_fixed_rec_new2(
     index: usize,
     num_iter: &mut usize,
     n: usize,
@@ -3607,7 +4388,7 @@ pub fn get_plan_fixed_rec_new2(
 
     // If cell was pre-assigned via init_vector / fixed_vec, advance to next position
     if limpl[idx(x, y, n)] != n + 1 {
-        return get_plan_fixed_rec_new2(
+        return botched_get_plan_fixed_rec_new2(
             index + 1,
             num_iter,
             n,
@@ -3647,7 +4428,7 @@ pub fn get_plan_fixed_rec_new2(
             continue;
         }
 
-        if get_plan_fixed_rec_new2(
+        if botched_get_plan_fixed_rec_new2(
             index + 1,
             num_iter,
             n,
@@ -3706,6 +4487,147 @@ pub fn get_plan_fixed_rec_new2(
 // }
 
 pub fn get_plan_continue_rec(
+    from_vec: &mut [usize], 
+    iter_cnt: &mut usize, 
+    time_ts: &mut Instant, 
+    lev:usize, 
+    n: usize, 
+    pord: & [usize], 
+    lalg_size: usize,
+    num_pord: usize, 
+    fixed_vec: & [(usize,usize)], 
+    positions: & [(usize,usize)], 
+    filter_fun: fn(&[usize])->bool, 
+    cur_lalg: &mut [usize], 
+    out_type: &OutputType
+) {
+    *iter_cnt +=1;
+
+    if *iter_cnt == 1 {
+        eprint!("state: ");
+        let mut b_first = true;
+        for i in 0..from_vec.len() {
+            if b_first {
+                b_first = false;
+            }
+            else {
+                eprint!(",");
+            }
+            eprint!("{}", from_vec[i]);
+        }
+        eprintln!();
+    }
+    else if (*iter_cnt - 1) % 250_000 == 0 {
+        eprint!("state: ");
+        let mut b_first = true;
+        for p in fixed_vec {
+            if b_first {
+                b_first = false;
+            }
+            else {
+                eprint!(",");
+            }
+            eprint!("{}", cur_lalg[idx(p.0, p.1, lalg_size)]);
+        }
+        eprintln!();
+        eprintln!("{:.4}", time_ts.elapsed().as_secs_f32());
+        *time_ts = Instant::now(); 
+    }
+    
+    if lev == fixed_vec.len() {
+        let mut hh = HashMap::<(usize,usize), usize>::new();
+        for (iidx,v) in fixed_vec.iter().enumerate() {
+            hh.insert(fixed_vec[iidx], cur_lalg[idx(fixed_vec[iidx].0, fixed_vec[iidx].1, lalg_size)]);
+        }
+
+        let pp = (0usize..pord.len()).collect::<Vec<_>>();
+        let jj = perm_iter_get_images(pp.into_iter().permutations(pord.len())
+            .filter(|pe| filter_fun(pe))
+            .filter(|pe| pord_perm_canonical_preserve_ord(&pord, lalg_size, &pe)), &hh);
+
+        let mut b_ok = true;
+        for (iidx, v) in fixed_vec.iter().enumerate() {
+            if jj[0][iidx] != cur_lalg[idx(fixed_vec[iidx].0, fixed_vec[iidx].1, lalg_size)] {
+                b_ok = false;
+                break;
+            }
+        }
+        if b_ok {
+            match *out_type {
+            OutputType::Script => {    print!("./target/release/gen_from_ord.exe {} ", num_pord);
+                    
+                let mut b_first = true;
+                let mut pos_idx = 0usize;
+                for i in 0..fixed_vec.len() {
+                    if !b_first {
+                        print!(",");
+                    }
+                    else {
+                        b_first = false;
+                    }
+                    
+                    if positions[pos_idx] != fixed_vec[i] {    
+                        while positions[pos_idx] != fixed_vec[i] {
+                            pos_idx+=1;
+                            print!("{},", pord.len()+1);                                
+                        }
+                    }
+                    print!("{}", cur_lalg[idx(fixed_vec[i].0, fixed_vec[i].1, lalg_size)]);
+                    pos_idx+=1;
+                }
+                print!(" 1> rc8sym-{:04}_1/hh8_pord_{:04}-", num_pord, num_pord);
+                for i in 0..fixed_vec.len() {
+                        print!("{}", cur_lalg[idx(fixed_vec[i].0, fixed_vec[i].1, lalg_size)]);
+                }
+                print!(".txt 2> rc8sym-{:04}_1/hh8_pord_{:04}-", num_pord, num_pord);
+                for i in 0..fixed_vec.len() {
+                    print!("{}", cur_lalg[idx(fixed_vec[i].0, fixed_vec[i].1, lalg_size)]);
+                }
+                println!(".log");
+            },
+            OutputType::List => {
+                    let mut b_first = true;
+                    let mut pos_idx = 0usize;
+                    for i in 0..fixed_vec.len() {
+                        if !b_first {
+                            print!(",");
+                        }
+                        else {
+                            b_first = false;
+                        }
+                        
+                        if positions[pos_idx] != fixed_vec[i] {    
+                            while positions[pos_idx] != fixed_vec[i] {
+                                pos_idx+=1;
+                                print!("{},", pord.len()+1);                                
+                            }
+                        }
+                        print!("{}", cur_lalg[idx(fixed_vec[i].0, fixed_vec[i].1, lalg_size)]);
+                        pos_idx+=1;
+                    }  
+                    println!();                  
+            }
+        }
+        }
+    }
+    else {
+        let mut from_idx = 0;
+        if lev < from_vec.len() {
+            from_idx = from_vec[lev];
+            from_vec[lev] = 0;
+        }
+        for i in from_idx..pord.len()-1 {
+            if l_alg_test_init_value(cur_lalg, lalg_size, lalg_size - 1, fixed_vec[lev].0, fixed_vec[lev].1, i, false) {
+                cur_lalg[idx(fixed_vec[lev].0, fixed_vec[lev].1, lalg_size)] = i;
+                get_plan_continue_rec(from_vec, iter_cnt, time_ts, lev+1, n, pord, lalg_size, num_pord, fixed_vec, positions, filter_fun, cur_lalg, out_type);
+                cur_lalg[idx(fixed_vec[lev].0, fixed_vec[lev].1, lalg_size)] = lalg_size+1;
+            }
+        }
+    }
+}
+
+
+pub fn botched_get_plan_continue_rec(
     limpl: &mut [usize],
     fixed: &mut [bool],
     positions: &[(usize, usize)],
@@ -3725,7 +4647,7 @@ pub fn get_plan_continue_rec(
     // If cell is already fixed, record value and continue to next position
     if fixed[idx(x, y, n)] {
         plan.push(limpl[idx(x, y, n)]);
-        return get_plan_continue_rec(limpl, fixed, positions, index + 1, n, unit, plan);
+        return botched_get_plan_continue_rec(limpl, fixed, positions, index + 1, n, unit, plan);
     }
 
     // Determine start candidate value: if plan has a value recorded for this slot, resume from it
@@ -3769,7 +4691,7 @@ pub fn get_plan_continue_rec(
             plan.push(e);
         }
 
-        if get_plan_continue_rec(limpl, fixed, positions, index + 1, n, unit, plan) {
+        if botched_get_plan_continue_rec(limpl, fixed, positions, index + 1, n, unit, plan) {
             return true;
         }
 
@@ -3805,7 +4727,7 @@ pub fn get_plan_continue(
         }
     }
 
-    if get_plan_continue_rec(
+    if botched_get_plan_continue_rec(
         &mut limpl,
         &mut fixed,
         positions,
@@ -3820,97 +4742,160 @@ pub fn get_plan_continue(
     }
 }
 
-// Wrong translation
-// pub fn transform_init_vector(
-//     limpl: &[usize],
-//     perm: &[usize],
-//     n: usize,
-//     unit_elem: usize,
-// ) -> Vec<usize> {
-//     let mut transformed = vec![n + 1; n * n];
+pub fn transform_init_vector(n: usize, 
+    from_positions: &[(usize,usize)], 
+    to_positions: &[(usize,usize)], 
+    init_vector: & [usize]
+) -> Vec<usize> 
+{
+        // get transformed init_vector
+    let mut trf_init_vector = Vec::<usize>::new();
+    let init_vector_size = init_vector.len();
+    let mut number_filled = 0usize;
+    for xy in to_positions.iter() {
+    
+        let index = from_positions.iter().position(|&oxoy| oxoy.0==xy.0 && oxoy.1==xy.1);
+        
+        let pos = index.unwrap();
+        // eprintln!("Pos: {pos}");
+        if pos < init_vector_size {
+            trf_init_vector.push(init_vector[index.unwrap()]);
+            number_filled+=1;
+            if number_filled == init_vector_size {
+                break;
+            }
+        }
+        else {
+            trf_init_vector.push(n+1);    
+        }
+    }
+    trf_init_vector
+}
 
-//     for i in 0..n {
-//         for j in 0..n {
-//             let val = limpl[idx(i, j, n)];
-//             if val < n {
-//                 // Apply permutation mapping to elements and table indices
-//                 transformed[idx(perm[i], perm[j], n)] = perm[val];
-//             } else if val == unit_elem {
-//                 transformed[idx(perm[i], perm[j], n)] = unit_elem;
-//             }
-//         }
-//     }
+// yy.len() < 64
+fn all_subsets(yy:& [usize]) -> Vec<Vec<usize>> {
+    let mut res = Vec::<Vec<usize>>::new();
+    
+    for i in 0..1usize<<yy.len() {
+        let mut cs = Vec::<usize>::new();
+        for j in 0..yy.len() {
+            if i & (1<<j) != 0 {
+                cs.push(yy[j]);
+            }
+        }
+        
+        // println!("{}", i);
+        res.push(cs);
+    }
+    res
+}
 
-//     transformed
-// }
+fn all_subsets_with_minimal_element(sorted_vec:& [usize]) -> Vec<Vec<usize>> {
+    let mut res = Vec::<Vec<usize>>::new();
+    
+    for i in 1..1usize<<sorted_vec.len() {
+        let mut cs = Vec::<usize>::new();
+        if i & 1 == 0 {
+            continue;
+        }
+        for j in 0..sorted_vec.len() {
+            if i & (1<<j) != 0 {
+                cs.push(sorted_vec[j]);
+            }
+        }
+        
+        // println!("{}", i);
+        res.push(cs);
+    }
+    res
+}
 
-// pub fn gen_plans_new2(
-//     pord: &[usize],
-//     num_pord: usize,
-//     fixed_vec: &[(usize, usize)],
-//     init_vector: &[usize],
-//     n: usize,
-// ) {
-//     let unit_elem = n - 1;
-//     let mut lalg_limpl = vec![n + 1; n * n];
-//     let mut positions = Vec::<(usize, usize)>::new();
+// The same function as in l_alglib::
+// not translated
+// fn releq_from_decomp(decomp: &Vec<Vec<usize>>) -> Vec<Vec<usize>>{
+// fn gen_decomp(mset: HashSet<usize>) -> Vec<Vec<Vec<usize>>> {
+// gen_releq2(mset: HashSet<usize>) -> Vec<Vec<Vec<usize>>> {
+// gen_releq(mset: HashSet<usize>) -> Vec<Vec<Vec<usize>>> {
+// fn gen_decomp_rec(mset: HashSet<usize>, part_decomp: &mut Vec<Vec<usize>>, all_decomps: &mut Vec<Vec<Vec<usize>>>) {
+// fn is_decomp_congruence(decomp: &Vec<Vec<usize>>, binop: &Vec<Vec<usize>>) -> bool
+// fn is_releq_congruence(releq: &Vec<Vec<usize>>, binop: &Vec<Vec<usize>>) -> bool 
 
-//     // Initialize 1D matrix and target position sequence
-//     l_alg_init_from_ord(&mut lalg_limpl, n, pord, unit_elem);
-//     l_alg_init_get_positions_old(pord, &mut positions, n);
+pub fn gen_plans_new2(pord: & [usize], 
+    lalg_size: usize,
+    num_pord: usize, 
+    fixed_vec: & [(usize,usize)], 
+    init_vector: & [usize]
+) {
+    let mut lalg_limpl = l_alg_alloc_limpl(pord.len());
+    let mut positions = Vec::<(usize,usize)>::new();
 
-//     // Validate and apply initial values
-//     for i in 0..init_vector.len() {
-//         let (row, col) = fixed_vec[i];
-//         let val = init_vector[i];
+    l_alg_init_from_ord(&mut lalg_limpl, lalg_size, &pord, lalg_size-1);
+    l_alg_init_get_positions_old(&pord, &mut positions, lalg_size);
+    
+    for i in 0..init_vector.len() {
+        if l_alg_test_init_value(&mut lalg_limpl, lalg_size, lalg_size - 1, fixed_vec[i].0, fixed_vec[i].1, init_vector[i], false) {
+            lalg_limpl[idx(fixed_vec[i].0, fixed_vec[i].1, lalg_size)] = init_vector[i];
+        }
+        else {
+            return;
+        }
+    }
+    
+    let mut num_iter =0usize;
+    get_plan_fixed_rec_new2(init_vector.len(), &mut num_iter, pord.len(), &pord, lalg_size, num_pord, fixed_vec,&positions, &mut lalg_limpl, &OutputType::List);
+    // print_vec(&mut std::io::stderr(), &get_iter(fixed_vec.len(), &fixed_vec, &lalg_limpl));
+    eprintln!("Finished.");
+}
 
-//         if l_alg_test_init_value(&mut lalg_limpl, n, n - 1, row, col, val, false) {
-//             lalg_limpl[idx(row, col, n)] = val;
-//         } else {
-//             return;
-//         }
-//     }
+pub fn gen_plans_main_new2(
+    pord: & [usize], 
+    lalg_size:usize, 
+    num_pord: usize, 
+    fixed_vec: & [(usize,usize)]
+) {
 
-//     // limpl: &mut [usize],
-//     // fixed: &mut [bool],
-//     // positions: &[(usize, usize)],
-//     // index: usize,
-//     // n: usize,
-//     // unit: usize,
-//     // plan: &mut Vec<usize>,
+    let ts = Instant::now();
+    let mut from_vec = Vec::<usize>::new();
+    if std::env::args().len() == 2 {
+        from_vec = std::env::args().nth(1).unwrap().split(",").map(|v| v.trim().parse::<usize>().unwrap()).collect();
+    }
 
+    gen_plans_new2(&pord, lalg_size, num_pord, &fixed_vec, &from_vec);
+    eprintln!("Time elapsed: {:.4}", ts.elapsed().as_secs_f32());
+}
 
-//     let mut num_iter = 0usize;
-//     get_plan_fixed_rec_new2(
-//         &mut lalg_limpl,
-//         init_vector.len(),
-//         &mut num_iter,
-//         n,
-//         pord,
-//         num_pord,
-//         fixed_vec,
-//         &positions,
-
-//         &OutputType::List,
-//     );
-
-//     eprintln!("Finished.");
-// }
-
-// pub fn gen_plans_main_new2(pord: &[usize], n: usize, num_pord: usize, fixed_vec: &[(usize, usize)]) {
-//     let ts = Instant::now();
-//     let mut from_vec = Vec::<usize>::new();
-
-//     if std::env::args().len() == 2 {
-//         from_vec = std::env::args()
-//             .nth(1)
-//             .unwrap()
-//             .split(',')
-//             .map(|v| v.trim().parse::<usize>().unwrap())
-//             .collect();
-//     }
-
-//     gen_plans_new2(pord, num_pord, fixed_vec, &from_vec, n);
-//     eprintln!("Time elapsed: {:.4}s", ts.elapsed().as_secs_f32());
-// }
-
+pub fn rel_get_cover_rel(
+    pord: & [usize],
+    lalg_size:usize
+)  {
+    for i in 0..lalg_size {
+        let mut b_first = true;
+        for j in 0..lalg_size {
+            if b_first {
+                b_first = false;
+            }
+            else {
+                print!(", ");
+            }
+            if pord[idx(i, j, lalg_size)]==1 {
+                let mut b_found = false;
+                for k in 0..lalg_size {
+                    if k!=i && k!=j && pord[idx(i, k, lalg_size)] ==1 && pord[idx(k, j, lalg_size)]==1 {
+                        b_found = true;
+                        break;
+                    }
+                }
+                if b_found {
+                    print!("0");
+                }
+                else {
+                    print!("1")
+                } 
+            }
+            else {
+                print!("0")
+            }
+        }
+        println!();
+    }
+}
