@@ -1,10 +1,11 @@
 use std::time::{Instant};
 
 fn main() {
-   main_1728_1();
+   main_1728_1o();
 }
 
-fn main_1728_1() {
+#[allow(dead_code)]
+fn main_1728_1o() {
     // 1
     let num_pord = 1;
     let pord = vec![
