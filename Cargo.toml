@@ -203,46 +203,6 @@ path = "src/plans/plan8-various.rs"
 name = "lalg_test_cmd"
 path = "src/lalg_test_cmd.rs"
 
-[[bin]]
-name = "plan7-1_2"
-path = "src/plans/plan7-1_2.rs"
-
-[[bin]]
-name = "plan7-2_2"
-path = "src/plans/plan7-2_2.rs"
-
-[[bin]]
-name = "plan7-3_2"
-path = "src/plans/plan7-3_2.rs"
-
-[[bin]]
-name = "plan7-4_2"
-path = "src/plans/plan7-4_2.rs"
-
-[[bin]]
-name = "plan7-5_2"
-path = "src/plans/plan7-5_2.rs"
-
-[[bin]]
-name = "plan7-66_2"
-path = "src/plans/plan7-66_2.rs"
-
-[[bin]]
-name = "plan7-75_2"
-path = "src/plans/plan7-75_2.rs"
-
-[[bin]]
-name = "plan7-256_2"
-path = "src/plans/plan7-256_2.rs"
-
-[[bin]]
-name = "plan7-257_2"
-path = "src/plans/plan7-257_2.rs"
-
-[[bin]]
-name = "plan7-272_2"
-path = "src/plans/plan7-272_2.rs"
-
 [dependencies]
 bzip2 = "0.6.1"
 itertools = "0.14.0"
