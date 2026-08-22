@@ -1,34 +1,34 @@
 use std::time::{Instant};
 
 fn main() {
-   main_1_1();
+   main_1935_1();
     // main_1_2();
 }
 
-fn gen_plans(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize,usize)>, fixed_predicate: fn(&[usize])->bool, init_vector: &Vec<usize>) {
-    let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(pord.len());
-    let mut positions = Vec::<(usize,usize)>::new();
+// fn gen_plans(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize,usize)>, fixed_predicate: fn(&[usize])->bool, init_vector: &Vec<usize>) {
+//     let mut lalg_limpl = l_alglib::l_alg_alloc_limpl(pord.len());
+//     let mut positions = Vec::<(usize,usize)>::new();
 
-    l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1);
-    l_alglib::l_alg_init_get_positions_old(&pord, &mut positions);
+//     l_alglib::l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1);
+//     l_alglib::l_alg_init_get_positions_old(&pord, &mut positions);
     
-    for i in 0..init_vector.len() {
-        if l_alglib::l_alg_test_init_value(fixed_vec[i].0, fixed_vec[i].1, init_vector[i], &lalg_limpl) {
-            lalg_limpl[fixed_vec[i].0][fixed_vec[i].1] = init_vector[i];
-        }
-        else {
-            return;
-        }
-    }
+//     for i in 0..init_vector.len() {
+//         if l_alglib::l_alg_test_init_value(fixed_vec[i].0, fixed_vec[i].1, init_vector[i], &lalg_limpl) {
+//             lalg_limpl[fixed_vec[i].0][fixed_vec[i].1] = init_vector[i];
+//         }
+//         else {
+//             return;
+//         }
+//     }
     
-    let mut num_iter =0usize;
-    l_alglib::get_plan_fixed_rec(init_vector.len(), &mut num_iter, pord.len(), &pord, num_pord, fixed_vec,&positions, fixed_predicate, &mut lalg_limpl, &l_alglib::OutputType::List);
-    // print_vec(&mut std::io::stderr(), &get_iter(fixed_vec.len(), &fixed_vec, &lalg_limpl));
-    eprintln!("Finished.");
-}
+//     let mut num_iter =0usize;
+//     l_alglib::get_plan_fixed_rec(init_vector.len(), &mut num_iter, pord.len(), &pord, num_pord, fixed_vec,&positions, fixed_predicate, &mut lalg_limpl, &l_alglib::OutputType::List);
+//     // print_vec(&mut std::io::stderr(), &get_iter(fixed_vec.len(), &fixed_vec, &lalg_limpl));
+//     eprintln!("Finished.");
+// }
 
 
-fn main_1_1() {
+fn main_1935_1() {
     // 
     let num_pord = 1935;
     // 
@@ -52,10 +52,10 @@ fn main_1_1() {
         from_vec = std::env::args().nth(1).unwrap().split(",").map(|v| v.trim().parse::<usize>().unwrap()).collect();
     }
 
-    gen_plans(&pord, num_pord, &fixed_vec, fix_pred, &from_vec);
+    l_alglib::gen_plans(&pord, num_pord, &fixed_vec, fix_pred, &from_vec);
 }
 
-fn main_1_2() {
+fn main_1935_2() {
     // 1
     let num_pord = 1;
     // 
@@ -77,7 +77,7 @@ fn main_1_2() {
         from_vec = std::env::args().nth(1).unwrap().split(",").map(|v| v.trim().parse::<usize>().unwrap()).collect();
     }
 
-    gen_plans(&pord, num_pord, &fixed_vec, fix_pred, &from_vec);
+    l_alglib::gen_plans(&pord, num_pord, &fixed_vec, fix_pred, &from_vec);
 }
 
 // fn main_1_2() {

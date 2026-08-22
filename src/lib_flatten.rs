@@ -4820,6 +4820,76 @@ fn all_subsets_with_minimal_element(sorted_vec:& [usize]) -> Vec<Vec<usize>> {
 // fn is_decomp_congruence(decomp: &Vec<Vec<usize>>, binop: &Vec<Vec<usize>>) -> bool
 // fn is_releq_congruence(releq: &Vec<Vec<usize>>, binop: &Vec<Vec<usize>>) -> bool 
 
+pub fn gen_plans(
+    pord: & [usize], 
+    lalg_size: usize,
+    num_pord: usize, 
+    fixed_vec: & [(usize,usize)], 
+    fixed_predicate: fn(&[usize])->bool, 
+    init_vector: & [usize]
+) {
+    let mut lalg_limpl = l_alg_alloc_limpl(lalg_size);
+    let mut positions = Vec::<(usize,usize)>::new();
+
+    l_alg_init_from_ord(&mut lalg_limpl, lalg_size, &pord, lalg_size-1);
+    l_alg_init_get_positions_old(&pord, &mut positions, lalg_size);
+    
+    for i in 0..init_vector.len() {
+//         pub fn l_alg_test_init_value(
+//     limpl: &mut [usize],
+//     n: usize,
+//     unit: usize,
+//     x: usize,
+//     y: usize,
+//     e: usize,
+//     b_print: bool,
+// ) -> bool {
+
+        if l_alg_test_init_value(&mut lalg_limpl, lalg_size, lalg_size -1, fixed_vec[i].0, fixed_vec[i].1, init_vector[i], false) {
+            lalg_limpl[idx(fixed_vec[i].0, fixed_vec[i].1, lalg_size)] = init_vector[i];
+        }
+        else {
+            return;
+        }
+    }
+    
+    let mut num_iter =0usize;
+    get_plan_fixed_rec(init_vector.len(), &mut num_iter, pord.len(), &pord, lalg_size, num_pord, fixed_vec,&positions, fixed_predicate, &mut lalg_limpl, &OutputType::List);
+    // print_vec(&mut std::io::stderr(), &get_iter(fixed_vec.len(), &fixed_vec, &lalg_limpl));
+    eprintln!("Finished.");
+}
+
+pub fn gen_plans_continue(
+    pord: & [usize],
+    lalg_size: usize, 
+    num_pord: usize, 
+    fixed_vec: & [(usize,usize)], 
+    fixed_predicate: fn(&[usize])->bool, 
+    init_vector: &mut [usize]
+) {
+    let mut lalg_limpl = l_alg_alloc_limpl(lalg_size);
+    let mut positions = Vec::<(usize,usize)>::new();
+
+    l_alg_init_from_ord(&mut lalg_limpl, lalg_size, &pord, lalg_size-1);
+    l_alg_init_get_positions_old(&pord, &mut positions, lalg_size);
+    
+    for i in 0..init_vector.len() {
+        if l_alg_test_init_value(&mut lalg_limpl, lalg_size, lalg_size-1, fixed_vec[i].0, fixed_vec[i].1, init_vector[i], false) {
+            lalg_limpl[idx(fixed_vec[i].0, fixed_vec[i].1, lalg_size)] = init_vector[i];
+        }
+        else {
+            return;
+        }
+    }
+    
+    let mut num_iter =0usize;
+    let mut ts =Instant::now();
+    get_plan_continue_rec( init_vector, &mut num_iter, &mut ts, 0, pord.len(), &pord, lalg_size, num_pord, &fixed_vec,&positions, fixed_predicate, &mut lalg_limpl, &OutputType::List);
+    eprintln!("Total time: {:.4}", ts.elapsed().as_secs_f32());
+    eprintln!("Finished.");
+}
+
+
 pub fn gen_plans_new2(pord: & [usize], 
     lalg_size: usize,
     num_pord: usize, 

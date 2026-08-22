@@ -3168,6 +3168,63 @@ fn is_releq_congruence(releq: &Vec<Vec<usize>>, binop: &Vec<Vec<usize>>) -> bool
     true
 }
 
+pub fn gen_plans(
+    pord: &Vec<Vec<usize>>, 
+    num_pord: usize, 
+    fixed_vec: &Vec<(usize,usize)>, 
+    fixed_predicate: fn(&[usize])->bool, 
+    init_vector: &Vec<usize>
+) {
+    let mut lalg_limpl = l_alg_alloc_limpl(pord.len());
+    let mut positions = Vec::<(usize,usize)>::new();
+
+    l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1);
+    l_alg_init_get_positions_old(&pord, &mut positions);
+    
+    for i in 0..init_vector.len() {
+        if l_alg_test_init_value(fixed_vec[i].0, fixed_vec[i].1, init_vector[i], &lalg_limpl) {
+            lalg_limpl[fixed_vec[i].0][fixed_vec[i].1] = init_vector[i];
+        }
+        else {
+            return;
+        }
+    }
+    
+    let mut num_iter =0usize;
+    get_plan_fixed_rec(init_vector.len(), &mut num_iter, pord.len(), &pord, num_pord, fixed_vec,&positions, fixed_predicate, &mut lalg_limpl, &OutputType::List);
+    // print_vec(&mut std::io::stderr(), &get_iter(fixed_vec.len(), &fixed_vec, &lalg_limpl));
+    eprintln!("Finished.");
+}
+
+pub fn gen_plans_continue(
+    pord: &Vec<Vec<usize>>, 
+    num_pord: usize, 
+    fixed_vec: &Vec<(usize,usize)>, 
+    fixed_predicate: fn(&[usize])->bool, 
+    init_vector: &mut Vec<usize>
+) {
+    let mut lalg_limpl = l_alg_alloc_limpl(pord.len());
+    let mut positions = Vec::<(usize,usize)>::new();
+
+    l_alg_init_from_ord(&mut lalg_limpl, &pord, pord.len()-1);
+    l_alg_init_get_positions_old(&pord, &mut positions);
+    
+    for i in 0..init_vector.len() {
+        if l_alg_test_init_value(fixed_vec[i].0, fixed_vec[i].1, init_vector[i], &lalg_limpl) {
+            lalg_limpl[fixed_vec[i].0][fixed_vec[i].1] = init_vector[i];
+        }
+        else {
+            return;
+        }
+    }
+    
+    let mut num_iter =0usize;
+    let mut ts =Instant::now();
+    get_plan_continue_rec( init_vector, &mut num_iter, &mut ts, 0, pord.len(), &pord, num_pord, &fixed_vec,&positions, fixed_predicate, &mut lalg_limpl, &OutputType::List);
+    eprintln!("Total time: {:.4}", ts.elapsed().as_secs_f32());
+    eprintln!("Finished.");
+}
+
 pub fn gen_plans_new2(pord: &Vec<Vec<usize>>, num_pord: usize, fixed_vec: &Vec<(usize,usize)>, init_vector: &Vec<usize>) {
     let mut lalg_limpl = l_alg_alloc_limpl(pord.len());
     let mut positions = Vec::<(usize,usize)>::new();
