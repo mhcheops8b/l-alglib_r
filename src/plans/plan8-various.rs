@@ -199,14 +199,23 @@ fn main() {
     // main_1799_1();
     
     // main_1800_1();
+    // main_1802_1();
+    // main_1808_1();
+    // main_1820_1();
+    // main_1877_1();
+    // main_1877_2();
     // main_1877_1_new2();
     main_1877_2_new2();
     // main_1879_1();
     // main_1879_1b();
     // main_1879_2();
+    // main_1881_1();
+    // main_1881_2();
     // main_1881_1_new2();
     // main_1881_2_new2();
     // main_1890_1()
+    // main_1890_1b()
+    // main_1890_2b()
     // main_1935_1();
     // main_1935_2();
     // main_1967_1();
@@ -3471,6 +3480,98 @@ fn main_1800_1() {
 }
 
 #[allow(dead_code)]
+fn main_1800_1b() {
+    // 
+    let num_pord = 1800;
+    // 
+    let pord = vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+    //    
+    let fixed_vec: Vec<(usize, usize)> = vec![(1,0), (1,3), (1,4), (1,5), (2,0), (2,1)];
+    // 
+    fn fix_pred(pe: &[usize]) -> bool {
+        
+        pe[2]==2 && pe[6]==6
+        // pe[0] == 0 && std::cmp::min(pe[4],pe[5]) == 4 && std::cmp::max(pe[4],pe[5]) == 5
+    }
+    
+    let mut from_vec = Vec::<usize>::new();
+    if std::env::args().len() == 2 {
+        from_vec = std::env::args().nth(1).unwrap().split(",").map(|v| v.trim().parse::<usize>().unwrap()).collect();
+    }
+
+    l_alglib::gen_plans(&pord, num_pord, &fixed_vec, fix_pred, &from_vec);
+}
+
+#[allow(dead_code)]
+fn main_1802_1() {
+    // 
+    let num_pord = 1802;
+    // 
+    let pord = vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 0, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+    //    
+    let fixed_vec: Vec<(usize, usize)> = vec![(1,0), (1,3), (1,4), (1,5), (2,0), (2,1)];
+    // 
+    fn fix_pred(pe: &[usize]) -> bool {
+        
+        pe[2]==2 && pe[6]==6
+        // pe[0] == 0 && std::cmp::min(pe[4],pe[5]) == 4 && std::cmp::max(pe[4],pe[5]) == 5
+    }
+    
+    let mut from_vec = Vec::<usize>::new();
+    if std::env::args().len() == 2 {
+        from_vec = std::env::args().nth(1).unwrap().split(",").map(|v| v.trim().parse::<usize>().unwrap()).collect();
+    }
+
+    l_alglib::gen_plans(&pord, num_pord, &fixed_vec, fix_pred, &from_vec);
+}
+
+#[allow(dead_code)]
+fn main_1808_1() {
+    // 
+    let num_pord = 1808;
+    // 
+    let pord = vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 0, 0, 1, 0, 1], vec![0, 0, 1, 0, 0, 1, 0, 1], vec![0, 0, 0, 1, 0, 1, 0, 1], vec![0, 0, 0, 0, 1, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+    //    
+    let fixed_vec: Vec<(usize, usize)> = vec![(1,0), (1,3), (1,4), (1,6)];
+    // 
+    fn fix_pred(pe: &[usize]) -> bool {
+        
+        pe[2]==2 && pe[5]==5 && pe[6]==6
+        // pe[0] == 0 && std::cmp::min(pe[4],pe[5]) == 4 && std::cmp::max(pe[4],pe[5]) == 5
+    }
+    
+    let mut from_vec = Vec::<usize>::new();
+    if std::env::args().len() == 2 {
+        from_vec = std::env::args().nth(1).unwrap().split(",").map(|v| v.trim().parse::<usize>().unwrap()).collect();
+    }
+
+    l_alglib::gen_plans(&pord, num_pord, &fixed_vec, fix_pred, &from_vec);
+}
+
+#[allow(dead_code)]
+fn main_1820_1() {
+    // 
+    let num_pord = 1820;
+    // 
+    let pord = vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 0, 1, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 1, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+    //    
+    let fixed_vec: Vec<(usize, usize)> = vec![(1,0), (1,3), (1,5), (1,6), (2,0), (2,1), (2,3), (2,4), (2,5), (2,6)];
+    // 
+    fn fix_pred(pe: &[usize]) -> bool {
+        
+        pe[2]==2 && pe[4]==4
+        // pe[0] == 0 && std::cmp::min(pe[4],pe[5]) == 4 && std::cmp::max(pe[4],pe[5]) == 5
+    }
+    
+    let mut from_vec = Vec::<usize>::new();
+    if std::env::args().len() == 2 {
+        from_vec = std::env::args().nth(1).unwrap().split(",").map(|v| v.trim().parse::<usize>().unwrap()).collect();
+    }
+
+    l_alglib::gen_plans(&pord, num_pord, &fixed_vec, fix_pred, &from_vec);
+}
+
+#[allow(dead_code)]
 fn main_1879_1() {
     gen_plans_main(
         //
@@ -3555,6 +3656,51 @@ fn main_1890_1() {
 }
 
 #[allow(dead_code)]
+fn main_1890_1b() {
+    // 
+    let num_pord = 1890;
+    // 
+    let pord = vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 0, 0, 1, 1], vec![0, 0, 1, 0, 0, 0, 1, 1], vec![0, 0, 0, 1, 0, 0, 1, 1], vec![0, 0, 0, 0, 1, 0, 1, 1], vec![0, 0, 0, 0, 0, 1, 1, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+    //    
+    let fixed_vec: Vec<(usize, usize)> = vec![(1,0), (2,0), (2,1), (2,3), (2,4), (2,5)];
+    // 
+    fn fix_pred(pe: &[usize]) -> bool {
+        
+        pe[2] == 2
+        // pe[0] == 0 && std::cmp::min(pe[4],pe[5]) == 4 && std::cmp::max(pe[4],pe[5]) == 5
+    }
+    
+    let mut from_vec = Vec::<usize>::new();
+    if std::env::args().len() == 2 {
+        from_vec = std::env::args().nth(1).unwrap().split(",").map(|v| v.trim().parse::<usize>().unwrap()).collect();
+    }
+
+    l_alglib::gen_plans(&pord, num_pord, &fixed_vec, fix_pred, &from_vec);
+}
+
+#[allow(dead_code)]
+fn main_1890_2b() {
+    // 1
+    let num_pord = 1;
+    // 
+    let pord = vec![vec![1, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 1]];
+    //    
+    let fixed_vec: Vec<(usize, usize)> = vec![(0,1), (0,2), (0,3), (0,4), (0,5), (1,0), (1,2), (1,3), (1,4), (1,5)];
+    // 
+    fn fix_pred(pe: &[usize]) -> bool {
+        std::cmp::min(pe[0], pe[1]) == 0 && std::cmp::max(pe[0], pe[1]) == 1
+    }
+    
+    let mut from_vec = Vec::<usize>::new();
+    if std::env::args().len() == 2 {
+        from_vec = std::env::args().nth(1).unwrap().split(",").map(|v| v.trim().parse::<usize>().unwrap()).collect();
+    }
+
+    l_alglib::gen_plans(&pord, num_pord, &fixed_vec, fix_pred, &from_vec);
+}
+
+
+#[allow(dead_code)]
 fn main_1967_1() {
     gen_plans_main(
         //
@@ -3567,6 +3713,50 @@ fn main_1967_1() {
         |pe| pe[2]==2 && pe[6]==6
             && std::cmp::min(std::cmp::min(pe[3],pe[4]),pe[5]) == 3 && std::cmp::max(std::cmp::max(pe[3],pe[4]),pe[5]) == 5
     )
+}
+
+#[allow(dead_code)]
+fn main_1877_1() {
+    // 
+    let num_pord = 1877;
+    // 
+    let pord = vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+    //    
+    let fixed_vec: Vec<(usize, usize)> = vec![(1,0), (2,1), (3,1), (4,1), (5,1), (6,1)];
+    // 
+    fn fix_pred(pe: &[usize]) -> bool {
+        
+        pe[1]==1 && std::cmp::min(pe[2],pe[3]) == 2 && std::cmp::max(pe[2],pe[3]) == 3 && std::cmp::min(std::cmp::min(pe[4], pe[5]), pe[6])==4 && std::cmp::max(std::cmp::max(pe[4], pe[5]), pe[6])==6
+        // pe[0] == 0 && std::cmp::min(pe[4],pe[5]) == 4 && std::cmp::max(pe[4],pe[5]) == 5
+    }
+    
+    let mut from_vec = Vec::<usize>::new();
+    if std::env::args().len() == 2 {
+        from_vec = std::env::args().nth(1).unwrap().split(",").map(|v| v.trim().parse::<usize>().unwrap()).collect();
+    }
+
+    l_alglib::gen_plans(&pord, num_pord, &fixed_vec, fix_pred, &from_vec);
+}
+
+#[allow(dead_code)]
+fn main_1877_2() {
+    // 1
+    let num_pord = 1;
+    // 
+    let pord = vec![vec![1, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 1]];
+    //    
+    let fixed_vec: Vec<(usize, usize)> = vec![(0,1), (0,2), (0,3), (0,4), (0,5), (1,0), (1,2), (1,3), (1,4), (1,5)];
+    // 
+    fn fix_pred(pe: &[usize]) -> bool {
+        std::cmp::min(pe[0], pe[1]) == 0 && std::cmp::max(pe[0], pe[1]) == 1
+    }
+    
+    let mut from_vec = Vec::<usize>::new();
+    if std::env::args().len() == 2 {
+        from_vec = std::env::args().nth(1).unwrap().split(",").map(|v| v.trim().parse::<usize>().unwrap()).collect();
+    }
+
+    l_alglib::gen_plans(&pord, num_pord, &fixed_vec, fix_pred, &from_vec);
 }
 
 #[allow(dead_code)]
@@ -3595,6 +3785,50 @@ fn main_1877_2_new2() {
         // 
         &vec![(1,0), (1,4), (1,5), (1,6), (2,0), (2,1), (2,3), (2,4), (2,5), (2,6)]
     )
+}
+
+#[allow(dead_code)]
+fn main_1881_1() {
+    // 
+    let num_pord = 1881;
+    // 
+    let pord = vec![vec![1, 1, 1, 1, 1, 1, 1, 1], vec![0, 1, 1, 1, 0, 0, 0, 1], vec![0, 0, 1, 1, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 0, 1]];
+    //    
+    let fixed_vec: Vec<(usize, usize)> = vec![(1,0), (2,0), (3,0), (3,4), (3,5), (3,6)];
+    // 
+    fn fix_pred(pe: &[usize]) -> bool {
+        
+        pe[3] == 3
+        // pe[0] == 0 && std::cmp::min(pe[4],pe[5]) == 4 && std::cmp::max(pe[4],pe[5]) == 5
+    }
+    
+    let mut from_vec = Vec::<usize>::new();
+    if std::env::args().len() == 2 {
+        from_vec = std::env::args().nth(1).unwrap().split(",").map(|v| v.trim().parse::<usize>().unwrap()).collect();
+    }
+
+    l_alglib::gen_plans(&pord, num_pord, &fixed_vec, fix_pred, &from_vec);
+}
+
+#[allow(dead_code)]
+fn main_1881_2() {
+    // 1
+    let num_pord = 1881;
+    // 
+    let pord = vec![vec![1, 0, 0, 0, 0, 0, 1], vec![0, 1, 0, 0, 0, 0, 1], vec![0, 0, 1, 0, 0, 0, 1], vec![0, 0, 0, 1, 0, 0, 1], vec![0, 0, 0, 0, 1, 0, 1], vec![0, 0, 0, 0, 0, 1, 1], vec![0, 0, 0, 0, 0, 0, 1]];
+    //    
+    let fixed_vec: Vec<(usize, usize)> = vec![(0,1), (0,2), (0,3), (0,4), (0,5), (1,0), (1,2), (1,3), (1,4), (1,5)];
+    // 
+    fn fix_pred(pe: &[usize]) -> bool {
+        std::cmp::min(pe[0], pe[1]) == 0 && std::cmp::max(pe[0], pe[1]) == 1
+    }
+    
+    let mut from_vec = Vec::<usize>::new();
+    if std::env::args().len() == 2 {
+        from_vec = std::env::args().nth(1).unwrap().split(",").map(|v| v.trim().parse::<usize>().unwrap()).collect();
+    }
+
+    l_alglib::gen_plans(&pord, num_pord, &fixed_vec, fix_pred, &from_vec);
 }
 
 #[allow(dead_code)]
