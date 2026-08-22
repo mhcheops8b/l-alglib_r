@@ -188,10 +188,6 @@ name = "plan8-1_4"
 path = "src/plans/plan8-1_4.rs"
 
 [[bin]]
-name = "plan8-1728_1"
-path = "src/plans/plan8-1728_1.rs"
-
-[[bin]]
 name = "plan6-various"
 path = "src/plans/plan6-various.rs"
 
@@ -199,46 +195,9 @@ path = "src/plans/plan6-various.rs"
 name = "plan7-various"
 path = "src/plans/plan7-various.rs"
 
-
 [[bin]]
 name = "plan8-various"
 path = "src/plans/plan8-various.rs"
-
-[[bin]]
-name = "plan8-1733_2"
-path = "src/plans/plan8-1733_2.rs"
-
-[[bin]]
-name = "plan8-1744_2"
-path = "src/plans/plan8-1744_2.rs"
-
-[[bin]]
-name = "plan8-1745_2"
-path = "src/plans/plan8-1745_2.rs"
-
-[[bin]]
-name = "plan8-1762_2"
-path = "src/plans/plan8-1762_2.rs"
-
-[[bin]]
-name = "plan8-1793_2"
-path = "src/plans/plan8-1793_2.rs"
-
-[[bin]]
-name = "plan8-1794_2"
-path = "src/plans/plan8-1794_2.rs"
-
-[[bin]]
-name = "plan8-1795_2"
-path = "src/plans/plan8-1795_2.rs"
-
-[[bin]]
-name = "plan8-1798_2"
-path = "src/plans/plan8-1798_2.rs"
-
-[[bin]]
-name = "plan8-1799_2"
-path = "src/plans/plan8-1799_2.rs"
 
 [[bin]]
 name = "lalg_test_cmd"
